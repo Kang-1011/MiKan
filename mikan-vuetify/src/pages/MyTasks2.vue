@@ -1,6 +1,6 @@
 <template>
     <v-app>
-      <Navbar />
+      <Sidebar />
       <MyAppBar />
       <v-main>
         <v-container fluid class="pa-4">
@@ -10,7 +10,7 @@
     </v-app>
   </template>
   <script setup>
-  import Navbar from '../components/Sidebar.vue'
+  import Sidebar from '../components/Sidebar.vue'
   import MyAppBar from '../components/MyAppBar.vue'
   import ProjectBoards from '../components/ProjectBoards.vue'
   import { ref } from 'vue'
