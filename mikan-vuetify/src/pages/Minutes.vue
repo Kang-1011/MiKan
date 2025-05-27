@@ -1,11 +1,11 @@
 <template>
-  <v-app style="height: 100vh; overflow: hidden;">
+  <v-app style="height: 100vh; overflow-y: auto; overflow: hidden;">
     <Sidebar />
     <Navbar />
     <v-main style="height: 100%; overflow: hidden;">
       <v-container fluid class="fill-height pa-0 ma-0">
         <v-row justify="center" align="stretch" class="fill-height ma-0">
-          <v-col cols="12" md="10" offset-md="1" class="pa-0 d-flex flex-column" style="height: 100%;">
+          <v-col cols="12" md="10"   class="pa-0 d-flex flex-column" style="height: 100%;">
             <MinuteDisplay :meeting="meetingHeaderData">
               <div>
                 <div v-if="meetingBodyData.attendees && meetingBodyData.attendees.length" class="content-block pa-4 rounded mb-4">
@@ -48,16 +48,22 @@
               </div>
             </MinuteDisplay>
           </v-col>
+          
+          <v-col cols="12" md="2" class="pa-0" style="height: 100%;">
+            <ActionButtonsBar />
+          </v-col>
         </v-row>
       </v-container>
-    </v-main>
+
+    </v-main> 
   </v-app>
 </template>
 
 <script setup>
 import Sidebar from "../components/Sidebar.vue";
 import Navbar from "../components/Navbar.vue";
-import MinuteDisplay from "../components/MinuteDisplay.vue"; // Your updated component
+import MinuteDisplay from "../components/MinuteDisplay.vue";
+import ActionButtonsBar from '../components/ActionButtonsBar.vue'; // Corrected import
 import { ref } from 'vue';
 
 const meetingHeaderData = ref({
