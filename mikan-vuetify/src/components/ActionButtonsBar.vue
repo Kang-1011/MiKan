@@ -38,6 +38,7 @@ onMounted(() => {
 
 <style scoped>
 .action-buttons-container {
+  background-color: #EBEBEB; 
   position: relative;
   height: 100%; 
   display: flex;

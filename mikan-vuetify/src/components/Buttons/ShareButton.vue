@@ -9,26 +9,26 @@
         class="action-button-style"
         @click="handleClick"
       >
-        <v-icon>mdi-view-dashboard-variant-outline</v-icon>
+        <v-icon>mdi-share-variant-outline</v-icon>
       </v-btn>
     </template>
-    <span>View on Kanban Board</span>
+    <span>Share</span>
   </v-tooltip>
 </template>
 
 <script setup>
 const emit = defineEmits(['action']);
 const handleClick = () => {
-  console.log('ViewKanbanButton clicked');
-  emit('action', { type: 'viewKanban' });
+  console.log('Share clicked');
+  emit('action', { type: 'share' });
 };
 </script>
 
 <style scoped>
-
 .v-btn {
   background-color: #FF3D00;
 }
+
 .action-button-style {
   box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2), 
               0px 6px 10px 0px rgba(0,0,0,0.14), 

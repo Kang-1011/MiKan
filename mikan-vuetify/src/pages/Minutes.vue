@@ -55,25 +55,24 @@
             <ViewKanbanButton @action="handleMinutesAction" />
           </template>
           <template #middle-button-1>
-            <FindInPageButton @action="handleMinutesAction" />
+            <EditButton @action="handleMinutesAction" />
           </template>
           <template #middle-button-2>
-            <ShareButton @action="handleMinutesAction" />
+            <TranscriptButton @action="handleMinutesAction" />
           </template>
           <template #middle-button-3>
-            <DownloadButton @action="handleMinutesAction" />
+            <ShareButton @action="handleMinutesAction" />
           </template>
           <template #middle-button-4>
-            <PrintButton @action="handleMinutesAction" />
+            <DownloadButton @action="handleMinutesAction" />
           </template>
           <template #bottom-button>
-            <MoreActionsButton @action="handleMinutesAction" />
+            <TasklistButton @action="handleMinutesAction" />
           </template>
         </ActionButtonsBar>
       </v-col>
         </v-row>
       </v-container>
-
     </v-main> 
   </v-app>
 </template>
@@ -84,6 +83,11 @@ import Navbar from "../components/Navbar.vue";
 import MinuteDisplay from "../components/MinuteDisplay.vue";
 import ActionButtonsBar from '../components/ActionButtonsBar.vue'; 
 import ViewKanbanButton from '../components/Buttons/KanbanButton.vue'; 
+import TranscriptButton from '../components/Buttons/TranscriptButton.vue'; 
+import EditButton from '../components/Buttons/EditButton.vue'; 
+import ShareButton from '../components/Buttons/ShareButton.vue'; 
+import DownloadButton from '../components/Buttons/DownloadButton.vue'; 
+import TasklistButton from '../components/Buttons/TasklistButton.vue';  
 import { ref } from 'vue';
 
 const meetingHeaderData = ref({

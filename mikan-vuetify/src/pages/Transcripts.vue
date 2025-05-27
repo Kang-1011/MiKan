@@ -4,8 +4,8 @@
     <Navbar />
     <v-main style="height: 100%; overflow: hidden;">
       <v-container fluid class="fill-height pa-0 ma-0">
-        <v-row justify="center" align="stretch" class="fill-height ma-0">
-          <v-col cols="12" md="10" offset-md="1" class="pa-0 d-flex flex-column" style="height: 100%;">
+        <v-row cols="12" md="10"justify="center" align="stretch" class="fill-height ma-0">
+          <v-col  class="pa-0 d-flex flex-column" style="height: 100%;">
             <MinuteDisplay :meeting="transcriptHeaderData">
               <div class="content-block pa-4 rounded">
                 <div v-for="(line, index) in transcriptLines" :key="index" class="mb-2">
@@ -15,7 +15,29 @@
                 </div>
               </div>
             </MinuteDisplay>
-          </v-col>
+          </v-col>      
+        <v-col cols="12" md="2" class="pa-0" style="height: 100%;">
+        <ActionButtonsBar>
+          <template #top-button>
+            <ViewKanbanButton @action="handleMinutesAction" />
+          </template>
+          <template #middle-button-1>
+            <EditButton @action="handleMinutesAction" />
+          </template>
+          <template #middle-button-2>
+            <TranscriptButton @action="handleMinutesAction" />
+          </template>
+          <template #middle-button-3>
+            <ShareButton @action="handleMinutesAction" />
+          </template>
+          <template #middle-button-4>
+            <DownloadButton @action="handleMinutesAction" />
+          </template>
+          <template #bottom-button>
+            <TasklistButton @action="handleMinutesAction" />
+          </template>
+        </ActionButtonsBar>
+      </v-col>
         </v-row>
       </v-container>
     </v-main>
@@ -26,7 +48,14 @@
 import Sidebar from "../components/Sidebar.vue";
 import Navbar from "../components/Navbar.vue";
 
-import MinuteDisplay from "../components/MinuteDisplay.vue"; // Your updated component
+import MinuteDisplay from "../components/MinuteDisplay.vue";  
+import ActionButtonsBar from '../components/ActionButtonsBar.vue'; 
+import ViewKanbanButton from '../components/Buttons/KanbanButton.vue'; 
+import TranscriptButton from '../components/Buttons/TranscriptButton.vue'; 
+import EditButton from '../components/Buttons/EditButton.vue'; 
+import ShareButton from '../components/Buttons/ShareButton.vue'; 
+import DownloadButton from '../components/Buttons/DownloadButton.vue'; 
+import TasklistButton from '../components/Buttons/TasklistButton.vue';  
 import { ref } from 'vue';
 
 const transcriptHeaderData = ref({

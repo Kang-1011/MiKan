@@ -7,16 +7,23 @@ export {}
 
 /* prettier-ignore */
 declare module 'vue' {
-  export interface GlobalComponents {
+  export interface GlobalComponents { 
     ActionButtons: typeof import('./components/ActionButtons.vue')['default']
     ActionButtonsBar: typeof import('./components/ActionButtonsBar.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    copy: typeof import('./components/Buttons/EditButton copy.vue')['default']
+    DownloadButton: typeof import('./components/Buttons/DownloadButton.vue')['default']
+    EditButton: typeof import('./components/Buttons/EditButton.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     KanbanButton: typeof import('./components/Buttons/KanbanButton.vue')['default']
+    Lightbulb: typeof import('./components/Lightbulb.vue')['default']
     MinuteDisplay: typeof import('./components/MinuteDisplay.vue')['default']
     Navbar: typeof import('./components/Navbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ShareButton: typeof import('./components/Buttons/ShareButton.vue')['default']
     Sidebar: typeof import('./components/Sidebar.vue')['default']
+    TasklistButton: typeof import('./components/Buttons/TasklistButton.vue')['default']
+    TranscriptButton: typeof import('./components/Buttons/TranscriptButton.vue')['default']
   }
 }
