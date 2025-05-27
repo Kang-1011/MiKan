@@ -1,5 +1,5 @@
 <template>
-  <v-app style="height: 100vh; overflow: hidden;">
+  <v-app style="height: 100vh; overflow: hidden;"> 
     <Sidebar />
     <Navbar />
     <v-main style="height: 100%; overflow: hidden;">
@@ -22,9 +22,10 @@
   </v-app>
 </template>
 
-<script setup>
+<script setup> 
 import Sidebar from "../components/Sidebar.vue";
 import Navbar from "../components/Navbar.vue";
+
 import MinuteDisplay from "../components/MinuteDisplay.vue"; // Your updated component
 import { ref } from 'vue';
 
