@@ -49,28 +49,9 @@
             </MinuteDisplay>
           </v-col>
           
-      <v-col cols="12" md="2" class="pa-0" style="height: 100%;">
-        <ActionButtonsBar>
-          <template #top-button>
-            <ViewKanbanButton @action="handleMinutesAction" />
-          </template>
-          <template #middle-button-1>
-            <FindInPageButton @action="handleMinutesAction" />
-          </template>
-          <template #middle-button-2>
-            <ShareButton @action="handleMinutesAction" />
-          </template>
-          <template #middle-button-3>
-            <DownloadButton @action="handleMinutesAction" />
-          </template>
-          <template #middle-button-4>
-            <PrintButton @action="handleMinutesAction" />
-          </template>
-          <template #bottom-button>
-            <MoreActionsButton @action="handleMinutesAction" />
-          </template>
-        </ActionButtonsBar>
-      </v-col>
+          <v-col cols="12" md="2" class="pa-0" style="height: 100%;">
+            <ActionButtonsBar />
+          </v-col>
         </v-row>
       </v-container>
 
@@ -82,8 +63,7 @@
 import Sidebar from "../components/Sidebar.vue";
 import Navbar from "../components/Navbar.vue";
 import MinuteDisplay from "../components/MinuteDisplay.vue";
-import ActionButtonsBar from '../components/ActionButtonsBar.vue'; 
-import ViewKanbanButton from '../components/Buttons/KanbanButton.vue'; 
+import ActionButtonsBar from '../components/ActionButtonsBar.vue'; // Corrected import
 import { ref } from 'vue';
 
 const meetingHeaderData = ref({
