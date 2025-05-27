@@ -8,8 +8,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    ActionButtons: typeof import('./components/ActionButtons.vue')['default']
-    ActionButtonsBar: typeof import('./components/ActionButtonsBar.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     MinuteDisplay: typeof import('./components/MinuteDisplay.vue')['default']
