@@ -7,7 +7,7 @@ export {}
 
 /* prettier-ignore */
 declare module 'vue' {
-  export interface GlobalComponents { 
+  export interface GlobalComponents {
     ActionButtons: typeof import('./components/ActionButtons.vue')['default']
     ActionButtonsBar: typeof import('./components/ActionButtonsBar.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
@@ -18,6 +18,7 @@ declare module 'vue' {
     KanbanButton: typeof import('./components/Buttons/KanbanButton.vue')['default']
     Lightbulb: typeof import('./components/Lightbulb.vue')['default']
     MinuteDisplay: typeof import('./components/MinuteDisplay.vue')['default']
+    MinutesButton: typeof import('./components/Buttons/MinutesButton.vue')['default']
     Navbar: typeof import('./components/Navbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

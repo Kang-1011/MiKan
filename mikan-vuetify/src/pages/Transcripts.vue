@@ -25,7 +25,7 @@
             <EditButton @action="handleMinutesAction" />
           </template>
           <template #middle-button-2>
-            <TranscriptButton @action="handleMinutesAction" />
+            <MinutesButton @action="handleMinutesAction" />
           </template>
           <template #middle-button-3>
             <ShareButton @action="handleMinutesAction" />
@@ -51,7 +51,7 @@ import Navbar from "../components/Navbar.vue";
 import MinuteDisplay from "../components/MinuteDisplay.vue";  
 import ActionButtonsBar from '../components/ActionButtonsBar.vue'; 
 import ViewKanbanButton from '../components/Buttons/KanbanButton.vue'; 
-import TranscriptButton from '../components/Buttons/TranscriptButton.vue'; 
+import MinutesButton from '../components/Buttons/MinutesButton.vue'; 
 import EditButton from '../components/Buttons/EditButton.vue'; 
 import ShareButton from '../components/Buttons/ShareButton.vue'; 
 import DownloadButton from '../components/Buttons/DownloadButton.vue'; 
