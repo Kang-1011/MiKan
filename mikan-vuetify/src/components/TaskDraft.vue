@@ -120,35 +120,3 @@ const avatars = ref([
   { img: "https://randomuser.me/api/portraits/men/3.jpg" },
 ]);
 </script>
-
-<!-- <template>
-  <v-card class="pa-2" rounded="lg">
-    <v-row class="d-flex align-center mb-4">
-      <v-col cols="9">
-        <h1 class="pl-1" style="background-color: #333; border-radius: 8px">
-          Task Title
-        </h1>
-      </v-col>
-      <v-col>
-        <div class="justify-space-between">
-          <v-btn icon color="red" size="small">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn icon color="red" size="small">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-card class="pa-2" rounded="lg">
-        <v-row class="align-center mb-4">
-          <div>Assignee</div>
-        </v-row>
-        <v-row>
-          <v-sheet> description </v-sheet>
-        </v-row>
-      </v-card>
-    </v-row>
-  </v-card>
-</template> -->
