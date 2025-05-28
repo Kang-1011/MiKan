@@ -1,55 +1,207 @@
 <template>
-  <v-card class="meeting-minutes-card" flat tile light>
-    <v-row no-gutters class="pa-4 pb-0 text-center flex-shrink-0">
-      <v-col>
-        <h1 class="text-h4 font-weight-bold text-black mb-0">{{ meeting.title }}</h1>
-      </v-col>
-    </v-row>
+  <v-app style="height: 100vh; overflow: hidden;">
+    <v-main style="height: 100vh; overflow: hidden;">
+      <v-container fluid class="fill-height pa-0 ma-0">
+        <v-row justify="center" align="stretch" class="fill-height ma-0">
+          <v-col cols="12" md="10" class="pa-0 d-flex flex-column" style="height: 100%;">
+             <v-card class="meeting-minutes-card" flat tile light>
+              <v-row no-gutters class="pa-4 pb-0 text-center flex-shrink-0">
+                <v-col>
+                  <h1 class="text-h4 font-weight-bold text-black mb-0">{{ meetingHeaderData.title }}</h1>
+                </v-col>
+              </v-row>
 
-    <v-row class="pa-4 pt-2 pb-3 justify-center align-center flex-shrink-0" dense>
-      <v-col cols="12" sm="6" md="3" class="py-2 px-2">
-        <v-card outlined class="metadata-card text-center pa-3 fill-height d-flex flex-column justify-center">
-          <div class="text-caption text-black">Created by:</div>
-          <div class="text-h6 font-weight-medium text-black mt-1">{{ meeting.createdBy }}</div>
-        </v-card>
-      </v-col>
-      <v-col cols="12" sm="6" md="3" class="py-2 px-2">
-        <v-card outlined class="metadata-card text-center pa-3 fill-height d-flex flex-column justify-center">
-          <div class="text-caption text-black">Date:</div>
-          <div class="text-h6 font-weight-medium text-black mt-1">{{ formatDate(meeting.date) }}</div>
-        </v-card>
-      </v-col>
-      <v-col cols="12" sm="6" md="3" class="py-2 px-2">
-        <v-card outlined class="metadata-card text-center pa-3 fill-height d-flex flex-column justify-center">
-          <div class="text-caption text-black">Action Items:</div>
-          <div class="text-h6 font-weight-medium text-black mt-1">{{ meeting.actionItemsCount }}</div>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-divider class="mx-4 flex-shrink-0"></v-divider>
+              <v-row class="pa-4 pt-2 pb-3 justify-center align-center flex-shrink-0" dense>
+                <v-col cols="12" sm="6" md="3" class="py-2 px-2">
+                  <v-card outlined class="metadata-card text-center pa-3 fill-height d-flex flex-column justify-center">
+                    <div class="text-caption text-black">Created by:</div>
+                    <div class="text-h6 font-weight-medium text-black mt-1">{{ meetingHeaderData.createdBy }}</div>
+                  </v-card>
+                </v-col>
+                <v-col cols="12" sm="6" md="3" class="py-2 px-2">
+                  <v-card outlined class="metadata-card text-center pa-3 fill-height d-flex flex-column justify-center">
+                    <div class="text-caption text-black">Date:</div>
+                    <div class="text-h6 font-weight-medium text-black mt-1">{{ formatDate(meetingHeaderData.date) }}</div>
+                  </v-card>
+                </v-col>
+                <v-col cols="12" sm="6" md="3" class="py-2 px-2">
+                  <v-card outlined class="metadata-card text-center pa-3 fill-height d-flex flex-column justify-center">
+                    <div class="text-caption text-black">Action Items:</div>
+                    <div class="text-h6 font-weight-medium text-black mt-1">{{ meetingHeaderData.actionItemsCount }}</div>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-divider class="mx-4 flex-shrink-0"></v-divider>
 
-    <v-card-text class="meeting-details pa-4">
-      <slot>
-        <p class="text-center text-grey-darken-1">No content provided.</p>
-      </slot>
-    </v-card-text>
-  </v-card>
+              <v-card-text class="meeting-details pa-4">
+                <div v-if="meetingBodyData.attendees && meetingBodyData.attendees.length" class="content-block pa-4 rounded mb-4">
+                  <h3 class="text-subtitle-1 font-weight-medium text-black mb-2">Attendees:</h3>
+                  <ul class="pl-5">
+                    <li v-for="attendee in meetingBodyData.attendees" :key="attendee.email" class="text-black text-body-2">
+                      {{ attendee.name }} ({{ attendee.email }})
+                    </li>
+                  </ul>
+                </div>
+
+                <div v-if="meetingBodyData.agenda && meetingBodyData.agenda.length" class="content-block pa-4 rounded mb-4">
+                  <h3 class="text-subtitle-1 font-weight-medium text-black mb-2">Agenda & Discussion:</h3>
+                  <div v-for="(item, index) in meetingBodyData.agenda" :key="index" class="mb-3">
+                    <p class="font-weight-medium text-black mb-1 text-body-1">{{ index + 1 }}. {{ item.topic }}</p>
+                    <div v-if="item.discussionPoints && item.discussionPoints.length" class="pl-4 mb-2">
+                      <p class="text-body-2 font-weight-medium text-black mb-1">Key Discussion Points:</p>
+                      <ul class="pl-5">
+                        <li v-for="(point, pIndex) in item.discussionPoints" :key="pIndex" class="text-body-2 text-black">{{ point }}</li>
+                      </ul>
+                    </div>
+                    <div v-if="item.decisionsMade && item.decisionsMade.length" class="pl-4">
+                      <p class="text-body-2 font-weight-medium text-black mb-1">Decisions Made:</p>
+                      <ul class="pl-5">
+                        <li v-for="(decision, dIndex) in item.decisionsMade" :key="dIndex" class="text-body-2 text-black">{{ decision }}</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div v-if="meetingBodyData.nextSteps && meetingBodyData.nextSteps.length" class="content-block pa-4 rounded">
+                  <h3 class="text-subtitle-1 font-weight-medium text-black mb-2">Next Steps (Summary of all Action Items):</h3>
+                  <div v-for="(step, index) in meetingBodyData.nextSteps" :key="index" class="mb-2">
+                    <p class="text-body-2 text-black mb-1">{{ index + 1 }}. {{ step.task }}</p>
+                    <p class="text-caption text-black mb-0">
+                      (Responsible: {{ step.responsible }}, Due: {{ formatDate(step.dueDate) }})
+                    </p>
+                  </div>
+                </div>
+                </v-card-text>
+            </v-card>
+            </v-col>
+          
+          <v-col cols="12" md="2" class="pa-0" style="height: 100%;">
+            <ActionButtonsBar> <template #top-button>
+                <KanbanButton @action="handleMinutesAction" />
+              </template>
+              <template #middle-button-1>
+                <EditButton @action="handleMinutesAction" />
+              </template>
+              <template #middle-button-2>
+                <TranscriptButton @action="handleMinutesAction" />
+              </template>
+              <template #middle-button-3>
+                <ShareButton @action="handleMinutesAction" />
+              </template>
+              <template #middle-button-4>
+                <DownloadButton @action="handleMinutesAction" />
+              </template>
+              <template #bottom-button>
+                <TasklistButton @action="handleMinutesAction" />
+              </template>
+            </ActionButtonsBar>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main> 
+  </v-app>
 </template>
 
-<script setup>
-// defineProps is a compiler macro and does not need to be imported.
-const props = defineProps({
-  meeting: {
-    type: Object,
-    required: true,
-    default: () => ({ // Default for object/array props must be a factory function
-      title: 'Meeting Title',
-      createdBy: 'N/A',
-      date: new Date().toISOString(),
-      actionItemsCount: 0,
-      // Removed attendees, agenda, nextSteps from default as they will be passed via slot
-    }),
-  },
+<script setup> 
+import { ref } from 'vue';
+
+// Assuming these components are imported if not globally registered
+// import Sidebar from './Sidebar.vue'; 
+// import MyAppBar from './MyAppBar.vue';
+// import ActionButtonsBar from './ActionButtonsBar.vue';
+// import KanbanButton from './buttons/KanbanButton.vue';
+// import EditButton from './buttons/EditButton.vue';
+// import TranscriptButton from './buttons/TranscriptButton.vue';
+// import ShareButton from './buttons/ShareButton.vue';
+// import DownloadButton from './buttons/DownloadButton.vue';
+// import TasklistButton from './buttons/TasklistButton.vue';
+
+
+const meetingHeaderData = ref({
+  title: 'Meeting 3 - Minutes',
+  createdBy: 'User 1',
+  date: '2025-05-15T10:00:00.000Z',
+  actionItemsCount: 5, // This could also be dynamically calculated from nextSteps.length if preferred
+});
+
+const meetingBodyData = ref({
+  attendees: [
+    { name: 'Alpha', email: 'email@example.com' },
+    { name: 'Bravo', email: 'email@example.com' },
+    { name: 'Charlie', email: 'charlie@example.com' },
+    { name: 'Delta', email: 'delta@example.com' },
+    { name: 'Echo', email: 'echo@example.com' },
+    { name: 'Foxtrot', email: 'foxtrot@example.com' },
+    { name: 'Golf', email: 'golf@example.com' },
+    { name: 'Hotel', email: 'hotel@example.com' },
+    { name: 'India', email: 'india@example.com' },
+    { name: 'Juliett', email: 'juliett@example.com' },
+    { name: 'Kilo', email: 'kilo@example.com' },
+    { name: 'Lima', email: 'lima@example.com' },
+    { name: 'Mike', email: 'mike@example.com' },
+    { name: 'November', email: 'november@example.com' },
+    { name: 'Oscar', email: 'oscar@example.com' },
+    { name: 'Papa', email: 'papa@example.com' },
+  ],
+  agenda: [
+    {
+      topic: 'New Marketing Campaign Proposal',
+      discussionPoints: [
+        'Presented three campaign concepts (Alpha, Bravo, Charlie).',
+        'Budget considerations for each concept were reviewed.',
+        'Timeline expectations and resource allocation discussed.',
+      ],
+      decisionsMade: ['Proceed with Concept Bravo, with modifications to target demographic based on feedback.'],
+    },
+    {
+      topic: 'Q2 Sales Performance Review',
+      discussionPoints: [
+        'Sales figures for Q2 presented and analyzed.',
+        'Regional performance variations highlighted.',
+        'Discussion on factors impacting sales (market trends, competitor actions).',
+      ],
+      decisionsMade: ['Implement a targeted training program for underperforming regions.', 'Adjust Q3 sales targets for specific product lines.'],
+    },
+    {
+      topic: 'Product Development Update - Project Phoenix',
+      discussionPoints: [
+        'Current development phase and milestones achieved.',
+        'Challenges encountered and mitigation strategies.',
+        'Feedback from early beta testers summarized.',
+      ],
+      decisionsMade: ['Allocate additional QA resources to address beta feedback.', 'Schedule a follow-up meeting to finalize feature set for next sprint.'],
+    },
+    {
+      topic: 'Employee Wellness Initiative Brainstorm',
+      discussionPoints: [
+        'Ideas for improving employee wellness presented (e.g., workshops, fitness challenges).',
+        'Potential costs and benefits of various initiatives.',
+        'Survey results on employee preferences discussed.',
+      ],
+      decisionsMade: ['Form a small working group to develop a detailed proposal for two selected initiatives.'],
+    },
+    {
+      topic: 'Review of Customer Feedback from Last Month',
+      discussionPoints: [
+        'Key themes from customer support tickets and surveys.',
+        'Positive feedback areas and areas for improvement.',
+        'Specific examples of customer pain points.',
+      ],
+      decisionsMade: ['Prioritize addressing the top 3 pain points in the next product update cycle.', 'Update FAQ documentation based on common queries.'],
+    },  
+  ],
+  nextSteps: [
+    { task: 'Brian to circulate the revised Concept Bravo marketing proposal to the team.', responsible: 'Brian M.', dueDate: '2025-05-22T10:00:00.000Z' },
+    { task: 'Alice to draft the Q3 sales target adjustments and present to management.', responsible: 'Alice W.', dueDate: '2025-05-29T10:00:00.000Z' },
+    { task: 'David to coordinate with QA for additional resources for Project Phoenix.', responsible: 'David K.', dueDate: '2025-05-20T10:00:00.000Z' },
+    { task: 'Sarah to lead the working group for the employee wellness initiative proposal.', responsible: 'Sarah P.', dueDate: '2025-06-05T10:00:00.000Z' },
+    { task: 'Mike to compile a list of FAQ updates based on recent customer feedback.', responsible: 'Mike L.', dueDate: '2025-05-24T10:00:00.000Z' },
+    { task: 'Team to review Project Phoenix beta feedback individually before next sprint planning.', responsible: 'All Dev Team', dueDate: '2025-05-21T10:00:00.000Z' },
+    { task: 'Finance department to provide budget impact analysis for Concept Bravo.', responsible: 'Finance Team', dueDate: '2025-05-23T10:00:00.000Z' },
+    { task: 'HR to schedule interviews for the wellness working group participants.', responsible: 'HR Department', dueDate: '2025-05-28T10:00:00.000Z' },
+    { task: 'Customer Support to implement immediate workaround for critical issue X reported by users.', responsible: 'Support Lead', dueDate: '2025-05-17T10:00:00.000Z' },
+    { task: 'Marketing team to research competitor strategies for similar campaigns.', responsible: 'Marketing Team', dueDate: '2025-06-01T10:00:00.000Z' },
+  ],
 });
 
 const formatDate = (dateString) => {
@@ -57,14 +209,29 @@ const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   try {
     return new Date(dateString).toLocaleDateString(undefined, options);
-  } catch (e) {
+  } catch (e) { 
     console.error("Error formatting date:", e);
     return dateString; 
   }
 };
+
+const handleMinutesAction = (action) => {
+  // Placeholder for handling actions from the ActionButtonsBar
+  console.log('Action triggered:', action);
+  // Example: if (action === 'edit') { router.push('/edit-minutes/' + meetingId); }
+};
+
 </script>
 
 <style scoped>
+/* Styles from original Minutes.vue */
+.content-block {
+  background-color: #FFFFFF; /* Each section row background color */
+  /* Using Vuetify classes for padding (pa-4) and border-radius (rounded) in template */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Styles from original MinuteDisplay.vue */
 .meeting-minutes-card {
   background-color: #FFFFFF; /* Whole minutes section background */
   border-radius: 8px; 
@@ -91,14 +258,6 @@ const formatDate = (dateString) => {
   border-radius: 6px; /* Rounded corners for the board area */
 }
 
-/* .content-block class will now be applied to the elements *inside* the slot by the parent */
-/*
-.content-block {
-  background-color: #FFFFFF; 
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-*/
-
 /* Custom Scrollbar Styling */
 .meeting-details::-webkit-scrollbar {
   width: 8px;
@@ -114,5 +273,4 @@ const formatDate = (dateString) => {
   border-radius: 10px;
   border: 2px solid #E0E0E0; /* Creates padding around thumb */
 }
- 
 </style>

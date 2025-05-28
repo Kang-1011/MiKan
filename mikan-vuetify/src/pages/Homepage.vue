@@ -1,7 +1,12 @@
-<template>
-  <Sidebar />
-  <Navbar />
-  <AudioConverter />
+<template> 
+    <Sidebar />
+    <MyAppBar />  
+    <v-app>
+    <v-main>
+
+      <Lightbulb />
+    <AudioConverter />
+    </v-main></v-app>
 </template>
 
 <script>
