@@ -38,8 +38,9 @@ onMounted(() => {
 
 <style scoped>
 .action-buttons-container {
+  background-color: #EBEBEB; 
   position: relative;
-  height: 100%; 
+  height: 95vh; /* Full height to fill the column */
   display: flex;
   flex-direction: column;
   align-items: center; 
