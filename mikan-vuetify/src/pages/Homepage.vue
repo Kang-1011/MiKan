@@ -1,22 +1,16 @@
-<template>
-  <v-app>
+<template> 
     <Sidebar />
-    <Navbar />
+    <MyAppBar />  
+    <v-app>
     <v-main>
-      <!-- Your main content here -->
-    </v-main>
-  </v-app>
+
+      <Lightbulb />
+    <AudioConverter />
+    </v-main></v-app>
 </template>
 
 <script>
 import Sidebar from "../components/Sidebar.vue";
 import Navbar from "../components/Navbar.vue";
-
-export default {
-  name: "App",
-  components: {
-    Sidebar,
-    Navbar,
-  },
-};
+import AudioConverter from "../components/AudioConverter.vue";
 </script>
