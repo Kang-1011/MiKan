@@ -15,8 +15,7 @@
       </v-chip>
       <div class="d-flex align-center">
         <DeleteButtonDialogue></DeleteButtonDialogue>
-        <v-btn class="ml-2">Edit</v-btn>
-        <!-- <EditButtonDialog></EditButtonDialog> -->
+        <EditTaskDialog></EditTaskDialog>
       </div>
     </div>
 
@@ -54,6 +53,7 @@
 <script setup>
 import { ref } from "vue";
 import DeleteButtonDialogue from "./DeleteButtonDialogue";
+import EditTaskDialog from "./EditTaskDialog.vue";
 const props = defineProps({
   taskData: {
     type: Object,
