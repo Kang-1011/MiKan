@@ -1,13 +1,23 @@
 <template>
-  <v-card>
-    <v-btn
-      icon
-      color="success"
-      size="60"
-      class="ma-2 position-fixed bottom-0"
-      @click="dialog = true"
+  <v-container>
+    <v-card
+      max-width="400"
+      class="d-flex align-end bg-surface-variant pa-2 rounded"
     >
-      <v-icon size="60">mdi-check</v-icon>
-    </v-btn>
-  </v-card>
+      <createDialog align="center" v-model="showDialog" />
+    </v-card>
+  </v-container>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import createDialog from "./createNewKanbanTaskButton.vue";
+import createNewKanbanTaskDialog from "./createNewKanbanTaskDialog";
+
+const showDialog = ref(false);
+
+const cards = ref([]);
+function addCard(newCard) {
+  cards.value.push(newCard);
+}
+</script>
