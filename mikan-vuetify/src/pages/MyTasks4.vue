@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import MyAppBar from '@/components/MyAppBar.vue'
+import MyAppBar from '@/components/NavbarMyTasks.vue'
 import ProjectBoard4 from '@/components/ProjectBoards4.vue'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -130,6 +130,160 @@ const projects = ref<Project[]>([
           }
         ]
       }
+    ]
+  },
+  {
+    id: 3,
+    title: 'Italian Brainrot',
+    color: '#1976D2',
+    boards: [
+      {
+        name: 'Tralalero Tralala',
+        color: 'purple lighten-1',
+        tasks: [
+          {
+            id: 3001,
+            title: 'Design endpoint schema',
+            date: '2025-06-05',
+            description: 'Decide on REST vs GraphQL'
+          }
+        ]
+      },
+      {
+        name: 'Bombardino Crocodilo',
+        color: 'teal lighten-1',
+        tasks: [
+          {
+            id: 3002,
+            title: 'Implement authentication',
+            date: '2025-05-30',
+            description: 'JWT middleware + token refresh'
+          }
+        ]
+      },
+      {
+        name: 'Tung',
+        color: 'orange lighten-1',
+        tasks: [
+          {
+            id: 3003,
+            title: 'Tung',
+            date: '2025-05-20',
+            description: 'Tung'
+          },
+          {
+            id: 3003,
+            title: 'Tung',
+            date: '2025-05-20',
+            description: 'Tung'
+          },
+          {
+            id: 3003,
+            title: 'Tung',
+            date: '2025-05-20',
+            description: 'Tung'
+          },
+          {
+            id: 3003,
+            title: 'Tung',
+            date: '2025-05-20',
+            description: 'Tung'
+          },
+          {
+            id: 3003,
+            title: 'Tung',
+            date: '2025-05-20',
+            description: 'Tung'
+          },
+          {
+            id: 3003,
+            title: 'Tung',
+            date: '2025-05-20',
+            description: 'Tung'
+          },
+          {
+            id: 3003,
+            title: 'Tung',
+            date: '2025-05-20',
+            description: 'Tung'
+          },
+          {
+            id: 3003,
+            title: 'Tung',
+            date: '2025-05-20',
+            description: 'Tung'
+          },
+          {
+            id: 3003,
+            title: 'Sahur',
+            date: '2025-05-20',
+            description: ''
+          },          
+        ]
+      },
+      {
+        name: 'Brr Brr',
+        color: 'teal lighten-1',
+        tasks: [
+          {
+            id: 3002,
+            title: 'Patapim',
+            date: '2025-05-30',
+            description: 'JWT middleware + token refresh'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: 'Bee Movie Script',
+    color: '#1976D2',
+    boards: [
+      {
+        name: 'According to all known laws of aviation,',
+        color: 'purple lighten-1',
+        tasks: [
+          {
+            id: 2001,
+            title: 'Design endpoint schema',
+            date: '2025-06-05',
+            description: 'Decide on REST vs GraphQL'
+          }
+        ]
+      },
+      {
+        name: 'there is no way a bee should be able to fly. Its wings are too small ',
+        color: 'teal lighten-1',
+        tasks: [
+          {
+            id: 2002,
+            title: 'Implement authentication',
+            date: '2025-05-30',
+            description: 'JWT middleware + token refresh'
+          }
+        ]
+      },
+      {
+        name: 'Done',
+        color: 'orange lighten-1',
+        tasks: [
+          {
+            id: 2003,
+            title: 'Write README',
+            date: '2025-05-20',
+            description: 'Populate project documentation'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: 'Empty Project',
+    color: '#1976D2',
+    boards: [
+      
     ]
   }
 ])
