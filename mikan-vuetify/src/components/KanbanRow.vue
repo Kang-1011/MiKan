@@ -4,7 +4,7 @@
         {{ title }}
       </div>
       <v-slide-group show-arrows class="py-4">
-        <v-slide-item v-for="(card,i) in cards" :key="i">
+        <v-slide-group-item v-for="(card,i) in cards" :key="i">
           <v-card class="mr-4" style="width:200px">
             <v-sheet :color="card.color" class="pa-2 white--text">
               <div class="font-weight-medium">{{ card.header }}</div>
@@ -17,11 +17,12 @@
             <v-divider />
             <v-list-item v-for="n in card.items" :key="n" class="pa-2" />
           </v-card>
-        </v-slide-item>
+        </v-slide-group-item>
       </v-slide-group>
     </div>
   </template>
   <script>
+  console.log("KanbanRow is being called!!!")
   export default {
     name: 'KanbanRow',
     props: {

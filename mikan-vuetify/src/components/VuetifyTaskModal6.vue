@@ -181,7 +181,7 @@
     </v-dialog>
   </template>
   
-  <script setup>
+  <script lang='ts' setup>
   import { computed, ref } from 'vue'
   
   const props = defineProps({ modelValue: { type: Boolean, required: true } })

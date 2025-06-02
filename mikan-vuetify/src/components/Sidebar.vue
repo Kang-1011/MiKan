@@ -29,7 +29,7 @@
       </v-list-item>
 
       <!-- Kanban Boards Section -->
-      <v-subheader class="grey--text mt-4">Kanban Boards</v-subheader>
+      <v-list-subheader class="grey--text mt-4">Kanban Boards</v-list-subheader>
       <v-list-item
         v-for="project in projects"
         :key="project.title"
