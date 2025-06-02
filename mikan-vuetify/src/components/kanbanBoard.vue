@@ -6,9 +6,11 @@
         <kanbanList> </kanbanList>
       </v-col>
       <v-col>
+        <v-card title="In progress" align="center"></v-card>
         <kanbanList></kanbanList>
       </v-col>
       <v-col>
+        <v-card title="Done" align="center"></v-card>
         <kanbanList></kanbanList>
       </v-col>
     </v-row>
