@@ -2,15 +2,15 @@
   <v-card>
     <v-row>
       <v-col>
-        <v-card title="To do" align="center"></v-card>
+        <v-card class="mt-2" title="To do" align="center"></v-card>
         <kanbanList> </kanbanList>
       </v-col>
       <v-col>
-        <v-card title="In progress" align="center"></v-card>
+        <v-card class="mt-2" title="In progress" align="center"></v-card>
         <kanbanList></kanbanList>
       </v-col>
       <v-col>
-        <v-card title="Done" align="center"></v-card>
+        <v-card class="mt-2" title="Done" align="center"></v-card>
         <kanbanList></kanbanList>
       </v-col>
     </v-row>

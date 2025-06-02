@@ -1,9 +1,6 @@
 <template>
   <v-container>
-    <v-card
-      max-width="400"
-      class="d-flex align-end bg-surface-variant pa-2 rounded"
-    >
+    <v-card max-width="450" class="d-flex align-end bg-surface-variant rounded">
       <createDialog align="center" v-model="showDialog" />
     </v-card>
   </v-container>
