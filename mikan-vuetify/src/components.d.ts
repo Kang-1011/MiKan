@@ -43,7 +43,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ShareButton: typeof import('./components/MinutesComponent/ShareButton.vue')['default']
-    Sidebar: typeof import('./components/AudioComponent/Sidebar.vue')['default']
+    Sidebar: typeof import('./components/Sidebar.vue')['default']
     TaskDraft: typeof import('./components/TaskDraft.vue')['default']
     TasklistButton: typeof import('./components/MinutesComponent/TasklistButton.vue')['default']
     TranscriptButton: typeof import('./components/MinutesComponent/TranscriptButton.vue')['default']
