@@ -17,10 +17,14 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router"; // Import useRouter
+
+const router = useRouter();
 const emit = defineEmits(['action']);
 const handleClick = () => {
   console.log('ViewKanbanButton clicked');
   emit('action', { type: 'viewKanban' });
+  router.push("/kanbanPage");
 };
 </script>
 

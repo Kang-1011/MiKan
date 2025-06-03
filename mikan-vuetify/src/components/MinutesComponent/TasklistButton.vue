@@ -9,7 +9,7 @@
         class="action-button-style"
         @click="handleClick"
       >
-        <v-icon>mdi-format-list-checkbox</v-icon>
+        <v-icon size="50">mdi-format-list-checkbox</v-icon>
       </v-btn>
     </template>
     <span>View Task List</span>
@@ -17,16 +17,23 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router"; // Import useRouter
+
+const router = useRouter();
 const emit = defineEmits(['action']);
 const handleClick = () => {
   console.log('Task list clicked');
   emit('action', { type: 'tasklist' });
+  router.push("/ManagerReview");
 };
 </script>
 
 <style scoped>
 .v-btn {
   background-color: #FF3D00;
+  height: 100px !important;; 
+  width: 100px;
+  border-radius:  100%;
 }
 
 .action-button-style {
