@@ -30,6 +30,6 @@ export default defineComponent({
 <style scoped>
 /* (Optional) space the rows slightly */
 div > * + * {
-  margin-top: 32px;
+  margin-top: 0px;
 }
 </style>

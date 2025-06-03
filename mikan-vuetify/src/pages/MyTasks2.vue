@@ -11,7 +11,7 @@
   </template>
   <script setup>
   import Sidebar from '../components/Sidebar.vue'
-  import MyAppBar from '../components/MyAppBar.vue'
+  import MyAppBar from '../components/NavbarKanban.vue'
   import ProjectBoards from '../components/ProjectBoards.vue'
   import { ref } from 'vue'
   
