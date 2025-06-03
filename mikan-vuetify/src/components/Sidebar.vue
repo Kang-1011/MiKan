@@ -19,6 +19,7 @@
       <v-list-item
         v-for="item in menuItems"
         :key="item.title"
+        @click="sidebarNavigation(item.routePath)"
         link
         class="px-4"
       >
@@ -67,15 +68,38 @@
   </v-navigation-drawer>
 </template>
 
-<script>
+<script setup>
+  import { ref } from 'vue';
+  import { useRouter } from "vue-router"; 
+  const router = useRouter();
+  const menuItems = ref([
+    { title: "New Meeting", icon: "mdi-plus-circle", routePath: "/Homepage" },
+    { title: "Kanban Board", icon: "mdi-view-dashboard", routePath: "/KanbanPage"  },
+    { title: "My Tasks", icon: "mdi-checkbox-marked", routePath: "/MyTasks4" },
+    { title: "Manager Review", icon: "mdi-file", routePath: "/ManagerReview" },
+  ]);
+  const projects = ref([
+    { title: "Project 1" },
+    { title: "Project 2" },
+    { title: "Project 3" },
+  ]);
+
+  const sidebarNavigation = (routePath) => {
+    console.log("Navigation to:", routePath);
+    router.push(routePath);
+  };
+
+</script>
+
+<!-- <script>
 export default {
   name: "Sidebar",
   data: () => ({
     menuItems: [
-      { title: "New Meeting", icon: "mdi-plus-circle" },
-      { title: "Kanban Board", icon: "mdi-view-dashboard" },
-      { title: "My Tasks", icon: "mdi-checkbox-marked" },
-      { title: "Some other page", icon: "mdi-file" },
+      { title: "New Meeting", icon: "mdi-plus-circle", routePath: "/Homepage" },
+      { title: "Kanban Board", icon: "mdi-view-dashboard", routePath: "/KanbanPage"  },
+      { title: "My Tasks", icon: "mdi-checkbox-marked", routePath: "/MyTasks4" },
+      { title: "Some other page", icon: "mdi-file", routePath: "/ManagerReview" },
     ],
     projects: [
       { title: "Project 1" },
@@ -84,7 +108,7 @@ export default {
     ],
   }),
 };
-</script>
+</script> -->
 
 <style scoped>
 .sidebar {
