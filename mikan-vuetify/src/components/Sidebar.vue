@@ -91,25 +91,6 @@
 
 </script>
 
-<!-- <script>
-export default {
-  name: "Sidebar",
-  data: () => ({
-    menuItems: [
-      { title: "New Meeting", icon: "mdi-plus-circle", routePath: "/Homepage" },
-      { title: "Kanban Board", icon: "mdi-view-dashboard", routePath: "/KanbanPage"  },
-      { title: "My Tasks", icon: "mdi-checkbox-marked", routePath: "/MyTasks4" },
-      { title: "Some other page", icon: "mdi-file", routePath: "/ManagerReview" },
-    ],
-    projects: [
-      { title: "Project 1" },
-      { title: "Project 2" },
-      { title: "Project 3" },
-    ],
-  }),
-};
-</script> -->
-
 <style scoped>
 .sidebar {
   width: 280px;
