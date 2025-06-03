@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <Sidebar />
-    <MyAppBar />
+    <Sidebar class="position-fixed"/>
+    <MyAppBar class="position-sticky"/>
 
     <v-main>
       <v-container fluid class="pa-4">
@@ -241,39 +241,60 @@ const projects = ref<Project[]>([
     color: '#1976D2',
     boards: [
       {
-        name: 'According to all known laws of aviation,',
+        name: 'According to all known laws of aviation, there is no way a bee should be able to fly.',
         color: 'purple lighten-1',
         tasks: [
           {
             id: 2001,
-            title: 'Design endpoint schema',
+            title: 'Its wings are too small to get its fat little body off the ground.',
             date: '2025-06-05',
             description: 'Decide on REST vs GraphQL'
           }
         ]
       },
       {
-        name: 'there is no way a bee should be able to fly. Its wings are too small ',
+        name: "  The bee, of course, flies anyway because bees don't care what humans think is impossible.  ",
         color: 'teal lighten-1',
         tasks: [
           {
             id: 2002,
-            title: 'Implement authentication',
+            title: 'Yellow, black.',
+            date: '2025-05-30',
+            description: 'JWT middleware + token refresh'
+          },
+          {
+            id: 2002,
+            title: 'Yellow, black. ',
+            date: '2025-05-30',
+            description: 'JWT middleware + token refresh'
+          },
+          {
+            id: 2002,
+            title: 'Yellow, black.  ',
+            date: '2025-05-30',
+            description: 'JWT middleware + token refresh'
+          },
+          {
+            id: 2002,
+            title: 'Yellow, black.',
+            date: '2025-05-30',
+            description: 'JWT middleware + token refresh'
+          },
+          {
+            id: 2002,
+            title: 'Ooh, black and yellow! ',
             date: '2025-05-30',
             description: 'JWT middleware + token refresh'
           }
+
+
         ]
       },
       {
-        name: 'Done',
+        name: "Oan you believe this is happening? - I can't. I'll pick you up. Looking sharp. Use the stairs. ",
         color: 'orange lighten-1',
         tasks: [
-          {
-            id: 2003,
-            title: 'Write README',
-            date: '2025-05-20',
-            description: 'Populate project documentation'
-          }
+
         ]
       }
     ]

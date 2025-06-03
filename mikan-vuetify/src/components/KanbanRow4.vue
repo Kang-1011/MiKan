@@ -6,17 +6,17 @@
     </div>
 
     <!-- If no boards are present at all -->
-    <div v-if="boards.length === 0" class="pa-4 grey--text text-center">
+    <div v-if="boards.length === 0" class="pa-4 grey--text text-center bg-grey-lighten-2" :style="bodyStyle">
       No boards available
     </div>
 
     <!-- Horizontally scrollable boards -->
-    <v-slide-group v-else show-arrows class="py-4">
+    <v-slide-group v-else show-arrows class="pa-2 bg-grey-lighten-2" :style="bodyStyle">
       <v-slide-group-item
         v-for="(board, bIndex) in boards"
         :key="bIndex"
       >
-        <v-card class="mr-4" style="width: 240px">
+        <v-card class="mr-4 bg-grey-lighten-4" style="width: 240px">
           <!-- Each board’s colored header -->
           <v-sheet :color="board.color" class="pa-2 white--text">
             <div class="font-weight-medium">{{ board.name }}</div>
@@ -24,13 +24,14 @@
 
           <!-- List out all tasks under this board -->
           <v-card-text>
-            <v-list dense>
+            <v-list dense class="">
               <v-list-item
                 v-for="(task, tIndex) in board.tasks"
                 :key="task.id"
-                class="pa-2"
+                class="pa-2 "
                 @click="openTaskModal(task)"
                 style="cursor: pointer;"
+                
               >
                 <v-list-item>
                   <v-list-item-title>{{ task.title }}</v-list-item-title>
@@ -98,7 +99,11 @@ const showModal = ref(false)
 // ─── Computed style for the project header bar ────────────────────────────────
 const headerStyle = computed(() => ({
   background: props.headerColor,
-  borderRadius: '8px 0 8px 0'
+  borderRadius: '4px 4px 0 0'
+}))
+
+const bodyStyle = computed(() => ({
+  borderRadius: '0 0 4px 4px'
 }))
 
 // ─── Methods ──────────────────────────────────────────────────────────────────
