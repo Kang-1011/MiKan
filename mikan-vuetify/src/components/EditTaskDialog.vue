@@ -60,65 +60,60 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  props: {
-    initialTask: {
-      type: Object,
-      default: () => ({}),
-    },
+<script setup>
+import { ref, watch } from "vue";
+
+const props = defineProps({
+  initialTask: {
+    type: Object,
+    default: () => ({}),
   },
+});
 
-  data() {
-    return {
-      dialog: false,
-      taskTitle: "",
-      dueDate: "",
-      assignee: "",
-      taskDescription: "",
-    };
-  },
+const emit = defineEmits(["cancel", "save", "regenerate"]);
 
-  watch: {
-    dialog(value) {
-      if (value && this.initialTask) {
-        this.taskTitle = this.initialTask.title || "";
-        this.dueDate = this.initialTask.dueDate || "";
-        this.assignee = this.initialTask.assignee || "";
-        this.taskDescription = this.initialTask.description || "";
-      }
-    },
-  },
+const dialog = ref(false);
+const taskTitle = ref("");
+const dueDate = ref("");
+const assignee = ref("");
+const taskDescription = ref("");
 
-  methods: {
-    cancel() {
-      this.dialog = false;
-      this.$emit("cancel");
-    },
+// Watch dialog: when it opens, pre-fill task data
+watch(dialog, (value) => {
+  if (value && props.initialTask) {
+    taskTitle.value = props.initialTask.title || "";
+    dueDate.value = props.initialTask.dueDate || "";
+    assignee.value = props.initialTask.assignee || "";
+    taskDescription.value = props.initialTask.description || "";
+  }
+});
 
-    save() {
-      if (this.validatedForm()) {
-        this.dialog = false;
-        this.$emit("save", {
-          title: this.taskTitle,
-          dueDate: this.dueDate,
-          assignee: this.assignee,
-          description: this.taskDescription,
-        });
-      }
-    },
+function cancel() {
+  dialog.value = false;
+  emit("cancel");
+}
 
-    regenerate() {
-      this.dialog = false;
-      this.$emit("regenerate");
-    },
+function save() {
+  if (validatedForm()) {
+    dialog.value = false;
+    emit("save", {
+      title: taskTitle.value,
+      dueDate: dueDate.value,
+      assignee: assignee.value,
+      description: taskDescription.value,
+    });
+  }
+}
 
-    validatedForm() {
-      // will add validation logic later on... or not
-      return true;
-    },
-  },
-};
+function regenerate() {
+  dialog.value = false;
+  emit("regenerate");
+}
+
+function validatedForm() {
+  // Placeholder for validation logic
+  return true;
+}
 </script>
 
 /* Example usage in a parent component: */
