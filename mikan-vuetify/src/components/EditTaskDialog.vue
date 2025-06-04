@@ -3,11 +3,11 @@
     <v-btn
       icon
       color="yellow-darken-2"
-      size="35"
-      class="mr-1"
       @click="dialog = true"
+      variant="flat"
+      density="compact"
     >
-      <v-icon size="25">mdi-pencil</v-icon>
+      <v-icon size="default">mdi-pencil</v-icon>
     </v-btn>
     <v-dialog v-model="dialog" max-width="600px">
       <v-card>
