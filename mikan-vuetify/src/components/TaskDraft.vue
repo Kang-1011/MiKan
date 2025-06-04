@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <v-card class="pa-4" elevation="4" rounded="lg">
     <div
       class="d-flex justify-space-between align-center mb-4"
@@ -72,4 +72,71 @@ const avatars = ref([
   { img: "https://randomuser.me/api/portraits/women/2.jpg" },
   { img: "https://randomuser.me/api/portraits/men/3.jpg" },
 ]);
+</script> -->
+
+<template>
+  <v-card elevation="4" height="320">
+    <v-row class="align-center pa-2 rounded-lg">
+      <v-col cols="8" class="bg-blue-grey-lighten-2">
+        <h2 class="d-flex justify-start">Task title</h2>
+      </v-col>
+      <v-col>
+        <div class="d-flex justify-end">
+          <deleteTask size="small" class="mr-1"></deleteTask>
+          <editTask size="small"></editTask>
+        </div>
+      </v-col>
+    </v-row>
+    <v-sheet>
+      <v-row class="align-center pl-2">
+        <v-col cols="1">
+          <v-icon>mdi-calendar</v-icon>
+        </v-col>
+        <v-col cols="5">
+          <div>Due date</div>
+        </v-col>
+        <v-col cols="1">
+          <v-icon>mdi-human</v-icon>
+        </v-col>
+        <v-col cols="5">
+          <div>Assignee</div>
+        </v-col>
+      </v-row>
+    </v-sheet>
+
+    <v-row class="align-center">
+      <v-col class="pa-2">
+        <v-sheet class="border rounded overflow-y-scroll" height="200">
+          <div></div>
+        </v-sheet>
+      </v-col>
+    </v-row>
+  </v-card>
+</template>
+
+<script setup>
+import { ref } from "vue";
+// import DeleteButtonDialogue from "./DeleteButtonDialogue";
+// import EditTaskDialog from "./EditTaskDialog.vue";
+import deleteTask from "./TaskDraftDeleteButton";
+// import editTask from "./TaskDraftEditButton";
+
+// const props = defineProps({
+//   taskData: {
+//     type: Object,
+//     required: true,
+//   },
+//   taskIndex: {
+//     type: Number,
+//     required: true,
+//   },
+// });
+// const taskTitle = ref("Task Title");
+// const dueDate = ref("2025-05-30");
+// const description = ref("Description...");
+// const avatars = ref([
+//   { img: "https://randomuser.me/api/portraits/men/1.jpg" },
+//   { img: "https://randomuser.me/api/portraits/women/2.jpg" },
+//   { img: "https://randomuser.me/api/portraits/men/3.jpg" },
+// ]);
 </script>
