@@ -5,7 +5,7 @@
       style="padding: 8px; border-radius: 8px"
     >
       <v-chip
-        color="red"
+        color=""
         text-color="black"
         class="font-weight-medium text-h6 px-4"
         style="min-width: 150px"

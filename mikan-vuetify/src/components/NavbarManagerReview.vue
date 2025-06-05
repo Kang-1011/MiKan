@@ -59,8 +59,9 @@ function toggleDark() {
 
 /* Force the search bar’s background to white */
 .search-white ::v-deep .v-input__control {
-  background-color: #a5a5a5 !important;
-  /* border-radius: 10%; */
+  background-color: #ffffff !important;
+  color:#7e7e7e;
+  border-radius: 5px;
 }
 .search-white ::v-deep .v-text-field__slot {
   background-color: #a5a5a5 !important;

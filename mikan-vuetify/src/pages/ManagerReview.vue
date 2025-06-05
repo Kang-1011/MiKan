@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <Sidebar />
-    <NavbarManagerReview />
+    <Sidebar class="position-fixed"/>
+    <NavbarManagerReview class="position-fixed"/>
     <v-main>
       <v-container fluid>
         <v-row>

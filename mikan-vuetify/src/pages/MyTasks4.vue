@@ -163,7 +163,7 @@ const projects = ref<Project[]>([
       },
       {
         name: 'Tung',
-        color: 'orange lighten-1',
+        color: 'purple lighten-1',
         tasks: [
           {
             id: 3003,
@@ -292,7 +292,7 @@ const projects = ref<Project[]>([
       },
       {
         name: "Oan you believe this is happening? - I can't. I'll pick you up. Looking sharp. Use the stairs. ",
-        color: 'orange lighten-1',
+        color: 'purple lighten-1',
         tasks: [
 
         ]
