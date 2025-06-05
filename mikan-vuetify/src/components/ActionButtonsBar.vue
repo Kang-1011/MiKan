@@ -11,10 +11,7 @@
       </div>
       <div class="button-slot-item">
         <slot name="middle-button-2"></slot>
-      </div>
-      <div class="button-slot-item">
-        <slot name="middle-button-3"></slot>
-      </div>
+      </div> 
       <div class="button-slot-item">
         <slot name="middle-button-4"></slot>
       </div>
@@ -43,7 +40,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 0; /* Vertical padding for the container */
+  padding: 24px 0;  
+  padding-bottom: 84px; 
   box-sizing: border-box;
   justify-content: space-between; /* Distributes: TopButton, MiddleGroup, BottomButton */
   overflow: hidden; /* Prevent the container itself from causing scrollbars if padding or content calculation is slightly off */

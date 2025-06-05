@@ -3,7 +3,7 @@
     <v-main style="height: 100vh; overflow: hidden;">
       <v-container fluid class="fill-height pa-0 ma-0">
         <v-row justify="center" align="stretch" class="fill-height ma-0">
-          <v-col cols="12" md="10" class="pa-0 d-flex flex-column" style="height: 100%;">
+          <v-col cols="12" md="12" class="pa-0 d-flex flex-column" style="height: 100%;">
              <v-card class="meeting-minutes-card" flat tile light>
               <v-row no-gutters class="pa-4 pb-0 text-center flex-shrink-0">
                 <v-col>
@@ -73,29 +73,7 @@
                 </div>
                 </v-card-text>
             </v-card>
-            </v-col>
-          
-          <v-col cols="12" md="2" class="pa-0  position-sticky"  style="height: 100%;">
-            <ActionButtonsBar> <template #top-button>
-                <KanbanButton  />
-              </template>
-              <template #middle-button-1>
-                <EditButton @action="handleMinutesAction" />
-              </template>
-              <template #middle-button-2>
-                <TranscriptButton   />
-              </template>
-              <template #middle-button-3>
-                <ShareButton   />
-              </template>
-              <template #middle-button-4>
-                <DownloadButton   />
-              </template>
-              <template #bottom-button>
-                <TasklistButton  />
-              </template>
-            </ActionButtonsBar>
-          </v-col>
+            </v-col> 
         </v-row>
       </v-container>
     </v-main> 
@@ -227,6 +205,7 @@ const handleMinutesAction = (action) => {
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   color: black;
+  width:100%
 }
 
 .metadata-card {
