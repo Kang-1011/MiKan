@@ -1,6 +1,6 @@
 <template>
   <Sidebar />
-  <MyAppBar3 />
+  <Topbar title="Meeting Transcript" />
   <TranscriptDisplay />
 </template>
 

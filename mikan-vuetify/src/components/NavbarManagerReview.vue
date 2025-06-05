@@ -4,7 +4,11 @@
     <v-spacer />
     <v-btn text>Filter <v-icon right>mdi-menu-down</v-icon></v-btn>
     <v-btn text>Group by<v-icon right>mdi-menu-down</v-icon></v-btn>
-    <v-btn color="orange" class="ml-4">Create</v-btn>
+    <v-btn color="orange" class="ml-4" @click="create">Create</v-btn>
+    <v-dialog v-model="create">
+      <CreateNewTaskDialog />
+    </v-dialog>
+
     <v-btn
       icon
       @click="toggleDark"
@@ -29,6 +33,7 @@
 //   export default { name: 'MyAppBar' }
 import { ref } from "vue";
 import { useTheme } from "vuetify";
+import CreateNewTaskDialog from "./CreateNewTaskDialog.vue";
 const search = ref("");
 const darkMode = ref(false);
 const theme = useTheme();
