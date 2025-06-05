@@ -60,26 +60,10 @@
     <!-- Task modal stub: swap `VuetifyTaskModal6` with your own modal component -->
     <VuetifyTaskModal6 v-model="showModal" />
 
-    <!-- <v-dialog v-model="showModal" max-width="600px">
-      <v-card>
-        <v-card-title>Task Details</v-card-title>
-        <v-card-text>
-          <div v-if="selectedTask">
-            <p><strong>Title:</strong> {{ selectedTask.title }}</p>
-            <p><strong>Date:</strong> {{ selectedTask.date }}</p>
-            <p><strong>Description:</strong> {{ selectedTask.description }}</p>
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn text @click="closeTaskModal">Close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog> -->
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, computed } from 'vue'
 import type { Board, Task } from '@/pages/MyTasks4.vue' // Adjust path if needed
 import VuetifyTaskModal6 from '@/components/VuetifyTaskModal6.vue'
