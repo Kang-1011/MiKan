@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Sidebar />
-    <NavbarManagerReview />
+    <Topbar title="Manager Review" />
     <v-main>
       <v-container fluid>
         <v-row>
