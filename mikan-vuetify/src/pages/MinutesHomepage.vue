@@ -1,6 +1,6 @@
 <template>
   <Sidebar />
-  <MyAppBar2 />
+  <Topbar title="Meeting Minutes" />
   <MinuteDisplay />
 </template>
 

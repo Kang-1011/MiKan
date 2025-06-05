@@ -46,7 +46,7 @@
       :disabled="files.length === 0"
       @click="$emit('convert')"
     >
-      <span class="mr-2">Convert to Text</span>
+      <span class="mr-2">Convert to Meeting Minutes</span>
 
       <v-icon right size="24">mdi-text-box-check</v-icon>
     </v-btn>
