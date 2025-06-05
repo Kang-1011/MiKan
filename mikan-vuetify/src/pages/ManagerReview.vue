@@ -1,7 +1,10 @@
 <template>
   <v-app>
-    <Sidebar />
-    <Topbar title="Manager Review" />
+
+    <Sidebar class="position-fixed"/>
+    <NavbarManagerReview class="position-fixed"/>
+      <!-- <Topbar title="Manager Review" /> -->
+
     <v-main>
       <v-container fluid>
         <v-row>

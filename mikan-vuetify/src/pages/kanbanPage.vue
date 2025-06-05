@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <Sidebar />
-    <NavbarKanban />
+    <Sidebar class="position-fixed"/>
+    <NavbarKanban class="position-fixed"/>
     <v-main>
       <kanbanBoard></kanbanBoard>
     </v-main>
