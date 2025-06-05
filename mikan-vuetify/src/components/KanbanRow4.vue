@@ -39,9 +39,9 @@
                     {{ task.date }}
                   </v-list-item-subtitle>
                 </v-list-item>
-                <v-list-item>
+                <!-- <v-list-item>
                   <v-icon size="18">mdi-chevron-right</v-icon>
-                </v-list-item>
+                </v-list-item> -->
               </v-list-item>
 
               <!-- If this board has no tasks, show a placeholder -->
