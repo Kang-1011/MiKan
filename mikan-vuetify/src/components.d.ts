@@ -16,6 +16,7 @@ declare module 'vue' {
     copy: typeof import('./components/HomepageComponent/Topbar.vue')['default']
     CreateNewKanbanTaskButton: typeof import('./components/createNewKanbanTaskButton.vue')['default']
     CreateNewKanbanTaskDialog: typeof import('./components/createNewKanbanTaskDialog.vue')['default']
+    CreateNewTaskDialog: typeof import('./components/CreateNewTaskDialog.vue')['default']
     DeleteButtonDialogue: typeof import('./components/DeleteButtonDialogue.vue')['default']
     DownloadButton: typeof import('./components/MinutesComponent/DownloadButton.vue')['default']
     EditButton: typeof import('./components/MinutesComponent/EditButton.vue')['default']
