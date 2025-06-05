@@ -1,6 +1,6 @@
 <template>
   <Sidebar />
-  <MyAppBar1 />
+  <Topbar title="Homepage" />
   <AudioConverter />
 </template>
 

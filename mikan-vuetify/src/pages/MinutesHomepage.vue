@@ -1,8 +1,10 @@
  
-<template>
-  <v-app style="height: 100vh; overflow: hidden;">
-    <Sidebar />  
-    <MyAppBar2 />  
+
+  <Sidebar />
+  <Topbar title="Meeting Minutes" />
+  <MinuteDisplay />
+</template>
+
 
     <v-main  > 
       <v-container fluid class="fill-height pa-0 ma-0">

@@ -3,11 +3,11 @@
     <v-btn
       icon
       color="red-darken-2"
-      size="35"
-      class="mr-1"
       @click="dialog = true"
+      variant="flat"
+      density="compact"
     >
-      <v-icon size="25">mdi-close</v-icon>
+      <v-icon size="default">mdi-delete</v-icon>
     </v-btn>
 
     <v-dialog v-model="dialog" max-width="500px" align="center">

@@ -1,40 +1,8 @@
  
 <template>
-  <v-app style="height: 100vh; overflow: hidden;">
-    <Sidebar />  
-    <MyAppBar3 />  
-    
-    <v-main  > 
-      <v-container fluid class="fill-height pa-0 ma-0">
-        <v-row no-gutters class="fill-height"> 
-          <v-col cols="12" md="10" class="pa-0" style="height: 100%;">
-            <TranscriptDisplay />
-          </v-col>
-
-          <!-- Action Buttons Bar Area -->
-          <v-col cols="12" md="2" class="pa-0 position-sticky" style="height: 100%; top: 0;"> 
-            <ActionButtonsBar> 
-              <template #top-button>
-                <KanbanButton />
-              </template>
-              <template #middle-button-1>
-                <EditButton @action="handleHomepageAction" />  
-              </template>
-              <template #middle-button-2>
-                <MinutesButton />
-              </template> 
-              <template #middle-button-4>
-                <DownloadButton />
-              </template>
-              <template #bottom-button>
-                <TasklistButton />
-              </template>
-            </ActionButtonsBar>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
+  <Sidebar />
+  <Topbar title="Meeting Transcript" />
+  <TranscriptDisplay />
 </template>
 
 <script setup> 
