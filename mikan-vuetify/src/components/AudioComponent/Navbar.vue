@@ -37,13 +37,8 @@
   </v-app-bar>
 </template>
 
-<script>
-export default {
-  name: "Navbar",
-  data: () => ({
-    search: "",
-  }),
-};
+<script setup>
+  const search = ref("");
 </script>
 
 <style scoped>
