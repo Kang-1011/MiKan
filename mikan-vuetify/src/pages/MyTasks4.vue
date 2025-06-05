@@ -43,11 +43,11 @@ const projects = ref<Project[]>([
   {
     id: 1,
     title: 'Website Redesign',
-    color: '#D32F2F',
+    color: '#f44336',
     boards: [
       {
         name: 'To Do',
-        color: 'red lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 1001,
@@ -65,7 +65,7 @@ const projects = ref<Project[]>([
       },
       {
         name: 'In Progress',
-        color: 'blue lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 1003,
@@ -77,7 +77,7 @@ const projects = ref<Project[]>([
       },
       {
         name: 'Done',
-        color: 'green lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 1004,
@@ -92,11 +92,11 @@ const projects = ref<Project[]>([
   {
     id: 2,
     title: 'API Integration',
-    color: '#1976D2',
+    color: '#f44336',
     boards: [
       {
         name: 'To Do',
-        color: 'purple lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 2001,
@@ -108,7 +108,7 @@ const projects = ref<Project[]>([
       },
       {
         name: 'In Progress',
-        color: 'teal lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 2002,
@@ -120,7 +120,7 @@ const projects = ref<Project[]>([
       },
       {
         name: 'Done',
-        color: 'orange lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 2003,
@@ -135,11 +135,11 @@ const projects = ref<Project[]>([
   {
     id: 3,
     title: 'Italian Brainrot',
-    color: '#1976D2',
+    color: '#f44336',
     boards: [
       {
         name: 'Tralalero Tralala',
-        color: 'purple lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 3001,
@@ -151,7 +151,7 @@ const projects = ref<Project[]>([
       },
       {
         name: 'Bombardino Crocodilo',
-        color: 'teal lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 3002,
@@ -163,7 +163,7 @@ const projects = ref<Project[]>([
       },
       {
         name: 'Tung',
-        color: 'orange lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 3003,
@@ -223,7 +223,7 @@ const projects = ref<Project[]>([
       },
       {
         name: 'Brr Brr',
-        color: 'teal lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 3002,
@@ -238,11 +238,11 @@ const projects = ref<Project[]>([
   {
     id: 4,
     title: 'Bee Movie Script',
-    color: '#1976D2',
+    color: '#f44336',
     boards: [
       {
         name: 'According to all known laws of aviation, there is no way a bee should be able to fly.',
-        color: 'purple lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 2001,
@@ -254,7 +254,7 @@ const projects = ref<Project[]>([
       },
       {
         name: "  The bee, of course, flies anyway because bees don't care what humans think is impossible.  ",
-        color: 'teal lighten-1',
+        color: '#f44336',
         tasks: [
           {
             id: 2002,
@@ -292,7 +292,7 @@ const projects = ref<Project[]>([
       },
       {
         name: "Oan you believe this is happening? - I can't. I'll pick you up. Looking sharp. Use the stairs. ",
-        color: 'orange lighten-1',
+        color: '#f44336',
         tasks: [
 
         ]
@@ -302,7 +302,7 @@ const projects = ref<Project[]>([
   {
     id: 5,
     title: 'Empty Project',
-    color: '#1976D2',
+    color: '#f44336',
     boards: [
       
     ]
