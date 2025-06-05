@@ -27,7 +27,7 @@ const handleClick = () => {
 <style scoped>
 .v-btn {
   background-color: #FF3D00;
-  border-radius:  25%;
+  border-radius:  9999px;
 }
 
 .action-button-style {

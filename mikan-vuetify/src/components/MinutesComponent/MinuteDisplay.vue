@@ -75,24 +75,24 @@
             </v-card>
             </v-col>
           
-          <v-col cols="12" md="2" class="pa-0" style="height: 100%;">
+          <v-col cols="12" md="2" class="pa-0  position-sticky"  style="height: 100%;">
             <ActionButtonsBar> <template #top-button>
-                <KanbanButton @action="handleMinutesAction" />
+                <KanbanButton  />
               </template>
               <template #middle-button-1>
                 <EditButton @action="handleMinutesAction" />
               </template>
               <template #middle-button-2>
-                <TranscriptButton @action="handleMinutesAction" />
+                <TranscriptButton   />
               </template>
               <template #middle-button-3>
-                <ShareButton @action="handleMinutesAction" />
+                <ShareButton   />
               </template>
               <template #middle-button-4>
-                <DownloadButton @action="handleMinutesAction" />
+                <DownloadButton   />
               </template>
               <template #bottom-button>
-                <TasklistButton @action="handleMinutesAction" />
+                <TasklistButton  />
               </template>
             </ActionButtonsBar>
           </v-col>
@@ -103,20 +103,7 @@
 </template>
 
 <script setup> 
-import { ref } from 'vue';
-
-// Assuming these components are imported if not globally registered
-// import Sidebar from './Sidebar.vue'; 
-// import MyAppBar from './MyAppBar.vue';
-// import ActionButtonsBar from './ActionButtonsBar.vue';
-// import KanbanButton from './buttons/KanbanButton.vue';
-// import EditButton from './buttons/EditButton.vue';
-// import TranscriptButton from './buttons/TranscriptButton.vue';
-// import ShareButton from './buttons/ShareButton.vue';
-// import DownloadButton from './buttons/DownloadButton.vue';
-// import TasklistButton from './buttons/TasklistButton.vue';
-
-
+import { ref } from 'vue'; 
 const meetingHeaderData = ref({
   title: 'Meeting 3 - Minutes',
   createdBy: 'User 1',
