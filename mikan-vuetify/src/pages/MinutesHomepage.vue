@@ -1,5 +1,5 @@
  
-
+<template>
   <Sidebar />
   <Topbar title="Meeting Minutes" />
   <MinuteDisplay />
