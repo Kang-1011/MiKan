@@ -1,9 +1,28 @@
- 
-<template>
+ <template>
   <Sidebar />
   <Topbar title="Meeting Transcript" />
   <TranscriptDisplay />
-</template>
+
+  
+  <ActionButtonsBar> 
+              <template #top-button>
+                <KanbanButton />
+              </template>
+              <template #middle-button-1>
+                <EditButton @action="handleHomepageAction" />  
+              </template>
+              <template #middle-button-2>
+                <MinutesButton />
+              </template> 
+              <template #middle-button-4>
+                <DownloadButton />
+              </template>
+              <template #bottom-button>
+                <TasklistButton />
+              </template>
+            </ActionButtonsBar> 
+
+</template> 
 
 <script setup> 
  

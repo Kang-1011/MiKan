@@ -1,22 +1,11 @@
  
 <template>
+       
   <Sidebar />
-  <Topbar title="Meeting Minutes" />
+  <Topbar title="Meeting Minutes" /> 
   <MinuteDisplay />
-</template>
-
-
-    <v-main  > 
-      <v-container fluid class="fill-height pa-0 ma-0">
-        <v-row no-gutters class="fill-height">
-          <!-- Main Content Area -->
-          <v-col cols="12" md="10" class="pa-0" style="height: 100%;">
-            <MinuteDisplay />
-          </v-col>
-
-          <!-- Action Buttons Bar Area -->
-          <v-col cols="12" md="2" class="pa-0 position-sticky" style="height: 100%; top: 0;"> 
-            <ActionButtonsBar> 
+ 
+  <ActionButtonsBar> 
               <template #top-button>
                 <KanbanButton />
               </template>
@@ -32,12 +21,8 @@
               <template #bottom-button>
                 <TasklistButton />
               </template>
-            </ActionButtonsBar>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
+            </ActionButtonsBar> 
+
 </template>
 
 <script setup> 
