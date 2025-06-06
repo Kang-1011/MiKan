@@ -1,14 +1,12 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-text-field v-model="title" label="Title" />
-      <v-text-field v-model="date" label="Due Date" />
-      <v-text-field v-model="assignee" label="Assignee" />
-      <v-text-field v-model="descrip" label="Description" />
+  <v-card>
+    <v-text-field v-model="title" label="Title" />
+    <v-text-field v-model="date" label="Due Date" />
+    <v-text-field v-model="assignee" label="Assignee" />
+    <v-text-field v-model="descrip" label="Description" />
 
-      <v-btn @click="createObject">Create</v-btn>
-    </v-card>
-  </v-container>
+    <v-btn @click="createObject">Create</v-btn>
+  </v-card>
 </template>
 
 <script setup>
@@ -22,7 +20,7 @@ const data = ref({});
 const emit = defineEmits(["transferDataToTaskDraft"]);
 
 function createObject() {
-  data.value = {
+  const data = {
     taskTitle: title.value,
     dueDate: date.value,
     assignee: assignee.value,

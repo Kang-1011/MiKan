@@ -12,7 +12,7 @@
           style="min-width: 150px"
           label
         >
-          {{ taskTitle }}
+          {{ taskData.taskTitle }}
         </v-chip>
         <div class="d-flex justify-end">
           <ApproveOneTask @approved="handleApproval"></ApproveOneTask>
@@ -73,7 +73,7 @@ import EditTaskDialog from "./EditTaskDialog.vue";
 import ApproveOneTask from "./ApproveOneTaskButton";
 
 const props = defineProps({
-  taskData: {
+  data: {
     type: Object,
     required: true,
   },
@@ -89,13 +89,4 @@ function handleApproval() {
   isApproved.value = true;
   snackbar.value = true;
 }
-
-const taskTitle = ref("Task Title");
-const dueDate = ref("2025-05-30");
-const description = ref("Description...");
-// const avatars = ref([
-//   { img: "https://randomuser.me/api/portraits/men/1.jpg" },
-//   { img: "https://randomuser.me/api/portraits/women/2.jpg" },
-//   { img: "https://randomuser.me/api/portraits/men/3.jpg" },
-// ]);
 </script>

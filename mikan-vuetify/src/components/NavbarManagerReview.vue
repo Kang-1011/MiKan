@@ -4,9 +4,9 @@
     <v-spacer />
     <v-btn text>Filter <v-icon right>mdi-menu-down</v-icon></v-btn>
     <v-btn text>Group by<v-icon right>mdi-menu-down</v-icon></v-btn>
-    <v-btn color="orange" class="ml-4" @click="create">Create</v-btn>
+    <v-btn color="orange" class="ml-4" @click="create = true">Create</v-btn>
     <v-dialog v-model="create">
-      <CreateNewTaskDialog />
+      <CreateNewTaskDialog></CreateNewTaskDialog>
     </v-dialog>
 
     <v-btn
@@ -39,6 +39,7 @@ const darkMode = ref(false);
 const theme = useTheme();
 const isDark = ref(theme.global.name.value === "dark");
 theme.global.name.value = darkMode.value ? "dark" : "light";
+const create = ref(false);
 
 function toggleDark() {
   darkMode.value = !darkMode.value;

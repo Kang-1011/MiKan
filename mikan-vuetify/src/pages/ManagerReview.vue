@@ -16,6 +16,7 @@
               :task-data="item"
               :task-index="index"
               @delete-task="deleteTask"
+              @newtask="addTaskToList"
             ></TaskDraft>
           </v-col>
         </v-row>
@@ -31,9 +32,20 @@ import NavbarManagerReview from "../components/NavbarManagerReview.vue";
 import TaskDraft from "../components/TaskDraft.vue";
 import ApproveButtonDialogue from "../components/ApproveButtonDialogue";
 
-// const tasks = ref(Array(9).fill({}));
+// const tasks = ref(
+//   Array(20)
+//     .fill()
+//     .map((_, index) => ({
+//       id: index + 1,
+//       title: `Task ${index + 1}`,
+//       dueDate: "2025-05-30",
+//       assignee: "Team Member",
+//       description: "Task description...",
+//     }))
+// );
+
 const tasks = ref(
-  Array(9)
+  Array(20)
     .fill()
     .map((_, index) => ({
       id: index + 1,
@@ -43,10 +55,14 @@ const tasks = ref(
       description: "Task description...",
     }))
 );
+
 const clearTasks = () => {
   tasks.value = [];
 };
+
 const deleteTask = (index) => {
   tasks.value.splice(index, 1);
 };
+
+function addTaskToList() {}
 </script>
