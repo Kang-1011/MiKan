@@ -1,42 +1,46 @@
+<!-- actionbuttonsbar.vue -->
 <template>
-  <div class="action-buttons-container">
-    <div class="button-slot-item">
-      <slot name="top-button">
-        </slot>
-    </div>
-
-    <div class="middle-buttons-group">
-      <div class="button-slot-item">
+  <v-navigation-drawer
+    permanent
+    location="right"
+    color="#EBEBEB"
+    class="action-bar"
+    width="110"
+  >  
+  <div class="d-flex flex-column fill-height">
+       <div class="pa-4 d-flex justify-center">
+        <slot name="top-button"></slot>
+      </div>
+ <v-spacer></v-spacer>
+      
+       <div class="d-flex flex-column align-center ga-2 mt-4">
         <slot name="middle-button-1"></slot>
-      </div>
-      <div class="button-slot-item">
         <slot name="middle-button-2"></slot>
-      </div>
-      <div class="button-slot-item">
-        <slot name="middle-button-3"></slot>
-      </div>
-      <div class="button-slot-item">
         <slot name="middle-button-4"></slot>
       </div>
-    </div>
 
-    <div class="button-slot-item">
-      <slot name="bottom-button"></slot>
+       <v-spacer></v-spacer>
+       <div class="pa-4 d-flex justify-center">
+        <slot name="bottom-button"></slot>
+      </div>
     </div>
-  </div>
+  </v-navigation-drawer>
 </template>
 
 <script setup>
-// No props or internal button logic needed here anymore for button definitions.
-// The parent component will provide the actual buttons.
 import { onMounted } from 'vue';
 
 onMounted(() => {
-  console.log('ActionButtonsBar.vue (slot-based) mounted.');
+  console.log('ActionButtonsBar.vue (flush vertical layout) mounted.');
 });
 </script>
 
 <style scoped>
+
+.action-bar {
+  border-left: 1px solid #dcdcdc;
+}
+
 .action-buttons-container {
   background-color: #EBEBEB;
   height: 100%; /* Take full height of its parent v-col */

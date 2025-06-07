@@ -1,16 +1,41 @@
  
 <template>
+       
   <Sidebar />
-  <Topbar title="Meeting Minutes" />
+  <Topbar title="Meeting Minutes" /> 
   <MinuteDisplay />
-</template>
  
+  <ActionButtonsBar> 
+              <template #top-button>
+                <KanbanButton />
+              </template>
+              <template #middle-button-1>
+                <EditButton @action="handleHomepageAction" />  
+              </template>
+              <template #middle-button-2>
+                <TranscriptButton />
+              </template> 
+              <template #middle-button-4>
+                <DownloadButton />
+              </template>
+              <template #bottom-button>
+                <TasklistButton />
+              </template>
+            </ActionButtonsBar> 
 
-<style scoped>
-/* Add this style to your minutes.vue if not already global */
+</template>
+
+<script setup> 
+
+const handleHomepageAction = (action) => { 
+  console.log('Action triggered in MinutesHomepage:', action); 
+};
+</script>
+
+
+<style scoped> 
 .content-block {
   background-color: #ffffff; /* Each section row background color */
-  /* Using Vuetify classes for padding (pa-4) and border-radius (rounded) in template */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 </style>

@@ -3,7 +3,7 @@
     <v-main style="height: 100%; overflow: hidden;">
       <v-container fluid class="fill-height pa-0 ma-0">
         <v-row justify="center" align="stretch" class="fill-height ma-0">
-          <v-col cols="12" md="10" class="pa-0 d-flex flex-column" style="height: 100%;">
+          <v-col cols="12" md="12" class="pa-0 d-flex flex-column" style="height: 100%;">
             <v-card class="meeting-display-card" flat tile light>
               <v-row no-gutters class="pa-4 pb-0 text-center flex-shrink-0">
                 <v-col>
@@ -46,30 +46,7 @@
                 </div>
                 </v-card-text>
             </v-card>
-            </v-col>
-          
-          <v-col cols="12" md="2" class="pa-0" style="height: 100%;">
-            <ActionButtonsBar>
-              <template #top-button>
-                <KanbanButton @action="handleMeetingAction" />
-              </template>
-              <template #middle-button-1>
-                <EditButton @action="handleMeetingAction" />
-              </template>
-              <template #middle-button-2>
-                <MinutesButton @action="handleMeetingAction" /> 
-              </template>
-              <template #middle-button-3>
-                <ShareButton @action="handleMeetingAction" />
-              </template>
-              <template #middle-button-4>
-                <DownloadButton @action="handleMeetingAction" />
-              </template>
-              <template #bottom-button>
-                <TasklistButton @action="handleMeetingAction" />
-              </template>
-            </ActionButtonsBar>
-          </v-col>
+            </v-col> 
         </v-row>
       </v-container>
     </v-main>
@@ -78,22 +55,7 @@
 
 <script setup> 
 import { ref } from 'vue';
-
-// Assuming these components are imported if not globally registered.
-// Note: Original Transcript.vue imported Navbar, MinuteDisplay.vue used MyAppBar.
-// I'm using MyAppBar here as it was part of the visual structure of MinuteDisplay.
-// Adjust if Navbar is the correct one for your app structure.
-// import Sidebar from "../components/Sidebar.vue";
-// import MyAppBar from "../components/MyAppBar.vue"; // Or Navbar.vue
-// import ActionButtonsBar from '../components/ActionButtonsBar.vue';
-// import KanbanButton from '../components/buttons/KanbanButton.vue';
-// import EditButton from '../components/buttons/EditButton.vue';
-// import MinutesButton from '../components/buttons/MinutesButton.vue';
-// import ShareButton from '../components/buttons/ShareButton.vue';
-// import DownloadButton from '../components/buttons/DownloadButton.vue';
-// import TasklistButton from '../components/buttons/TasklistButton.vue';
-
-
+  
 const transcriptHeaderData = ref({
   title: 'Meeting 3 - Transcript',
   createdBy: 'User 1',
