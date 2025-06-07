@@ -32,6 +32,7 @@ const handleHomepageAction = (action) => {
 };
 </script>
 
+
 <style scoped> 
 .content-block {
   background-color: #ffffff; /* Each section row background color */
