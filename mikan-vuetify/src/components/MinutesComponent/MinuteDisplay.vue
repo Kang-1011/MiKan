@@ -75,27 +75,6 @@
             </v-card>
             </v-col>
           
-          <v-col cols="12" md="2" class="pa-0  position-sticky"  style="height: 100%;">
-            <ActionButtonsBar> <template #top-button>
-                <KanbanButton  />
-              </template>
-              <template #middle-button-1>
-                <EditButton @action="handleMinutesAction" />
-              </template>
-              <template #middle-button-2>
-                <TranscriptButton   />
-              </template>
-              <template #middle-button-3>
-                <ShareButton   />
-              </template>
-              <template #middle-button-4>
-                <DownloadButton   />
-              </template>
-              <template #bottom-button>
-                <TasklistButton  />
-              </template>
-            </ActionButtonsBar>
-          </v-col>
         </v-row>
       </v-container>
     </v-main> 
