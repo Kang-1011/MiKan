@@ -1,6 +1,4 @@
-<template>
-  <v-app style="height: 100vh; overflow: hidden;">
-    <v-main style="height: 100vh; overflow: hidden;">
+<template> 
       <v-container fluid class="fill-height pa-0 ma-0">
         <v-row justify="center" align="stretch" class="fill-height ma-0">
           <v-col cols="12" md="12" class="pa-0 d-flex flex-column" style="height: 100%;">
@@ -76,19 +74,21 @@
             </v-col>
           
         </v-row>
-      </v-container>
-    </v-main> 
-  </v-app>
+      </v-container> 
 </template>
 
 <script setup> 
-import { ref } from 'vue'; 
+import { defineExpose, ref } from 'vue'; 
 const meetingHeaderData = ref({
   title: 'Meeting 3 - Minutes',
   createdBy: 'User 1',
   date: '2025-05-15T10:00:00.000Z',
   actionItemsCount: 5, // This could also be dynamically calculated from nextSteps.length if preferred
 });
+
+defineExpose ({
+  meetingHeaderData
+})
 
 const meetingBodyData = ref({
   attendees: [

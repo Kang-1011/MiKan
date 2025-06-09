@@ -1,6 +1,4 @@
-<template>
-  <v-app style="height: 100vh; overflow: hidden;"> 
-    <v-main style="height: 100%; overflow: hidden;">
+<template> 
       <v-container fluid class="fill-height pa-0 ma-0">
         <v-row justify="center" align="stretch" class="fill-height ma-0">
           <v-col cols="12" md="12" class="pa-0 d-flex flex-column" style="height: 100%;">
@@ -48,13 +46,11 @@
             </v-card>
             </v-col> 
         </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
+      </v-container> 
 </template>
 
 <script setup> 
-import { ref } from 'vue';
+import { defineExpose, ref } from 'vue';
   
 const transcriptHeaderData = ref({
   title: 'Meeting 3 - Transcript',
@@ -119,6 +115,10 @@ const transcriptLines = ref([
   { timestamp: '00:00:37', speaker: 'Speaker 5 (Rohimi)', dialogue: 'Thank you Chat' },
   { timestamp: '00:00:45', speaker: 'Speaker 6 (Alia)', dialogue: 'Bye Chat' }
 ]);
+
+defineExpose ({
+  transcriptHeaderData
+})
 
 // Function from original MinuteDisplay.vue
 const formatDate = (dateString) => {
