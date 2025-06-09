@@ -28,7 +28,7 @@
  
 
 const handleHomepageAction = (action) => { 
-  console.log('Action triggered in MinutesHomepage:', action); 
+  console.log('Action triggered in TranscriptsHomepage:', action); 
 };
 </script>
 
