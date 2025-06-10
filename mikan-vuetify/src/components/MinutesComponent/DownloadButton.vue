@@ -6,31 +6,11 @@
         fab
         size="x-large"
         dark
-        class="action-button-style"
+        class="action-button-style white--text"
         @click="dialog = true"
       >
         <v-icon>mdi-download-outline</v-icon>
       </v-btn>
-
-      <v-dialog v-model="dialog" max-width="500px" align="center">
-        <v-card>
-          <v-card-title class="text-headline pa-2">Download Item</v-card-title>
-          <div class="icon-container">
-            <v-icon size="50" class="close-icon">mdi-download-outline</v-icon>
-          </div>
-          <v-card-subtitle class="pa-2">
-            Are you sure you want to download this item?
-          </v-card-subtitle>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn style="background-color: grey" text @click="dialog = false"
-              >Cancel</v-btn
-            >
-            <v-btn text @click="downloadItem">Download</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </template>
     <span>Download</span>
   </v-tooltip>
@@ -54,7 +34,8 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from "vue";
+import { ref } from "vue";
+
 const dialog = ref(false);
 
 // 1. Define the 'action' event that the parent is listening for
@@ -67,7 +48,6 @@ function confirmDownload() {
   dialog.value = false;
 }
 </script>
- 
 
 <style scoped>
 .v-btn {

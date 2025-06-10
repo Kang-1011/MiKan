@@ -1,5 +1,7 @@
 <template>
   <Sidebar />
+  <Topbar title="Meeting Transcript" />
+  <MinuteDisplay ref="pdfContent"/>
   <ActionButtonsBar> 
               <template #top-button>
                 <KanbanButton />
@@ -17,24 +19,7 @@
                 <TasklistButton />
               </template>
             </ActionButtonsBar> 
-
-  <ActionButtonsBar>
-    <template #top-button>
-      <KanbanButton />
-    </template>
-    <template #middle-button-1>
-      <EditButton @action="handleHomepageAction" />
-    </template>
-    <template #middle-button-2>
-      <TranscriptButton />
-    </template>
-    <template #middle-button-4>
-      <DownloadButton />
-    </template>
-    <template #bottom-button>
-      <TasklistButton />
-    </template>
-  </ActionButtonsBar>
+ 
 </template>
 
 <script setup>
