@@ -20,8 +20,7 @@
         <template v-slot:prepend>
           <v-icon color="primary">mdi-file-music</v-icon>
         </template>
-
-        <v-list-item-title class="clickable" @click="openFile(file)">
+        <v-list-item-title class="clickable" @click="$emit('openFile', file)">
           {{ file.name }}
         </v-list-item-title>
 
@@ -39,7 +38,7 @@
         </template>
       </v-list-item>
     </v-list>
-    <!-- 
+
     <v-btn
       class="start-recording-button mt-4"
       block
@@ -51,7 +50,7 @@
       <span class="mr-2">Convert to Meeting Minutes</span>
 
       <v-icon right size="24">mdi-text-box-check</v-icon>
-    </v-btn> -->
+    </v-btn>
   </div>
 </template>
 
@@ -59,7 +58,6 @@
 defineProps({
   files: {
     type: Array,
-
     required: true,
   },
 });

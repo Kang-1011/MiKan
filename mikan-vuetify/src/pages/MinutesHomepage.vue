@@ -1,10 +1,5 @@
- 
 <template>
-       
   <Sidebar />
-  <Topbar title="Meeting Minutes" /> 
-  <MinuteDisplay ref="pdfContent" />
- 
   <ActionButtonsBar> 
               <template #top-button>
                 <KanbanButton />
@@ -23,10 +18,26 @@
               </template>
             </ActionButtonsBar> 
 
+  <ActionButtonsBar>
+    <template #top-button>
+      <KanbanButton />
+    </template>
+    <template #middle-button-1>
+      <EditButton @action="handleHomepageAction" />
+    </template>
+    <template #middle-button-2>
+      <TranscriptButton />
+    </template>
+    <template #middle-button-4>
+      <DownloadButton />
+    </template>
+    <template #bottom-button>
+      <TasklistButton />
+    </template>
+  </ActionButtonsBar>
 </template>
 
 <script setup>
-
 import { ref } from 'vue';
 
 const pdfContent = ref(null);
@@ -84,9 +95,13 @@ const exportToPDF = () => {
       alert("Could not generate PDF. Please check the console for errors.");
     });
 };
+
+const handleHomepageAction = (action) => {
+  console.log("Action triggered in MinutesHomepage:", action);
+};
 </script>
 
-<style scoped> 
+<style scoped>
 .content-block {
   background-color: #ffffff; /* Each section row background color */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
