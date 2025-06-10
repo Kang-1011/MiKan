@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="red lighten-1" dark>
+  <v-app-bar app color="#FF3D00">
     <v-toolbar-title class="custom-title">{{ title }}</v-toolbar-title>
     <v-spacer />
     <span class="mikan-text">MIKAN.AI</span>

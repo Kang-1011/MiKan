@@ -4,7 +4,7 @@
       <v-btn
         v-bind="activatorProps"
         fab
-        size="x-large" 
+        size="x-large"
         dark
         class="action-button-style"
         @click="handleClick"
@@ -20,24 +20,24 @@
 import { useRouter } from "vue-router"; // Import useRouter
 
 const router = useRouter();
-const emit = defineEmits(['action']);
+const emit = defineEmits(["action"]);
 const handleClick = () => {
-  console.log('ViewKanbanButton clicked');
-  emit('action', { type: 'viewKanban' });
+  console.log("ViewKanbanButton clicked");
+  emit("action", { type: "viewKanban" });
   router.push("/kanbanPage");
 };
 </script>
 
-<style scoped> 
+<style scoped>
 .v-btn {
-  background-color: #FF3D00;
+  background-color: #ff3d00;
   height: 100px;
   width: 100px;
-  border-radius:  50%;
+  border-radius: 50%;
+  color: white;
 }
 .action-button-style {
-  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2), 
-              0px 6px 10px 0px rgba(0,0,0,0.14), 
-              0px 1px 18px 0px rgba(0,0,0,0.12);
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
 }
 </style>
