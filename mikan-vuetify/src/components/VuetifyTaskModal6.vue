@@ -65,7 +65,7 @@
               <v-col cols="6" class="pa-1">
                 <div class="d-flex justify-space-between align-center mb-1">
                   <span class="caption">AI Suggested Attachments</span>
-                  <v-btn color="#f44336" small dense @click="onRegenerateAI" style="min-height: 24px;">
+                  <v-btn color="#FF3D00" small dense @click="onRegenerateAI" style="min-height: 24px;">
                     <v-icon left small>mdi-refresh</v-icon> Regenerate
                   </v-btn>
                 </div>
@@ -108,7 +108,7 @@
             <!-- Autostart -->
             <div class="d-flex justify-space-between align-center mb-1">
               <span class="caption">Autostart</span>
-              <v-btn color="#f44336" small dense @click="onRegenerateAutostart" style="min-height: 24px;">
+              <v-btn color="#FF3D00" small dense @click="onRegenerateAutostart" style="min-height: 24px;">
                 <v-icon left small>mdi-refresh</v-icon> Regenerate
               </v-btn>
             </div>
@@ -154,13 +154,13 @@
               <v-col cols="4" class="text-right"><v-btn icon small dense><v-icon small>mdi-plus</v-icon></v-btn></v-col>
             </v-row>
   
-            <v-btn color="#f44336" small dense block class="mb-2">
+            <v-btn color="#FF3D00" small dense block class="mb-2">
               <v-icon left small>mdi-check</v-icon>Mark as Complete
             </v-btn>
   
             <v-btn small dense block disabled class="mb-1">Move Task</v-btn>
             <v-btn small dense block disabled class="mb-1">Archive Task</v-btn>
-            <v-btn small dense block text color="#f44336" disabled class="mb-2">Delete Task</v-btn>
+            <v-btn small dense block text color="#FF3D00" disabled class="mb-2">Delete Task</v-btn>
   
             <!-- Comments -->
             <v-textarea
@@ -172,7 +172,7 @@
               class="mt-2 drop-box"
             />
             <div class="d-flex justify-end mt-2">
-              <v-btn color="#f44336" small dense>Comment</v-btn>
+              <v-btn color="#FF3D00" small dense>Comment</v-btn>
             </div>
   
           </v-container>
