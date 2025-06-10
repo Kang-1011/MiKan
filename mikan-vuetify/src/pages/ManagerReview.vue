@@ -1,9 +1,7 @@
 <template>
   <v-app>
-
-    <Sidebar class="position-fixed"/>
-    <NavbarManagerReview class="position-fixed"/>
-      <!-- <Topbar title="Manager Review" /> -->
+    <Sidebar class="position-fixed" />
+    <Topbar title="Manager Review" />
 
     <v-main>
       <v-container fluid>
@@ -29,8 +27,6 @@
 </template>
 
 <script setup>
-import Sidebar from "../components/Sidebar.vue";
-import NavbarManagerReview from "../components/NavbarManagerReview.vue";
 import TaskDraft from "../components/TaskDraft.vue";
 import ApproveButtonDialogue from "../components/ApproveButtonDialogue";
 
