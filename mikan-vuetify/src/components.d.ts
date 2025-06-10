@@ -12,6 +12,8 @@ declare module 'vue' {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     ApproveButtonDialogue: typeof import('./components/ApproveButtonDialogue.vue')['default']
     ApproveOneTaskButton: typeof import('./components/ApproveOneTaskButton.vue')['default']
+    Attachment: typeof import('./components/MyTasksComponent/Attachment.vue')['default']
+    AttachmentUpload: typeof import('./components/MyTasksComponent/AttachmentUpload.vue')['default']
     AudioConverter: typeof import('./components/AudioComponent/AudioConverter.vue')['default']
     CreateNewKanbanTaskButton: typeof import('./components/createNewKanbanTaskButton.vue')['default']
     CreateNewKanbanTaskDialog: typeof import('./components/createNewKanbanTaskDialog.vue')['default']
