@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <Sidebar class="position-fixed"/>
-    <NavbarKanban class="position-fixed"/>
+    <Sidebar class="position-fixed" />
+    <Topbar title="Kanban" />
     <v-main>
       <kanbanBoard></kanbanBoard>
     </v-main>
@@ -9,10 +9,6 @@
 </template>
 
 <script setup>
-import Sidebar from "../components/Sidebar.vue";
-import NavbarKanban from "../components/NavbarKanban.vue";
-import kanbanBoard from "../components/kanbanBoard";
-
 // const tasks = ref(Array(9).fill({}));
 // const tasks = ref(
 //   Array(9)
