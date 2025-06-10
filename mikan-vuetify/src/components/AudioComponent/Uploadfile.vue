@@ -39,7 +39,6 @@
         </template>
       </v-list-item>
     </v-list>
-    <!-- 
     <v-btn
       class="start-recording-button mt-4"
       block
@@ -51,7 +50,7 @@
       <span class="mr-2">Convert to Meeting Minutes</span>
 
       <v-icon right size="24">mdi-text-box-check</v-icon>
-    </v-btn> -->
+    </v-btn>
   </div>
 </template>
 
