@@ -94,6 +94,38 @@ function addTaskToList() {}
 <template>
   <Sidebar />
   <ManagerReviewNavbar />
+
+  <!-- Navbar Start-->
+  <!-- <v-app-bar app color="red lighten-1" dark>
+    <v-toolbar-title>Manager Review </v-toolbar-title>
+    <v-spacer />
+    <v-btn text>Filter <v-icon right>mdi-menu-down</v-icon></v-btn>
+
+    <ManagerReviewNavbarCreateButton
+      @transferTaskDataToTaskDraft="handleTaskData($event)"
+    />
+
+    <v-btn
+      icon
+      @click="toggleDark"
+      class="ml-4"
+      :class="['dark-toggle', { active: darkMode }]"
+      ><v-icon>{{
+        darkMode ? "mdi-weather-night" : "mdi-weather-sunny"
+      }}</v-icon></v-btn
+    >
+    <v-btn icon><v-icon>mdi-account-circle</v-icon></v-btn>
+    <v-text-field
+      flat
+      hide-details
+      placeholder="Search..."
+      append-inner-icon="mdi-magnify"
+      class="mx-4 search-white"
+      style="max-width: 200px"
+    />
+  </v-app-bar> -->
+  <!-- Navbar End-->
+
   <v-row>
     <v-col>
       <TaskDraft />
@@ -101,4 +133,57 @@ function addTaskToList() {}
   </v-row>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+import { useTheme } from "vuetify";
+const search = ref("");
+const darkMode = ref(false);
+const theme = useTheme();
+const isDark = ref(theme.global.name.value === "dark");
+theme.global.name.value = darkMode.value ? "dark" : "light";
+const create = ref(false);
+
+defineEmits({
+  emits: ["transferTaskDataToTaskDraft", "close-dialog"],
+});
+
+function toggleDark() {
+  darkMode.value = !darkMode.value;
+  theme.global.name.value = isDark.value ? "light" : "dark";
+  isDark.value = !isDark.value;
+}
+function handleTaskData(taskData) {
+  console.log("Received from child:", taskData);
+}
+
+// function createNewTaskDraft() {}
+// function showOnConsole() {
+//   console.log("received taskData");
+// }
+const transferTaskDataToTaskDraft = ref(false);
+function receiveEmittedData(taskData) {
+  console.log("received taskData", taskData);
+}
+</script>
+
+<style scoped>
+/* Dark-mode toggle button styling */
+.dark-toggle {
+  background-color: #ffffff; /* dark grey bg */
+  color: #000000; /* white icon */
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+.dark-toggle.active {
+  background-color: #ffffff; /* even darker when active */
+}
+
+/* Force the search bar’s background to white */
+.search-white ::v-deep .v-input__control {
+  background-color: #a5a5a5 !important;
+  /* border-radius: 10%; */
+}
+.search-white ::v-deep .v-text-field__slot {
+  background-color: #a5a5a5 !important;
+}
+</style>

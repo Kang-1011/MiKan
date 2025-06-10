@@ -1,56 +1,79 @@
 <template>
   <v-container>
     <v-card>
-      <v-card-text>
-        <v-text-field class="ml-2 mr-2 mt-2" v-model="title" label="Title" />
-      </v-card-text>
-      <v-card-text>
-        <v-text-field
-          class="ml-2 mr-2 mb-2"
-          v-model="assignee"
-          label="Assignee"
-        />
-      </v-card-text>
+      <v-text-field
+        class="ma-2 pa-1"
+        v-model="taskStore.title"
+        label="Task title"
+      />
+      <v-text-field
+        class="ma-2 pa-1"
+        v-model="taskStore.dueDate"
+        label="Due Date"
+        type="date"
+      />
+      <v-text-field
+        class="ma-2 pa-1"
+        v-model="taskStore.assignee"
+        label="Assignee"
+      />
+      <v-text-field
+        class="ma-2 pa-1"
+        v-model="taskStore.description"
+        label="Description"
+      />
+
       <v-card-action>
         <div>
-          <v-btn @click="closeDialog" class="pa-1 ml-2 mr-2 mb-2">
-            cancel
-          </v-btn>
-          <v-btn @click="createObject" class="pa-1 ml-2 mr-2 mb-2"
-            >Create</v-btn
-          >
+          <v-btn @click="closeDialog" class="ma-2 pa-1">Cancel</v-btn>
+          <v-btn @click="createTask" class="ma-2 pa-1">Create</v-btn>
         </div>
       </v-card-action>
-
-      <!-- <v-text-field v-model="assignee" label="Assignee" />
-      <v-text-field v-model="assignee" label="Due date" />
-      <v-text-field v-model="descrip" label="Description" /> -->
     </v-card>
   </v-container>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useTaskStore } from "@/stores/newTask";
+
+const taskStore = useTaskStore();
 
 const title = ref("");
-const date = ref("");
+const dueDate = ref("");
 const assignee = ref("");
-const descrip = ref("");
-const data = ref({});
-const emit = defineEmits(["transferDataToTaskDraft", "close-dialog"]);
+const description = ref("");
+const taskData = ref({});
+// const emit = defineEmits(["transferTaskDataToTaskDraft", "close-dialog"]);
 
-function createObject() {
-  const data = {
-    taskTitle: title.value,
-    dueDate: date.value,
-    assignee: assignee.value,
-    description: descrip.value,
-  };
-  emit("transferDataToTaskDraft", data);
-  emit("close-dialog");
+// function createTask() {
+//   const taskData = {
+//     taskTitle: title.value,
+//     dueDate: dueDate.value,
+//     assignee: assignee.value,
+//     description: description.value,
+//   };
+//   emit("transferTaskDataToTaskDraft", taskData);
+//   emit("close-dialog");
+//   // console.log(taskData);
+// }
+
+function createTask() {
+  const taskData = taskStore.getTaskData();
+  // emit("transferTaskDataToTaskDraft", taskData);
+  // emit("close-dialog");
+  console.log(taskData);
 }
 
+// function closeDialog() {
+//   emit("close-dialog");
+//   console.log("dialog closed");
+// }
+
 function closeDialog() {
-  emit("close-dialog");
+  // Optional: clear fields when closing dialog
+  taskStore.clearAllFields();
+  // emit("close-dialog");
+  console.log("dialog closed");
 }
 </script>
