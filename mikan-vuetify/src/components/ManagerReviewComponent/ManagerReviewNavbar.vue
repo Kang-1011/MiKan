@@ -34,7 +34,7 @@
 //   export default { name: 'MyAppBar' }
 import { ref } from "vue";
 import { useTheme } from "vuetify";
-import CreateNewTaskDialog from "./ManagerReviewNavbarCreateTaskDialog.vue";
+import CreateNewTaskDialog from "./ManagerReviewCreateTaskDialog.vue";
 const search = ref("");
 const darkMode = ref(false);
 const theme = useTheme();
@@ -67,7 +67,7 @@ function toggleDark() {
 /* Force the search bar’s background to white */
 .search-white ::v-deep .v-input__control {
   background-color: #ffffff !important;
-  color:#7e7e7e;
+  color: #7e7e7e;
   border-radius: 5px;
 }
 .search-white ::v-deep .v-text-field__slot {

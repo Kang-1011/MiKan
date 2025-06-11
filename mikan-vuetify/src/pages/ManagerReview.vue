@@ -3,21 +3,19 @@
     <Sidebar class="position-fixed" />
     <Topbar title="Manager Review" />
     <v-app-bar app dark flat="">
-      <!-- <v-app-bar-title> Task Manager </v-app-bar-title> -->
-
       <v-spacer></v-spacer>
 
       <v-btn
         variant="elevated"
         color="yellow"
         class="mr-2"
-        @click="handleButton1Click"
+        @click="openCreateTaskDialog()"
       >
         <v-icon left>mdi-plus</v-icon>
         Create Task
       </v-btn>
 
-      <v-btn variant="elevated" color="green" @click="handleButton2Click">
+      <v-btn variant="elevated" color="green" @click="openApproveAllDialog()">
         <v-icon left>mdi-check</v-icon>
         Approve All
       </v-btn>
@@ -40,65 +38,49 @@
             ></TaskDraft>
           </v-col>
         </v-row>
+        <CreateTaskDialog
+          v-model="newTaskDialogFlag"
+          @close-create-task-dialog="newTaskDialogFlag = false"
+          @pass-created-task="createNewDraft()"
+        />
+        <ApproveAllDialog
+          v-model="approveAllDialogFlag"
+          @approve-all-drafts="approveAllDrafts($event)"
+          @close-approve-dialog="approveAllDialogFlag = false"
+        />
       </v-container>
-      <ApproveButtonDialogue @approve="clearTasks"></ApproveButtonDialogue>
     </v-main>
   </v-app>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { useTaskStore } from "@/stores/newTask";
-const create = ref(false);
+import { useDraftStore } from "@/stores/drafts";
+import ApproveAllDialog from "@/components/ManagerReviewComponent/ManagerReviewApproveAllDialog.vue";
+import CreateTaskDialog from "@/components/ManagerReviewComponent/ManagerReviewCreateTaskDialog.vue";
+const newTaskDialogFlag = ref(false);
+const approveAllDialogFlag = ref(false);
 
-// const taskStore = useTaskStore();
-// console.log(taskStore.title);
+const draftStore = useDraftStore();
 
-defineEmits({
-  emits: ["transferTaskDataToTaskDraft", "close-dialog"],
-});
-
-function createNewTaskDraft() {
-  console.log("create new task draft", taskStore.title.value);
+function openCreateTaskDialog() {
+  newTaskDialogFlag.value = true;
 }
 
-function toggleDark() {
-  darkMode.value = !darkMode.value;
-  theme.global.name.value = isDark.value ? "light" : "dark";
-  isDark.value = !isDark.value;
-}
-function handleTaskData(taskData) {
-  console.log("Received from child:", taskData);
+function openApproveAllDialog() {
+  approveAllDialogFlag.value = true;
 }
 
-// function createNewTaskDraft() {}
-// function showOnConsole() {
-//   console.log("received taskData");
-// }
-const transferTaskDataToTaskDraft = ref(false);
-function receiveEmittedData(taskData) {
-  console.log("received taskData", taskData);
+// Problems with this function
+function createNewDraft() {
+  console.log("Manager Review - Change this to API calls");
+  // console.log(draftStore.getDraft[0]);
+  newTaskDialogFlag.value = false;
+}
+// Problems with this function
+
+function approveAllDrafts(task) {
+  approveAllDialogFlag.value = false;
+  console.log("Approve All - Change this to API calls");
 }
 </script>
-
-<style scoped>
-/* Dark-mode toggle button styling */
-.dark-toggle {
-  background-color: #ffffff; /* dark grey bg */
-  color: #000000; /* white icon */
-  border-radius: 50%;
-  transition: background-color 0.2s;
-}
-.dark-toggle.active {
-  background-color: #ffffff; /* even darker when active */
-}
-
-/* Force the search bar’s background to white */
-.search-white ::v-deep .v-input__control {
-  background-color: #a5a5a5 !important;
-  /* border-radius: 10%; */
-}
-.search-white ::v-deep .v-text-field__slot {
-  background-color: #a5a5a5 !important;
-}
-</style>
