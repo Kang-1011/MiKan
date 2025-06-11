@@ -1,9 +1,7 @@
-<template>
-  <v-app style="height: 100vh; overflow: hidden;">
-    <v-main style="height: 100vh; overflow: hidden;">
+<template> 
       <v-container fluid class="fill-height pa-0 ma-0">
         <v-row justify="center" align="stretch" class="fill-height ma-0">
-          <v-col cols="12" md="10" class="pa-0 d-flex flex-column" style="height: 100%;">
+          <v-col cols="12" md="12" class="pa-0 d-flex flex-column" style="height: 100%;">
              <v-card class="meeting-minutes-card" flat tile light>
               <v-row no-gutters class="pa-4 pb-0 text-center flex-shrink-0">
                 <v-col>
@@ -75,54 +73,22 @@
             </v-card>
             </v-col>
           
-          <v-col cols="12" md="2" class="pa-0" style="height: 100%;">
-            <ActionButtonsBar> <template #top-button>
-                <KanbanButton @action="handleMinutesAction" />
-              </template>
-              <template #middle-button-1>
-                <EditButton @action="handleMinutesAction" />
-              </template>
-              <template #middle-button-2>
-                <TranscriptButton @action="handleMinutesAction" />
-              </template>
-              <template #middle-button-3>
-                <ShareButton @action="handleMinutesAction" />
-              </template>
-              <template #middle-button-4>
-                <DownloadButton @action="handleMinutesAction" />
-              </template>
-              <template #bottom-button>
-                <TasklistButton @action="handleMinutesAction" />
-              </template>
-            </ActionButtonsBar>
-          </v-col>
         </v-row>
-      </v-container>
-    </v-main> 
-  </v-app>
+      </v-container> 
 </template>
 
 <script setup> 
-import { ref } from 'vue';
-
-// Assuming these components are imported if not globally registered
-// import Sidebar from './Sidebar.vue'; 
-// import MyAppBar from './MyAppBar.vue';
-// import ActionButtonsBar from './ActionButtonsBar.vue';
-// import KanbanButton from './buttons/KanbanButton.vue';
-// import EditButton from './buttons/EditButton.vue';
-// import TranscriptButton from './buttons/TranscriptButton.vue';
-// import ShareButton from './buttons/ShareButton.vue';
-// import DownloadButton from './buttons/DownloadButton.vue';
-// import TasklistButton from './buttons/TasklistButton.vue';
-
-
+import { defineExpose, ref } from 'vue'; 
 const meetingHeaderData = ref({
   title: 'Meeting 3 - Minutes',
   createdBy: 'User 1',
   date: '2025-05-15T10:00:00.000Z',
   actionItemsCount: 5, // This could also be dynamically calculated from nextSteps.length if preferred
 });
+
+defineExpose ({
+  meetingHeaderData
+})
 
 const meetingBodyData = ref({
   attendees: [
@@ -240,6 +206,7 @@ const handleMinutesAction = (action) => {
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   color: black;
+  width:100%
 }
 
 .metadata-card {

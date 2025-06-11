@@ -1,29 +1,54 @@
 <template>
-  <Sidebar />
-  <button @click="createNewTaskDraft">Create New Task Draft</button>
-  <ManagerReviewNavbar />
+  <v-app>
+    <Sidebar class="position-fixed" />
+    <Topbar title="Manager Review" />
+    <v-app-bar app dark flat="">
+      <!-- <v-app-bar-title> Task Manager </v-app-bar-title> -->
 
-  <v-row>
-    <v-col>
-      <!-- <TaskDraft
-        :task-data="item"
-        :task-index="index"
-        @delete-task="deleteTask"
-      ></TaskDraft> -->
-      <TaskDraft />
-    </v-col>
-  </v-row>
+      <v-spacer></v-spacer>
+
+      <v-btn
+        variant="elevated"
+        color="yellow"
+        class="mr-2"
+        @click="handleButton1Click"
+      >
+        <v-icon left>mdi-plus</v-icon>
+        Create Task
+      </v-btn>
+
+      <v-btn variant="elevated" color="green" @click="handleButton2Click">
+        <v-icon left>mdi-check</v-icon>
+        Approve All
+      </v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <v-container fluid>
+        <v-row>
+          <v-col
+            cols="12"
+            sm="6"
+            md="4"
+            v-for="(item, index) in tasks"
+            :key="index"
+          >
+            <TaskDraft
+              :task-data="item"
+              :task-index="index"
+              @delete-task="deleteTask"
+            ></TaskDraft>
+          </v-col>
+        </v-row>
+      </v-container>
+      <ApproveButtonDialogue @approve="clearTasks"></ApproveButtonDialogue>
+    </v-main>
+  </v-app>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { useTheme } from "vuetify";
 import { useTaskStore } from "@/stores/newTask";
-const search = ref("");
-const darkMode = ref(false);
-const theme = useTheme();
-const isDark = ref(theme.global.name.value === "dark");
-theme.global.name.value = darkMode.value ? "dark" : "light";
 const create = ref(false);
 
 // const taskStore = useTaskStore();

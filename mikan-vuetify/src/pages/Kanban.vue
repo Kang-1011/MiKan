@@ -1,7 +1,7 @@
 <template>
   <Sidebar />
-  <Topbar title="Homepage" />
-  <AudioConverter />
+  <Topbar title="My Tasks" />
+  <Attachment />
 </template>
 
 <script></script>
