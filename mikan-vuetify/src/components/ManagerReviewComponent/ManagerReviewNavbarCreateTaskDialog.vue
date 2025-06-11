@@ -44,7 +44,7 @@ const dueDate = ref("");
 const assignee = ref("");
 const description = ref("");
 const taskData = ref({});
-// const emit = defineEmits(["transferTaskDataToTaskDraft", "close-dialog"]);
+const emit = defineEmits(["transferTaskDataToTaskDraft", "close-dialog"]);
 
 // function createTask() {
 //   const taskData = {
@@ -73,7 +73,7 @@ function createTask() {
 function closeDialog() {
   // Optional: clear fields when closing dialog
   taskStore.clearAllFields();
-  // emit("close-dialog");
+  emit("close-dialog");
   console.log("dialog closed");
 }
 </script>

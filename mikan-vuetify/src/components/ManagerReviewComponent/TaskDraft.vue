@@ -1,6 +1,6 @@
 <template>
-  <v-card class="pa-1 ma-4 w-33">
-    <v-row class="align-center bg-red pa-1 rounded-lg">
+  <v-card class="pa-1 ma-4 w-50">
+    <v-row class="align-center bg-red pl-1 pr-1 rounded-lg">
       <v-col cols="8">
         <strong class="d-flex justify-start">Task title</strong>
       </v-col>
