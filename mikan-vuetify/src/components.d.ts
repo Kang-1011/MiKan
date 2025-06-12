@@ -45,6 +45,7 @@ declare module 'vue' {
     TranscriptButton: typeof import('./components/MinutesComponent/TranscriptButton.vue')['default']
     TranscriptDisplay: typeof import('./components/TranscriptComponent/TranscriptDisplay.vue')['default']
     Uploadfile: typeof import('./components/AudioComponent/Uploadfile.vue')['default']
+    VConfirmEdit: typeof import('./components/VConfirmEdit.vue')['default']
     VuetifyTaskModal6: typeof import('./components/VuetifyTaskModal6.vue')['default']
   }
 }
