@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-btn
       icon
       color="blue-darken-4"
@@ -11,7 +11,7 @@
         >mdi-check</v-icon
       >
     </v-btn>
-  </v-container>
+  </div>
 </template>
 
 <script setup>

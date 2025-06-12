@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-btn
       icon
       color="red-darken-2"
@@ -28,7 +28,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 
 <script setup>

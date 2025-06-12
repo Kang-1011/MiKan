@@ -24,8 +24,6 @@ declare module 'vue' {
     Lightbulb: typeof import('./components/Lightbulb.vue')['default']
     ManagerReviewApproveAllDialog: typeof import('./components/ManagerReviewComponent/ManagerReviewApproveAllDialog.vue')['default']
     ManagerReviewCreateTaskDialog: typeof import('./components/ManagerReviewComponent/ManagerReviewCreateTaskDialog.vue')['default']
-    ManagerReviewNavbar: typeof import('./components/ManagerReviewComponent/ManagerReviewNavbar.vue')['default']
-    ManagerReviewNavbarCreateButton: typeof import('./components/ManagerReviewComponent/ManagerReviewNavbarCreateButton.vue')['default']
     MinuteDisplay: typeof import('./components/MinutesComponent/MinuteDisplay.vue')['default']
     MinutesButton: typeof import('./components/TranscriptComponent/MinutesButton.vue')['default']
     NavbarKanban: typeof import('./components/NavbarKanban.vue')['default']

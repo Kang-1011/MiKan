@@ -74,7 +74,7 @@ function openApproveAllDialog() {
 // Problems with this function
 function createNewDraft() {
   console.log("Manager Review - Change this to API calls");
-  console.log(draftStore.drafts)
+  console.log(draftStore.drafts);
   newTaskDialogFlag.value = false;
 }
 // Problems with this function
