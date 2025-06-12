@@ -8,30 +8,16 @@ interface DraftCreate {
   description: string;
 }
 
-// export const useDraftStore = defineStore("draft", {
-//   state: () => ({
-//     drafts: [],
-//   }),
+export const useDraftStore = defineStore("draft", {
+  state: () => ({
+    drafts: [],
+  }),
 
-//   getters: {},
+  getters: {},
 
-//   actions: {
-//     addDraft(newDraft: DraftCreate) {
-//       state.drafts.push(newDraft);
-//     },
-//   },
-// });
-
-export const useDraftStore = defineStore("draft", () => {
-  const drafts = reactive([] as DraftCreate[]);
-
-  function getDraft(index: number) {
-    return drafts[index].assignee;
-  }
-
-  function addDraft(newDraft: DraftCreate) {
-    // console.log("Title", newDraft.title);
-    drafts.push(newDraft);
-  }
-  return { drafts, addDraft };
+  actions: {
+    addDraft(newDraft: DraftCreate) {
+      this.drafts.push(newDraft);
+    },
+  },
 });

@@ -28,13 +28,13 @@
             cols="12"
             sm="6"
             md="4"
-            v-for="(item, index) in tasks"
-            :key="index"
+            v-for="draft in draftStore.drafts"
+            :key="draft.title"
           >
             <TaskDraft
-              :task-data="item"
-              :task-index="index"
-              @delete-task="deleteTask"
+              :title="draft.title"
+              :dueDate="draft.dueDate"
+              :assignee="draft.assignee"
             ></TaskDraft>
           </v-col>
         </v-row>
@@ -45,8 +45,8 @@
         />
         <ApproveAllDialog
           v-model="approveAllDialogFlag"
-          @approve-all-drafts="approveAllDrafts($event)"
           @close-approve-dialog="approveAllDialogFlag = false"
+          @approve-all-drafts="approveAllDrafts($event)"
         />
       </v-container>
     </v-main>
@@ -74,12 +74,12 @@ function openApproveAllDialog() {
 // Problems with this function
 function createNewDraft() {
   console.log("Manager Review - Change this to API calls");
-  // console.log(draftStore.getDraft[0]);
+  console.log(draftStore.drafts)
   newTaskDialogFlag.value = false;
 }
 // Problems with this function
 
-function approveAllDrafts(task) {
+function approveAllDrafts() {
   approveAllDialogFlag.value = false;
   console.log("Approve All - Change this to API calls");
 }

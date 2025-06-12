@@ -2,7 +2,7 @@
   <v-card class="pa-1 ma-4 w-50">
     <v-row class="align-center bg-red pl-1 pr-1 rounded-lg">
       <v-col cols="8">
-        <strong class="d-flex justify-start">Task title</strong>
+        <strong class="d-flex justify-start">{{  props.title }}</strong>
       </v-col>
       <v-col cols="4" class="d-flex justify-end">
         <div class="d-flex justify-end">
@@ -16,10 +16,10 @@
     <v-row class="pa-2">
       <div>
         <v-sheet class="rounded bg-grey-lighten-2 ml-2 mr-2 mb-2 pa-1">
-          <strong>Due date:</strong> I want to add the received data here
+          <strong>Due date:</strong> {{ props.dueDate }}
         </v-sheet>
         <v-sheet class="rounded bg-grey-lighten-2 ml-2 mr-2 mb-2 pa-1">
-          <strong>Assignee:</strong> I want to add the received data here
+          <strong>Assignee:</strong> {{ props.assignee }}
         </v-sheet>
       </div>
     </v-row>
@@ -31,4 +31,11 @@
   </v-card>
 </template>
 
-<script setup></script>
+<script setup>
+const props = defineProps({
+  title: String,
+  dueDate: String,
+  assignee: String,
+  description: String,
+});
+</script>

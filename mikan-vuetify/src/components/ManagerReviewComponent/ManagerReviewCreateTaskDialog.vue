@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :model-value="modelValue" max-width="400">
+  <v-dialog max-width="400">
     <v-card class="w-auto">
       <v-card-title class="headline ml-3 mt-5">New Task</v-card-title>
 
@@ -65,24 +65,30 @@ const description = ref("");
 
 const emit = defineEmits(["close-create-task-dialog", "pass-created-task"]);
 
-function closeDialog() {
-  // taskStore.clearAllFields();
-  emit("close-create-task-dialog");
+function clearAllFields() {
+  title.value = "";
+  dueDate.value = "";
+  assignee.value = "";
+  description.value = "";
 }
 
-function createDraft() {
+function closeDialog() {
+  emit("close-create-task-dialog");
+  clearAllFields();
+}
+
+function createDraft() { 
   const newDraft = {
     title: title.value,
     dueDate: dueDate.value,
     assignee: assignee.value,
     description: description.value,
   };
-  console.log(title.value);
-  console.log(dueDate.value);
-  console.log(assignee.value);
-  console.log(description.value);
-  // draftStore.addDraft(newDraft);
+
+  draftStore.addDraft(newDraft);
+  console.log("HI", draftStore.drafts)
+
   emit("pass-created-task");
-  // taskStore.clearAllFields();
+  clearAllFields();
 }
 </script>
