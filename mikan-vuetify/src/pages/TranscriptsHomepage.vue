@@ -9,7 +9,7 @@
                 <KanbanButton />
               </template>
               <template #middle-button-1>
-                <EditButton />  
+                <EditButton @action="transcriptStore.toggleEditMode()"/>  
               </template>
               <template #middle-button-2>
                 <MinutesButton />
@@ -28,8 +28,10 @@
 <script setup>
 
 import { ref } from 'vue';
+import { useTranscriptStore } from '@/stores/transcriptstore';
 
 const pdfContent = ref(null);
+const transcriptStore = useTranscriptStore();
 
 const exportToPDF = () => {
   console.log("Export to PDF triggered!");
