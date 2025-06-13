@@ -24,7 +24,6 @@
       v-model="stage.tasks"
       :item-key="'id'"
       :animation="150"
-
       :group="{ name: `tasks-board-${boardIndex}`, pull: true, put: [`tasks-board-${boardIndex}`] }"
       class="pa-2"
       style="max-height: 400px; overflow-y:auto"
@@ -34,14 +33,36 @@
       <template #item="{ element: task, index: tIndex }">
         <TaskCard 
         :task="task" 
-
         :visitorMode="visitorMode" 
         @click="$emit('open-task-dialog', tIndex)" 
         />
       </template>
-      <template #footer>
+      <!-- <template #footer>
         <div v-if="!stage.tasks.length" class="pa-4 text-center grey--text" style="font-size:.9rem;">No tasks</div>
+      </template> -->
+
+      <!-- <template #item="{ element: task, index: tIndex }">
+
+        <div>
+        <TaskCard
+          v-show="!selectedAssignee || task.assignee === selectedAssignee"
+          :task="task"
+          :visitorMode="visitorMode"
+          @click="$emit('open-task-dialog', tIndex)"
+        />
+      </div>
+      </template> -->
+      <template #footer>
+        <div v-if="(
+            !selectedAssignee
+              ? stage.tasks.length === 0
+              : stage.tasks.filter(t => t.assignee === selectedAssignee).length === 0
+          )" class="pa-4 text-center grey--text" style="font-size:.9rem;">
+          No tasks
+        </div>
       </template>
+
+
     </draggable>
     <v-divider />
     <v-card-actions class="pa-2">
@@ -57,7 +78,14 @@ import { ref, defineProps, defineEmits } from 'vue'
 import draggable from 'vuedraggable'
 import TaskCard from './TaskCard2.vue'
 
-const props = defineProps({ stage:Object, boardIndex:Number, stageIndex:Number, visitorMode:Boolean })
+// Accept assignee filter
+const props = defineProps({
+  stage: Object,
+  boardIndex: Number,
+  stageIndex: Number,
+  visitorMode: Boolean,
+  selectedAssignee: String
+})
 const emit = defineEmits(['add-task','delete-stage','open-task-dialog','rename-stage'])
 
 const isEditing = ref(false)
