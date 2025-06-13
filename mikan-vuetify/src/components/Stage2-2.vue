@@ -31,11 +31,13 @@
       
     >
       <template #item="{ element: task, index: tIndex }">
+
         <TaskCard 
         :task="task" 
         :visitorMode="visitorMode" 
         @click="$emit('open-task-dialog', tIndex)" 
         />
+
       </template>
       <!-- <template #footer>
         <div v-if="!stage.tasks.length" class="pa-4 text-center grey--text" style="font-size:.9rem;">No tasks</div>

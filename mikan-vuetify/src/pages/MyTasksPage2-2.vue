@@ -11,7 +11,7 @@
     <v-main>
    <!-- SUGGESTION: Replace the fixed container+row with Vuetify App Bar -->
    <v-app-bar app fixed color="white" elevation="2">
-        <v-toolbar-title>My Tasks</v-toolbar-title>
+        <v-toolbar-title>MyTasks Dev Mode</v-toolbar-title>
 
         <!-- Board filter -->
         <v-select
@@ -77,18 +77,17 @@
           <template #item="{ element: board, index: bIndex }">
             <Board 
               v-show="!selectedBoard || board.title === selectedBoard"
-                :board="{
-                  ...board,
-                  stages: board.stages.map(sg => ({
-                    ...sg,
-                    tasks: selectedAssignee
-                      ? sg.tasks.filter(t => t.assignee === selectedAssignee)
-                      : sg.tasks
-                  }))
-                  
-                  .filter(sg => !selectedAssignee || sg.tasks.length > 0)
-                }"
-
+             :board="selectedAssignee
+               ? {
+                   ...board,
+                   stages: board.stages
+                     .map(sg => ({
+                       ...sg,
+                       tasks: sg.tasks.filter(t => t.assignee === selectedAssignee)
+                     }))
+                     .filter(sg => sg.tasks.length > 0)
+                 }
+               : board"
               :boardIndex="bIndex"
               :visitorMode="visitorMode"
               :selectedAssignee="selectedAssignee"
@@ -158,7 +157,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref,computed } from 'vue'
+import { ref,computed, watch } from 'vue'
 import draggable from 'vuedraggable'
 import Board from '@/components/Board2-2.vue'
 
@@ -287,6 +286,11 @@ const isTaskDialogOpen = ref(false)
 const isDeleteConfirmOpen = ref(false)
 const editingInfo = ref({ boardIndex: null as number | null, stageIndex: null as number | null, taskIndex: null as number | null })
 const editedTaskTitle = ref('')
+
+watch(selectedAssignee, assignee => {
+  // whenever you pick someone, lock down the UI
+  visitorMode.value = assignee !== null
+})
 
 function addBoard() {
   boards.value.push({ id: genId(), title: `New Board ${boards.value.length+1}`, stages: [] })
