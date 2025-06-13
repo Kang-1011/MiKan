@@ -8,9 +8,9 @@
       </v-col>
       <v-col cols="5" sm="4" class="d-flex justify-end">
         <div class="d-flex align-center justify-end" style="gap: 10px">
-          <TaskDraftApproveOneTaskButton />
-          <TaskDraftDeleteOneTaskButton />
-          <TaskDraftEditOneTaskButton />
+          <TaskDraftApproveOneTaskButton @task-approved="handleTaskApproved" />
+          <TaskDraftDeleteOneTaskButton @task-deleted="handleTaskDeleted" />
+          <TaskDraftEditOneTaskButton @task-edited="handleTaskEdited" />
         </div>
       </v-col>
     </v-row>
@@ -23,6 +23,9 @@
         <v-sheet class="rounded bg-grey-lighten-2 mb-2 pa-1">
           <strong>Assignee:</strong> {{ props.assignee }}
         </v-sheet>
+        <v-sheet class="pa-3 rounded border" min-height="120px">
+          <em>Description {{ props.description }}</em>
+        </v-sheet>
       </v-col>
     </v-row>
 
@@ -31,23 +34,30 @@
       <em>Description</em>
     </v-sheet> -->
   </v-card>
-  <v-snackbar
-    v-model="snackbar"
-    :timeout="3000"
-    color="success"
-    variant="tonal"
-    class="justify-center align center"
-    location="center middle"
-  >
-    <h1 class="text-center">Task approved!</h1>
-  </v-snackbar>
 </template>
 
 <script setup>
 const props = defineProps({
+  taskIndex: Number,
   title: String,
   dueDate: String,
   assignee: String,
   description: String,
 });
+
+const emit = defineEmits(["task-approved", "task-deleted", "task-edited"]);
+
+provide("taskIndex", props.taskIndex)
+
+function handleTaskApproved() {
+  emit("task-approved");
+}
+
+function handleTaskDeleted() {
+  emit("task-deleted");
+}
+
+function handleTaskEdited() {
+  emit("task-edited");
+}
 </script>

@@ -24,7 +24,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="grey" text @click="dialog = false">Cancel</v-btn>
-          <v-btn color="red" text @click="deleteItem">Delete</v-btn>
+          <v-btn color="red" text @click="deleteTask">Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -32,18 +32,20 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from "vue";
-const dialog = ref(false);
-const emit = defineEmits(["delete-task"]);
+import { ref } from "vue";
+import { useDraftStore } from '@/stores/drafts';
+const draftStore = useDraftStore()
 
-function deleteItem() {
+const dialog = ref(false);
+const emit = defineEmits(["task-deleted"]);
+const taskIndex = inject("taskIndex");
+
+function deleteTask() {
   console.log("Item deleted");
+  draftStore.deleteDraft(taskIndex);
   dialog.value = false;
+  emit("task-deleted");
 }
-const deleteTask = () => {
-  emit("delete-task", props.taskIndex);
-  dialog.value = false;
-};
 </script>
 
 <style scoped>

@@ -9,8 +9,8 @@
     >
       <v-icon size="default">mdi-pencil</v-icon>
     </v-btn>
-    <v-dialog v-model="dialog" max-width="600px">
-      <v-card>
+    <v-dialog v-model="dialog" max-width="400px">
+      <v-card class="w-auto">
         <v-card-title class="headline ml-3 mt-5">Edit Task</v-card-title>
 
         <v-card-text>
@@ -51,9 +51,8 @@
         </v-card-text>
 
         <v-card-actions class="justify-end">
-          <v-btn color="grey" text @click="cancel">Cancel</v-btn>
-          <v-btn color="primary" @click="save">Save</v-btn>
-          <v-btn color="secondary" @click="regenerate">Regenerate</v-btn>
+          <v-btn color="grey" text @click="cancel" class="ma-2 pa-1">Cancel</v-btn>
+          <v-btn color="primary" @click="save" class="ma-2 pa-1">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -62,15 +61,13 @@
 
 <script setup>
 import { ref, watch } from "vue";
+import { useDraftStore } from '@/stores/drafts';
+const draftStore = useDraftStore()
 
-const props = defineProps({
-  initialTask: {
-    type: Object,
-    default: () => ({}),
-  },
-});
+const taskIndex = inject("taskIndex");
+const retrievedDraft = draftStore.getDraftById(taskIndex)
 
-const emit = defineEmits(["cancel", "save", "regenerate"]);
+const emit = defineEmits(["task-edited"]);
 
 const dialog = ref(false);
 const taskTitle = ref("");
@@ -78,36 +75,37 @@ const dueDate = ref("");
 const assignee = ref("");
 const taskDescription = ref("");
 
+taskTitle.value = retrievedDraft.title;
+dueDate.value = retrievedDraft.dueDate;
+assignee.value = retrievedDraft.assignee;
+taskDescription.value = retrievedDraft.description;
+
 // Watch dialog: when it opens, pre-fill task data
-watch(dialog, (value) => {
-  if (value && props.initialTask) {
-    taskTitle.value = props.initialTask.title || "";
-    dueDate.value = props.initialTask.dueDate || "";
-    assignee.value = props.initialTask.assignee || "";
-    taskDescription.value = props.initialTask.description || "";
-  }
-});
+// watch(dialog, (value) => {
+//   if (value && props.initialTask) {
+//     taskTitle.value = props.initialTask.title || "";
+//     dueDate.value = props.initialTask.dueDate || "";
+//     assignee.value = props.initialTask.assignee || "";
+//     taskDescription.value = props.initialTask.description || "";
+//   }
+// });
 
 function cancel() {
   dialog.value = false;
-  emit("cancel");
 }
 
 function save() {
   if (validatedForm()) {
     dialog.value = false;
-    emit("save", {
+    emit("task-edited");
+    const editedDraft = {
       title: taskTitle.value,
       dueDate: dueDate.value,
       assignee: assignee.value,
       description: taskDescription.value,
-    });
+    }
+    draftStore.editDraft(taskIndex, editedDraft);
   }
-}
-
-function regenerate() {
-  dialog.value = false;
-  emit("regenerate");
 }
 
 function validatedForm() {
@@ -115,58 +113,3 @@ function validatedForm() {
   return true;
 }
 </script>
-
-/* Example usage in a parent component: */
-<!-- <template>
-    <EditTaskDialog
-        :initialTask="currentTask"
-        @cancel="handleCancel"
-        @save="handleSave"
-        @regenerate="handleRegenerate"
-    />
-</template>
-
-<script>
-import { ref } from 'vue';
-import EditTaskDialog from "../components/EditTaskDialog.vue";
-
-export default {
-
-  components: {
-    EditTaskDialog,
-  },
-
-  setup() {
-    // Initialize currentTask with properties that match what EditTaskDialog expects/emits
-    const currentTask = ref({
-      title: 'Sample Task Title',
-      dueDate: '2023-12-31', // Example date format
-      assignee: 'John Doe',
-      description: 'This is a sample task description that will be pre-filled in the dialog.',
-    });
-
-    const handleCancel = () => {
-      console.log('Edit cancelled by user.');
-    };
-
-    const handleSave = (task) => {
-      console.log('Task saved:', task);
-      // Update the parent's currentTask with the new data received from the dialog
-      currentTask.value = { ...task }; 
-    };
-
-    const handleRegenerate = () => {
-      console.log('Task regeneration requested.');
-      // Add logic here to regenerate task content, e.g., make an API call to get new content
-    };
-
-    return {
-      currentTask,
-      handleCancel,
-      handleSave,
-      handleRegenerate,
-    };
-  },
-};
-</script>
- -->

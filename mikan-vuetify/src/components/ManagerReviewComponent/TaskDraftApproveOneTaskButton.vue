@@ -3,7 +3,7 @@
     <v-btn
       icon
       color="blue-darken-4"
-      @click="approve"
+      @click="approveTask"
       variant="flat"
       density="compact"
     >
@@ -15,8 +15,15 @@
 </template>
 
 <script setup>
-const emit = defineEmits(["approved"]);
-function approve() {
-  emit("approved");
+import { useDraftStore } from '@/stores/drafts';
+const draftStore = useDraftStore()
+
+const taskIndex = inject("taskIndex");
+const emit = defineEmits(["task-approved"])
+
+function approveTask() {
+  console.log("Approve One Task - API calls to save into database");
+  emit("task-approved")
+  draftStore.deleteDraft(taskIndex);
 }
 </script>

@@ -15,12 +15,12 @@
         Create Task
       </v-btn>
 
-      <v-btn variant="elevated" color="green" @click="openApproveAllDialog()">
+      <v-btn :disabled="draftStore.drafts.length === 0" variant="elevated" color="green" @click="openApproveAllDialog()">
         <v-icon left>mdi-check</v-icon>
         Approve All
       </v-btn>
     </v-app-bar>
-
+     
     <v-main>
       <v-container fluid>
         <v-row>
@@ -29,12 +29,17 @@
             sm="6"
             md="4"
             v-for="draft in draftStore.drafts"
-            :key="draft.title"
+            :key="draft.id"
           >
             <TaskDraft
+              :taskIndex="draft.id"
               :title="draft.title"
               :dueDate="draft.dueDate"
               :assignee="draft.assignee"
+              :description="draft.description"
+              @task-approved="oneTaskApproved($event)"
+              @task-deleted="oneTaskDeleted($event)"
+              @task-edited="oneTaskEdited($event)"
             ></TaskDraft>
           </v-col>
         </v-row>
@@ -48,6 +53,16 @@
           @close-approve-dialog="approveAllDialogFlag = false"
           @approve-all-drafts="approveAllDrafts($event)"
         />
+        <v-snackbar
+          v-model="snackbar"
+          :timeout="2500"
+          :color="snackbarColor"
+          variant="tonal"
+          class="justify-center align center"
+          location="center middle"
+        >
+          <h1 class="text-center">{{snackbarMessage}}</h1>
+        </v-snackbar>
       </v-container>
     </v-main>
   </v-app>
@@ -61,6 +76,10 @@ import CreateTaskDialog from "@/components/ManagerReviewComponent/ManagerReviewC
 const newTaskDialogFlag = ref(false);
 const approveAllDialogFlag = ref(false);
 
+const snackbar = ref(false);
+const snackbarMessage = ref("")
+const snackbarColor = ref("");
+
 const draftStore = useDraftStore();
 
 function openCreateTaskDialog() {
@@ -73,7 +92,7 @@ function openApproveAllDialog() {
 
 // Problems with this function
 function createNewDraft() {
-  console.log("Manager Review - Change this to API calls");
+  console.log("Create Draft - create draft in drafts.ts");
   console.log(draftStore.drafts);
   newTaskDialogFlag.value = false;
 }
@@ -81,6 +100,29 @@ function createNewDraft() {
 
 function approveAllDrafts() {
   approveAllDialogFlag.value = false;
-  console.log("Approve All - Change this to API calls");
+  console.log("Approve All - API calls to save into database and delete drafts");
+  draftStore.approveAllDrafts()
+
+  snackbarMessage.value = "All Tasks Approved!"
+  snackbarColor.value = "success"
+  snackbar.value = true;
+}
+
+function oneTaskApproved() {
+  snackbarMessage.value = "Task Approved!"
+  snackbarColor.value = "success"
+  snackbar.value = true;
+}
+
+function oneTaskDeleted() {
+  snackbarMessage.value = "Task Deleted!"
+  snackbarColor.value = "error"
+  snackbar.value = true;
+}
+
+function oneTaskEdited() {
+  snackbarMessage.value = "Task Edited!"
+  snackbarColor.value = "warning"
+  snackbar.value = true;
 }
 </script>
