@@ -29,7 +29,6 @@ declare module 'vue' {
     Lightbulb: typeof import('./components/Lightbulb.vue')['default']
     MinuteDisplay: typeof import('./components/MinutesComponent/MinuteDisplay.vue')['default']
     MinutesButton: typeof import('./components/TranscriptComponent/MinutesButton.vue')['default']
-    Navbar: typeof import('./components/AudioComponent/Navbar.vue')['default']
     NavbarKanban: typeof import('./components/NavbarKanban.vue')['default']
     NavbarManagerReview: typeof import('./components/NavbarManagerReview.vue')['default']
     NavbarMyTasks: typeof import('./components/NavbarMyTasks.vue')['default']
