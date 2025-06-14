@@ -15,13 +15,25 @@
         Create Task
       </v-btn>
 
-      <v-btn :disabled="draftStore.drafts.length === 0" variant="elevated" color="green" @click="openApproveAllDialog()">
+      <v-btn
+        :disabled="draftStore.drafts.length === 0"
+        variant="elevated"
+        color="green"
+        @click="openApproveAllDialog()"
+      >
         <v-icon left>mdi-check</v-icon>
         Approve All
       </v-btn>
     </v-app-bar>
-     
+
     <v-main>
+      <v-container
+        v-if="draftStore.drafts.length === 0 && !snackbar"
+        fluid
+        class="fill-height d-flex align-center justify-center"
+      >
+        <h2 class="text-center text-black">No drafts found</h2>
+      </v-container>
       <v-container fluid>
         <v-row>
           <v-col
@@ -61,7 +73,7 @@
           class="justify-center align center"
           location="center middle"
         >
-          <h1 class="text-center">{{snackbarMessage}}</h1>
+          <h1 class="text-center">{{ snackbarMessage }}</h1>
         </v-snackbar>
       </v-container>
     </v-main>
@@ -77,7 +89,7 @@ const newTaskDialogFlag = ref(false);
 const approveAllDialogFlag = ref(false);
 
 const snackbar = ref(false);
-const snackbarMessage = ref("")
+const snackbarMessage = ref("");
 const snackbarColor = ref("");
 
 const draftStore = useDraftStore();
@@ -100,29 +112,31 @@ function createNewDraft() {
 
 function approveAllDrafts() {
   approveAllDialogFlag.value = false;
-  console.log("Approve All - API calls to save into database and delete drafts");
-  draftStore.approveAllDrafts()
+  console.log(
+    "Approve All - API calls to save into database and delete drafts"
+  );
+  draftStore.approveAllDrafts();
 
-  snackbarMessage.value = "All Tasks Approved!"
-  snackbarColor.value = "success"
+  snackbarMessage.value = "All Tasks Approved!";
+  snackbarColor.value = "success";
   snackbar.value = true;
 }
 
 function oneTaskApproved() {
-  snackbarMessage.value = "Task Approved!"
-  snackbarColor.value = "success"
+  snackbarMessage.value = "Task Approved!";
+  snackbarColor.value = "success";
   snackbar.value = true;
 }
 
 function oneTaskDeleted() {
-  snackbarMessage.value = "Task Deleted!"
-  snackbarColor.value = "error"
+  snackbarMessage.value = "Task Deleted!";
+  snackbarColor.value = "error";
   snackbar.value = true;
 }
 
 function oneTaskEdited() {
-  snackbarMessage.value = "Task Edited!"
-  snackbarColor.value = "warning"
+  snackbarMessage.value = "Task Edited!";
+  snackbarColor.value = "warning";
   snackbar.value = true;
 }
 </script>
