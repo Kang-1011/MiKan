@@ -7,6 +7,10 @@
       outlined
       style="cursor: grab;"
       @click="$emit('click')"
+<<<<<<< HEAD
+=======
+
+>>>>>>> 718182c1a582f732a26ff32a52803239a10ee23f
     >
       <v-card-text class="d-flex justify-space-between align-center pa-2">
         <span>{{ task.title }}</span>
