@@ -3,6 +3,7 @@
 // ======================== -->
 <template>
 
+
   <v-app>
   <Sidebar class="position-fixed" />
   <Topbar title="My Tasks" class="position-fixed" />
@@ -14,26 +15,23 @@
           <h2>Devmode</h2>
         </v-col>
         <v-col cols="8" class="d-flex justify-end">
-          <!-- Assignee Filter -->
-          <v-select
-            v-model="selectedAssignee"
-            :items="assignees"
-            label="Filter by Assignee"
-            clearable
-            class="flex-grow-1"
-            style="max-width: 250px"
-          ></v-select>
+        <!-- Board dropdown -->
+        <v-select
+        v-model="selectedBoard"
+        :items="boardOptions"
+        label="Filter by Board"
+        clearable
+        style="max-width:250px"
+        />
 
-          <!-- Project Filter -->
-          <v-select
-            v-model="selectedProject"
-            :items="projectTitles"
-            label="Filter by Project"
-            clearable
-            class="flex-grow-1"
-            style="max-width: 250px"
-          ></v-select>
-
+        <!-- Assignee dropdown -->
+        <v-select
+          v-model="selectedAssignee"
+          :items="assigneeOptions"
+          label="Filter by Assignee"
+          clearable
+          style="max-width:250px"
+        />
           <v-btn text @click="logData" class="mr-2">
             Log Data
           </v-btn>
@@ -51,49 +49,44 @@
           </v-btn>
         </v-col>
       </v-row>
-
       </v-container>
 
       <v-container fluid class="pt-16">
-      <!-- BOARDS -->
-      <div v-if="boards.length === 0" class="text-center grey--text pa-4">
-      No projects assigned
-    </div>
-    <div v-else>
+        <!-- No boards at all -->
+        <div v-if="boards.length === 0" class="text-center grey--text pa-4">
+          No boards defined
+        </div>
 
+        <!-- Boards exist but filters removed everything -->
+        <div v-else-if="filteredBoards.length === 0" class="text-center grey--text pa-4">
+          No stages/tasks match your filters
+        </div>
 
-      <draggable
-        v-model="boards"
-        item-key="id"
-
-        :animation="150"
-        class="d-flex flex-column"
-        :disabled="visitorMode || !allowBoardReordering"
-      >
-        <template #item="{ element: board, index: bIndex }">
-          <Board
-            :board="board"
-            :boardIndex="bIndex"
-  
-            :visitorMode="visitorMode"
-            :allowStageCrossBoard="allowStageCrossBoard"
-            @delete-board="deleteBoard"
-            @add-stage="addStage"
-            @rename-board="renameBoard"
-            @rename-stage="renameStage"
-            @delete-stage="deleteStage"
-            @add-task="addTask"
-            @delete-task="deleteTask"
-            @open-task-dialog="openTaskDialog"
-            
-          />
-        </template>
-      </draggable>
-
-    </div>
-    </v-container>
+        <!-- 3) Show filtered boards -->
+        <draggable
+          v-else
+          :list="filteredBoards"
+          item-key="id"
+          :animation="150"
+          class="d-flex flex-column"
+          :disabled="visitorMode || !allowBoardReordering"
+        >
+          <template #item="{ element: board, index: bIndex }">
+            <Board
+              :board="board"
+              :boardIndex="bIndex"
+              :visitorMode="visitorMode"
+              :allowStageCrossBoard="allowStageCrossBoard"
+              @add-task="addTask"
+              @delete-task="deleteTask"
+              @rename-stage="renameStage"
+              @delete-stage="deleteStage"
+              @open-task-dialog="openTaskDialog"
+            />
+          </template>
+        </draggable>
+      </v-container>
   </v-main>
-
     <!-- TASK EDIT DIALOG w/ DELETE -->
     <v-dialog v-model="isTaskDialogOpen" max-width="500">
       <v-card>
@@ -145,37 +138,126 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref,computed } from 'vue'
 import draggable from 'vuedraggable'
 import Board from '@/components/Board2.vue'
 
 let nextId = 1
 function genId() { return nextId++ }
 
-const selectedAssignee = ref(null)
-const selectedProject = ref(null)
-
-
-
 // Dynamically pull from existing board titles
-const projectTitles = computed(() => boards.value.map(b => b.title))
+// const projectTitles = computed(() => boards.value.map(b => b.title))
 // ─── Mock data (already “filtered” for the current user) ───────────────────────
 // Placeholder for future assignee support
-const assignees = ref([
-  'Alice',
-  'Bob',
-  'Charlie',
-])
+// const assignees = ref([
+//   'Alice',
+//   'Bob',
+//   'Charlie',
+// ])
 
+// const boards = ref([ // initial mock data
+//   {
+//     id: genId(), title: 'Project Alpha', stages: [
+//       { id: genId(), title: 'To Do', tasks: [{ id: genId(), title: 'Task A1' }] },
+//       { id: genId(), title: 'Done', tasks: [] }
+//     ]
+//   }
+// ])
 
-const boards = ref([ // initial mock data
+// ─── 1. Your mock data as Board→Stage→Task ───────────────────────────
+const boards = ref([
   {
-    id: genId(), title: 'Project Alpha', stages: [
-      { id: genId(), title: 'To Do', tasks: [{ id: genId(), title: 'Task A1' }] },
-      { id: genId(), title: 'Done', tasks: [] }
-    ]
-  }
+    id: genId(),
+    title: "Website Redesign",
+    stages: [
+      {
+        id: genId(),
+        title: "To Do",
+        tasks: [
+          { id: genId(), title: "Wireframes", assignee: "Alice", dueDate: "2025-06-01", priority: "High", comments: [], attachments: [], subtasks: [] },
+          { id: genId(), title: "Assets",    assignee: "Bob",   dueDate: "2025-06-02", priority: "Med",  comments: [], attachments: [], subtasks: [] },
+        ],
+      },
+      {
+        id: genId(),
+        title: "Done",
+        tasks: [
+          { id: genId(), title: "Audit UI",   assignee: "Charlie", dueDate: "2025-05-20", priority: "Low", comments: [], attachments: [], subtasks: [] }
+        ],
+      },
+    ],
+  },
+  {
+    id: genId(),
+    title: "API Integration",
+    stages: [
+      {
+        id: genId(),
+        title: "To Do",
+        tasks: [
+          { id: genId(), title: "Design Schema",   assignee: "Frank",  dueDate: "2025-06-05", priority: "High", comments: [], attachments: [], subtasks: [] }
+        ],
+      },
+      {
+        id: genId(),
+        title: "In Progress",
+        tasks: [
+          { id: genId(), title: "Auth Middleware", assignee: "Grace",  dueDate: "2025-05-30", priority: "Critical", comments: [], attachments: [], subtasks: [] }
+        ],
+      },
+    ],
+  },
+  // …other boards…
 ])
+
+// ─── 2. Filter state ────────────────────────────────────────────────
+const selectedBoard    = ref<string | null>(null)
+const selectedAssignee = ref<string | null>(null)
+
+// ─── 3. Dropdown options ──────────────────────────────────────────
+// Board titles for the first dropdown
+const boardOptions = computed(() => boards.value.map(b => b.title))
+
+// Unique assignees across all tasks
+const assigneeOptions = computed(() => {
+  const s = new Set<string>()
+  boards.value.forEach(b =>
+    b.stages.forEach(sg =>
+      sg.tasks.forEach(t => t.assignee && s.add(t.assignee))
+    )
+  )
+  return Array.from(s)
+})
+
+// ——— 4) COMPUTE FILTERED BOARDS ———
+/**
+ * We flatten all boards from all (or the selected) projects,
+ * then within each board we only keep tasks matching the
+ * selectedAssignee (if any).
+ */
+ const filteredBoards = computed(() => {
+  return boards.value
+    // 4a) Keep only matching boards (or all if none selected)
+    .filter(b => !selectedBoard.value || b.title === selectedBoard.value)
+    // 4b) For each kept board, filter its stages & tasks
+    .map(b => ({
+      ...b,
+      stages: b.stages
+        // map each stage, filtering tasks by assignee
+        .map(sg => ({
+          ...sg,
+          tasks: selectedAssignee.value
+            ? sg.tasks.filter(t => t.assignee === selectedAssignee.value)
+            : sg.tasks
+        }))
+        // then drop any stage with zero tasks
+        .filter(sg => sg.tasks.length > 0)
+    }))
+    // 4c) drop any board where all stages got filtered out
+    .filter(b => b.stages.length > 0)
+})
+// MOCK DATA ENDS HERE
+
 const visitorMode = ref(false)
 const allowBoardReordering = ref(false)
 const allowStageCrossBoard = ref(false)
