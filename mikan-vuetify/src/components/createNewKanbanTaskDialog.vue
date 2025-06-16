@@ -4,7 +4,7 @@
     @update:modelValue="$emit('update:modelValue', $event)"
     max-width="400"
   >
-    <v-card>
+    <v-card class="w-auto">
       <v-card-title class="headline ml-3 mt-5">New Task</v-card-title>
 
       <v-card-text>

@@ -1,47 +1,51 @@
 <template>
-  <v-container>
+  <div>
     <v-btn
       icon
-      color="success"
-      size="60"
-      class="mr-1 position-fixed bottom-0 right-0 mb-4 mr-4"
+      color="red-darken-2"
       @click="dialog = true"
+      variant="flat"
+      density="compact"
     >
-      <v-icon size="60">mdi-check</v-icon>
+      <v-icon size="default">mdi-delete</v-icon>
     </v-btn>
 
     <v-dialog v-model="dialog" max-width="500px" align="center">
       <v-card>
-        <v-card-title class="text-headline pa-2">Approve Action</v-card-title>
+        <v-card-title class="text-headline pa-2">Delete Item</v-card-title>
         <div class="icon-container">
-          <v-icon size="50" class="tick-icon">mdi-check</v-icon>
+          <v-icon size="50" class="close-icon">mdi-close</v-icon>
         </div>
         <v-card-subtitle class="pa-2">
-          Are you sure you want to approve this action?<br />This cannot be
+          Are you sure you want to delete this item?<br />This action cannot be
           undone.
         </v-card-subtitle>
 
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="grey" text @click="dialog = false">Cancel</v-btn>
-          <v-btn color="red" text @click="approve">Approve</v-btn>
+          <v-btn color="red" text @click="deleteTask">Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useDraftStore } from '@/stores/drafts';
+const draftStore = useDraftStore()
+
 const dialog = ref(false);
-const emit = defineEmits(["approve"]);
-const confirmApprove = () => {
-  dialog.value = true;
-};
-const approve = () => {
-  emit("approve");
+const emit = defineEmits(["task-deleted"]);
+const taskIndex = inject("taskIndex");
+
+function deleteTask() {
+  console.log("Item deleted");
+  draftStore.deleteDraft(taskIndex);
   dialog.value = false;
-};
+  emit("task-deleted");
+}
 </script>
 
 <style scoped>
@@ -53,10 +57,10 @@ const approve = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 16px; /* Adjust as needed */
 }
 
-.tick-icon {
+.close-icon {
   border: 6px solid red;
   border-radius: 50%;
   padding: 30px;
