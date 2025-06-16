@@ -2,8 +2,9 @@
 // Stage.vue
 // ======================== -->
 <template>
-  
+
   <v-sheet elevation="1" class="ma-2" style="min-width:250px; display:flex; flex-direction:column; background:#f5f5f5; ">
+
     <v-toolbar flat dense color="grey lighten-2">
       <template v-if="!isEditing">
         <v-toolbar-title class="text-subtitle-1">{{ stage.title }}</v-toolbar-title>
@@ -24,12 +25,11 @@
       v-model="stage.tasks"
       :item-key="'id'"
       :animation="150"
-
       :group="{ name: `tasks-board-${boardIndex}`, pull: true, put: [`tasks-board-${boardIndex}`] }"
       class="pa-2"
       style="max-height: 400px; overflow-y:auto"
       :disabled="visitorMode"
-      
+
     >
       <template #item="{ element: task, index: tIndex }">
         <TaskCard 

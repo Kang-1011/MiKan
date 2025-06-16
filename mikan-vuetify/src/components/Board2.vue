@@ -2,6 +2,7 @@
 // Board.vue
 // ======================== -->
 <template>
+
   <v-card class="ma-2" elevation="2" style="width:100%" >
     <v-toolbar flat dense color="grey lighten-3">
       <template v-if="!isEditing">
@@ -34,8 +35,6 @@
     </div>
     <div v-else>
 
-
-  
     <draggable
       v-model="board.stages"
       :item-key="'id'"

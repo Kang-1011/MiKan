@@ -3,7 +3,6 @@
 // ======================== -->
 <template>
 
-
   <v-app>
   <Sidebar class="position-fixed" />
   <Topbar title="My Tasks" class="position-fixed" />
@@ -52,6 +51,7 @@
           </v-btn>
         </v-col>
       </v-row>
+
       </v-container>
 
       <v-container fluid class="pt-16">
@@ -89,9 +89,11 @@
           />
         </template>
       </draggable>
+
     </div>
     </v-container>
   </v-main>
+
     <!-- TASK EDIT DIALOG w/ DELETE -->
     <v-dialog v-model="isTaskDialogOpen" max-width="500">
       <v-card>
@@ -164,6 +166,7 @@ const assignees = ref([
   'Bob',
   'Charlie',
 ])
+
 
 const boards = ref([ // initial mock data
   {
