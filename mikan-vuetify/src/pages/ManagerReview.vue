@@ -32,7 +32,7 @@
         fluid
         class="fill-height d-flex align-center justify-center"
       >
-        <h2 class="text-center text-black">No drafts found</h2>
+        <h2 class="text-center text-black">No pending tasks</h2>
       </v-container>
       <v-container fluid>
         <v-row>
@@ -67,7 +67,7 @@
         />
         <v-snackbar
           v-model="snackbar"
-          :timeout="2500"
+          :timeout="2000"
           :color="snackbarColor"
           variant="tonal"
           class="justify-center align center"
