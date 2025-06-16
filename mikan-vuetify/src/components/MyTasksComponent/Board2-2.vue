@@ -3,6 +3,7 @@
 // ======================== -->
 <template>
   <v-card class="ma-2" elevation="2" style="width:100%" >
+
     <v-toolbar flat dense color="grey lighten-3">
       <template v-if="!isEditing">
         <v-toolbar-title class="text-h6">{{ board.title }}</v-toolbar-title>
@@ -29,13 +30,13 @@
       </template>
     </v-toolbar>
 
+
+
     <div v-if="board.stages.length === 0" class="text-center grey--text pa-4">
       No stages assigned
     </div>
     <div v-else>
 
-
-  
     <draggable
       v-model="board.stages"
       :item-key="'id'"
@@ -63,7 +64,9 @@
         />
       </template>
     </draggable>
+
   </div>
+
   </v-card>
 </template>
 
