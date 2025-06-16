@@ -2,12 +2,8 @@
 // Board.vue
 // ======================== -->
 <template>
-<<<<<<< HEAD
-  <v-card class="ma-2" elevation="2" style="width:100%">
-=======
-
   <v-card class="ma-2" elevation="2" style="width:100%" >
->>>>>>> 718182c1a582f732a26ff32a52803239a10ee23f
+
     <v-toolbar flat dense color="grey lighten-3">
       <template v-if="!isEditing">
         <v-toolbar-title class="text-h6">{{ board.title }}</v-toolbar-title>
@@ -34,14 +30,13 @@
       </template>
     </v-toolbar>
 
-<<<<<<< HEAD
-=======
+
+
     <div v-if="board.stages.length === 0" class="text-center grey--text pa-4">
       No stages assigned
     </div>
     <div v-else>
 
->>>>>>> 718182c1a582f732a26ff32a52803239a10ee23f
     <draggable
       v-model="board.stages"
       :item-key="'id'"
@@ -58,9 +53,9 @@
         <Stage
           :stage="stage"
           :boardIndex="boardIndex"
-
           :stageIndex="sIndex"
           :visitorMode="visitorMode"
+          :selectedAssignee="props.selectedAssignee"
           @rename-stage="(sIdx, title) => $emit('rename-stage', boardIndex, sIdx, title)"
           @delete-stage="$emit('delete-stage', boardIndex, sIndex)"
           @add-task="$emit('add-task', boardIndex, sIndex)"
@@ -69,19 +64,24 @@
         />
       </template>
     </draggable>
-<<<<<<< HEAD
-=======
+
   </div>
->>>>>>> 718182c1a582f732a26ff32a52803239a10ee23f
+
   </v-card>
 </template>
 
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue'
 import draggable from 'vuedraggable'
-import Stage from './Stage2.vue'
+import Stage from './Stage2-2.vue'
 
-const props = defineProps({ board:Object, boardIndex:Number, visitorMode:Boolean, allowStageCrossBoard:Boolean })
+const props = defineProps({
+  board: Object,
+  boardIndex: Number,
+  visitorMode: Boolean,
+  allowStageCrossBoard: Boolean,
+  selectedAssignee: String
+})
 const emit = defineEmits(['add-stage','delete-board','delete-stage','add-task','delete-task','open-task-dialog','rename-board','rename-stage' ])
 
 const isEditing = ref(false)
