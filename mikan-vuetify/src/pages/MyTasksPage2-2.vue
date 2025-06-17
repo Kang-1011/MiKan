@@ -159,7 +159,7 @@
 <script setup lang="ts">
 import { ref,computed, watch } from 'vue'
 import draggable from 'vuedraggable'
-import Board from '@/components/Board2-2.vue'
+import Board from '@/components/MyTasksComponent/Board2-2.vue'
 
 let nextId = 1
 function genId() { return nextId++ }
