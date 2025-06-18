@@ -101,9 +101,9 @@ const menuItems = ref([
   {
     title: "Kanban Board",
     icon: "mdi-view-dashboard",
-    routePath: "/KanbanPage",
+    routePath: "/MyTasksPage2-2",
   },
-  { title: "My Tasks", icon: "mdi-checkbox-marked", routePath: "/MyTasks4" },
+  { title: "My Tasks", icon: "mdi-checkbox-marked", routePath: "/MyTasksPage2-2" },
   { title: "Manager Review", icon: "mdi-file", routePath: "/ManagerReview" },
 ]);
 
