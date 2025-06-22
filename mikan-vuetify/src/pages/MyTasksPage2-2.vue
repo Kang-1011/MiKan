@@ -157,7 +157,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref,computed, watch } from 'vue'
+import { ref,computed, watch, onMounted } from 'vue'
+import axios from 'axios'
 import draggable from 'vuedraggable'
 import Board from '@/components/MyTasksComponent/Board2-2.vue'
 
@@ -184,50 +185,59 @@ function genId() { return nextId++ }
 // ])
 
 // ─── 1. Your mock data as Board→Stage→Task ───────────────────────────
-const boards = ref([
-  {
-    id: genId(),
-    title: "Website Redesign",
-    stages: [
-      {
-        id: genId(),
-        title: "To Do",
-        tasks: [
-          { id: genId(), title: "Wireframes", assignee: "Alice", dueDate: "2025-06-01", priority: "High", comments: [], attachments: [], subtasks: [] },
-          { id: genId(), title: "Assets",    assignee: "Bob",   dueDate: "2025-06-02", priority: "Med",  comments: [], attachments: [], subtasks: [] },
-        ],
-      },
-      {
-        id: genId(),
-        title: "Done",
-        tasks: [
-          { id: genId(), title: "Audit UI",   assignee: "Charlie", dueDate: "2025-05-20", priority: "Low", comments: [], attachments: [], subtasks: [] }
-        ],
-      },
-    ],
-  },
-  {
-    id: genId(),
-    title: "API Integration",
-    stages: [
-      {
-        id: genId(),
-        title: "To Do",
-        tasks: [
-          { id: genId(), title: "Design Schema",   assignee: "Frank",  dueDate: "2025-06-05", priority: "High", comments: [], attachments: [], subtasks: [] }
-        ],
-      },
-      {
-        id: genId(),
-        title: "In Progress",
-        tasks: [
-          { id: genId(), title: "Auth Middleware", assignee: "Grace",  dueDate: "2025-05-30", priority: "Critical", comments: [], attachments: [], subtasks: [] }
-        ],
-      },
-    ],
-  },
-  // …other boards…
-])
+const boards = ref<any[]>([])
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:8000/tasks')
+    const tasks = response.data
+
+    // Step 1: Group by project
+    const projectsMap = new Map()
+
+    for (const task of tasks) {
+      const projectId = task.project.id
+      const projectTitle = task.project.title
+
+      if (!projectsMap.has(projectId)) {
+        projectsMap.set(projectId, {
+          id: projectId,
+          title: projectTitle,
+          stages: [
+            { id: 1, title: 'To Do', tasks: [] },
+            { id: 2, title: 'In Progress', tasks: [] },
+            { id: 3, title: 'Done', tasks: [] },
+          ],
+        })
+      }
+
+      // Step 2: Map task into correct stage
+      const stageMap = {
+        'to-do': 'To Do',
+        'in-progress': 'In Progress',
+        'done': 'Done',
+      }
+      const statusStage = stageMap[task.status] || 'To Do'
+      const project = projectsMap.get(projectId)
+      const stage = project.stages.find((s: any) => s.title === statusStage)
+
+      stage.tasks.push({
+        id: task.id,
+        title: task.description,
+        assignee: task.assignee?.name || 'Unassigned',
+        dueDate: task.due_date,
+        priority: task.priority,
+        comments: task.comment ? [task.comment] : [],
+        attachments: [],
+        subtasks: [],
+      })
+    }
+
+    boards.value = Array.from(projectsMap.values())
+  } catch (error) {
+    console.error('Failed to load tasks:', error)
+  }
+})
 
 // ─── 2. Filter state ────────────────────────────────────────────────
 const selectedBoard    = ref<string | null>(null)
