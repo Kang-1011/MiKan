@@ -10,7 +10,7 @@
       </v-btn>
     </div>
 
-    <v-list class="rounded-lg" style="background-color: #f5f5f5">
+    <v-list class="rounded-lg" style="background-color: transparent">
       <v-list-item
         v-for="(file, index) in files"
         :key="index"
@@ -18,7 +18,7 @@
         elevation="1"
       >
         <template v-slot:prepend>
-          <v-icon color="primary">mdi-file-music</v-icon>
+          <v-icon color="primary">mdi-file</v-icon>
         </template>
 
         <v-list-item-title class="clickable" @click="openFile(file)">

@@ -24,7 +24,8 @@ declare module 'vue-router/auto-routes' {
     '/Loginpage': RouteRecordInfo<'/Loginpage', '/Loginpage', Record<never, never>, Record<never, never>>,
     '/ManagerReview': RouteRecordInfo<'/ManagerReview', '/ManagerReview', Record<never, never>, Record<never, never>>,
     '/MinutesHomepage': RouteRecordInfo<'/MinutesHomepage', '/MinutesHomepage', Record<never, never>, Record<never, never>>,
-    '/MyTasks4': RouteRecordInfo<'/MyTasks4', '/MyTasks4', Record<never, never>, Record<never, never>>,
+    '/MyTasksPage2-1': RouteRecordInfo<'/MyTasksPage2-1', '/MyTasksPage2-1', Record<never, never>, Record<never, never>>,
+    '/MyTasksPage2-2': RouteRecordInfo<'/MyTasksPage2-2', '/MyTasksPage2-2', Record<never, never>, Record<never, never>>,
     '/TestTaskModal': RouteRecordInfo<'/TestTaskModal', '/TestTaskModal', Record<never, never>, Record<never, never>>,
     '/TranscriptsHomepage': RouteRecordInfo<'/TranscriptsHomepage', '/TranscriptsHomepage', Record<never, never>, Record<never, never>>,
   }
