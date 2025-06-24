@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="internalDialogOpen" max-width="800" >
+  <v-dialog v-model="internalDialogOpen" min-width="800" max-width="1300" >
     <v-card v-if="localTask" class="rounded-xl border-md dialog-card"  style=" background:#fcfcfc;">
       <!-- Header with action icons -->
       <v-toolbar flat dense density="compact" class="dialog-header">
@@ -26,7 +26,7 @@
             <input
               type="text"
               v-model="localTask.title"
-              :disabled="visitorMode"
+
               class="custom-input"
             />
           </div>
@@ -37,7 +37,7 @@
             <textarea
               ref="descRef"
               v-model="localTask.description"
-              :disabled="visitorMode"
+
               class="custom-input description-textarea"
               @input="autoGrowDesc"
             ></textarea>
@@ -55,7 +55,7 @@
                 <input
                   type="text"
                   v-model="localTask.subtasks[idx]"
-                  :disabled="visitorMode"
+
                   class="custom-input"
                 />
                 <v-btn
@@ -64,7 +64,7 @@
                   elevation="0"
                   class="subtask-delete-btn"
                   @click="removeSubtask(idx)"
-                  :disabled="visitorMode"
+
                 >
                   <v-icon small color="rgba(0,0,0,0.4)">mdi-trash-can-outline</v-icon>
                 </v-btn>
@@ -77,7 +77,7 @@
               elevation="0"
               class="border-sm rounded-xl small-gap"
               @click="addSubtask"
-              :disabled="visitorMode"
+
               :style="{ fontSize: '0.75rem' }"
             >
               <v-icon left small>mdi-plus</v-icon> Add Subtask
@@ -112,40 +112,43 @@
 
         <div class="vertical-divider"></div>
 
-        <div class="column-right">
+        <div>
           <!-- Assignee -->
           <div class="input-label small-gap">Assignee</div>
-          <div class="custom-input-wrapper select-wrapper small-gap">
-            <select
-              v-model="localTask.assignee"
-              :disabled="visitorMode"
-              class="custom-input select-input"
-            >
-              <option value="" disabled>Select assignee</option>
-              <option v-for="opt in assigneeOptions" :key="opt" :value="opt">
-                {{ opt }}
-              </option>
-            </select>
-          </div>
+          <v-combobox
+            v-model="localTask.assignee"
+            :items="assigneeOptions"
+
+            label="Select assignee"
+            clearable
+            dense
+            hide-details
+            single-line
+            variant="outlined"
+            density="compact"
+            class="rounded-xl border-sm small-gap"
+            :menu-props="{
+          contentClass: 'rounded-xl text-body-2',
+          }"
+          />
 
           <!-- Priority -->
           <div class="input-label small-gap">Priority</div>
-          <div class="custom-input-wrapper select-wrapper small-gap">
-            <select
-              v-model="localTask.priority"
-              :disabled="visitorMode"
-              class="custom-input select-input"
-            >
-              <option value="" disabled>Select priority</option>
-              <option
-                v-for="p in ['Low','Medium','High','Critical']"
-                :key="p"
-                :value="p"
-              >
-                {{ p }}
-              </option>
-            </select>
-          </div>
+         <v-select
+          v-model="localTask.priority"
+          :items="['Low','Medium','High','Critical']"
+
+          label="Select priority"
+          clearable
+          dense
+          hide-details
+          variant="outlined"
+          density="compact"
+          class="rounded-xl border-sm small-gap"
+          :menu-props="{
+          contentClass: 'rounded-xl text-body-2',
+          }"
+        />
 
           <!-- Due Date -->
           <div class="input-label small-gap">Due Date</div>
@@ -159,17 +162,18 @@
                   type="text"
                   v-model="formattedDate"
                   readonly
-                  :disabled="visitorMode"
+
                   class="custom-input"
                   placeholder="Due Date"
                 />
               </div>
             </template>
             <v-date-picker
+            class="rounded-xl border-md text-body-2"
               v-model="localTask.dueDate"
               @input="dateMenu = false"
-
               title=""
+              
             />
           </v-menu>
 
@@ -178,11 +182,12 @@
           <div class="custom-input-wrapper small-gap comment-wrapper rounded-xl">
             <textarea
               v-model="newComment"
-              :disabled="visitorMode"
+
               class="custom-input"
               rows="1"
             ></textarea>
           </div>
+
           <v-btn
             variant="text"
             color="grey"
@@ -190,7 +195,7 @@
             elevation="0"
             class="border-sm rounded-xl small-gap"
             @click="submitComment"
-            :disabled="visitorMode || !newComment"
+            :disabled=" !newComment"
             :style="{ fontSize: '0.75rem' }"
           >
             Comment
@@ -220,6 +225,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import Attachment from '@/components/MyTasksComponent/AttachmentManager.vue'
+import { boards } from '@/stores/boards'
 
 const props = defineProps<{ modelValue: boolean; task: any; visitorMode?: boolean }>()
 const emit = defineEmits(['update:modelValue','save-task','delete-task'])
@@ -231,7 +237,18 @@ const internalDialogOpen = computed({
 const localTask = ref<any>(null)
 const dateMenu = ref(false)
 const newComment = ref('')
-const assigneeOptions = ref<string[]>(['Alice','Bob','Charlie','Diana','Grace','Frank','Hani'])
+// derive assignee list dynamically from your boards store
+
+const assigneeOptions = computed(() => {
+  const set = new Set<string>()
+  boards.value.forEach(b =>
+    b.stages.forEach(sg =>
+      sg.tasks.forEach(t => t.assignee && set.add(t.assignee))
+    )
+  )
+  return Array.from(set)
+})
+
 const descRef = ref<HTMLTextAreaElement | null>(null)
 
 function autoGrowDesc(event: Event) {
@@ -355,8 +372,6 @@ function formatDateShort(d: any) {
   flex-direction: column;
 }
 .column-left { flex: 3; }
-.column-right { flex: 1; }
-
 .vertical-divider {
   width: 1px;
   background: #eee;
@@ -458,4 +473,9 @@ function formatDateShort(d: any) {
   border-top: 1px solid #eee;
 }
 .delete-btn { color: #e53935; }
+
+::v-deep .v-field__outline,
+::v-deep .v-field__bottom {
+  display: none !important;
+}
 </style>

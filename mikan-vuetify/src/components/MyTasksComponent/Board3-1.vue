@@ -19,7 +19,7 @@
         />
       </template>
        <!-- Inline Assignee Filter -->
-       <v-combobox
+       <v-select
           v-model="selectedAssigneeFilter"
           :items="assigneeOptions"
           label="Assignee"
@@ -30,7 +30,7 @@
           dense hide-details clearable
           :menu-props="{
           contentClass: 'rounded-xl text-body-2',
-      }"
+          }"
           style="background: #f5f5f5 ;max-width:150px"
         />
 

@@ -56,7 +56,7 @@
         <TaskCard 
         :task="task" 
         :visitorMode="visitorMode" 
-        @click="$emit('open-task-dialog', tIndex)" 
+        @click="$emit('open-task-dialog', task.id)" 
         />
 
       </template>

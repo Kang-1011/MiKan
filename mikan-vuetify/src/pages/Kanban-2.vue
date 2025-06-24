@@ -10,10 +10,12 @@
           v-model="selectedBoard"
           :items="boardOptions"
           label="Board"
+
           clearable
           dense
           hide-details
           style="max-width:200px"
+          
         />
 
         <!-- Assignee filter -->
@@ -64,6 +66,9 @@
       hide-details
       class="me-4 border-sm rounded-xl"
       style="background: #f5f5f5; max-width:150px"
+      :menu-props="{
+          contentClass: 'rounded-xl text-body-2',
+          }"
     />
 
     <!-- Due date filter -->
@@ -90,7 +95,7 @@
         />
       </template>
       <v-date-picker
-      
+        class="rounded-xl border-md text-body-2"
         v-model="selectedDueDate"
         @input="dueDateMenu = false"
       />
@@ -108,6 +113,9 @@
       single-line
       hide-details
       style="background: #f5f5f5; max-width:150px"
+      :menu-props="{
+          contentClass: 'rounded-xl text-body-2',
+          }"
     />
   </div>
 
@@ -122,9 +130,9 @@
         </div>
 
         <!-- Boards exist but filters removed everything -->
-        <div v-else-if="filteredBoards.length === 0" class="text-center grey--text pa-4">
+        <!-- <div v-else-if="filteredBoards.length === 0" class="text-center grey--text pa-4">
           No stages/tasks match your filters
-        </div>
+        </div> -->
 
         <!-- 3) Show filtered boards -->
         <!-- SUGGESTION: Bind draggable to real `boards` and filter inside Board2.vue -->
@@ -211,7 +219,7 @@ import Board from '@/components/MyTasksComponent/Board2-3.vue'
 import TaskDetail from '@/components/MyTasksComponent/TaskDetail.vue'
 
 // Toggle this in-file to show/hide the dev toolbar
-const showDevBar = false
+const showDevBar = true
 
 // ID generator for new items
 let nextId = 2000
@@ -320,10 +328,10 @@ function handleTaskSave(updatedTask) {
   }
 }
 
-watch(selectedAssignee, assignee => {
-  // whenever you pick someone, lock down the UI
-  visitorMode.value = assignee !== null
-})
+// watch(selectedAssignee, assignee => {
+//   // whenever you pick someone, lock down the UI
+//   visitorMode.value = assignee !== null
+// })
 
 function addBoard() {
   boards.value.push({ id: genId(), title: `New Board ${boards.value.length+1}`, stages: [] })
@@ -351,10 +359,13 @@ function addTask(boardIndex: number, stageIndex: number) {
 function deleteTask(boardIndex: number, stageIndex: number, taskIndex: number) {
   boards.value[boardIndex].stages[stageIndex].tasks.splice(taskIndex, 1)
 }
-function openTaskDialog(boardIndex: number, stageIndex: number, taskIndex: number) {
-  editingInfo.value = { boardIndex, stageIndex, taskIndex }
-  editedTaskTitle.value = boards.value[boardIndex].stages[stageIndex].tasks[taskIndex].title
-  isTaskDialogOpen.value = true
+function openTaskDialog(boardIndex: number, stageIndex: number, taskId: number) {
+  const tasks    = boards.value[boardIndex].stages[stageIndex].tasks
+  const realIdx  = tasks.findIndex(t => t.id === taskId)
+  if (realIdx !== -1) {
+    editingInfo.value = { boardIndex, stageIndex, taskIndex: realIdx }
+    isTaskDialogOpen.value = true
+  }
 }
 function closeTaskDialog() {
   isTaskDialogOpen.value = false

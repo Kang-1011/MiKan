@@ -53,9 +53,9 @@
       </div>
 
       <!-- Boards exist but filters removed everything -->
-      <div v-else-if="filteredBoards.length === 0" class="text-center grey--text pa-4">
+      <!-- <div v-else-if="filteredBoards.length === 0" class="text-center grey--text pa-4">
         No stages/tasks match your filters
-      </div>
+      </div> -->
 
       <!-- 3) Show filtered boards -->
       <!-- SUGGESTION: Bind draggable to real `boards` and filter inside Board2.vue -->
@@ -134,7 +134,7 @@ import Board from '@/components/MyTasksComponent/Board3-1.vue'
 import TaskDetail from '@/components/MyTasksComponent/TaskDetail.vue'
 // import Sidebar3 from '@/components/MyTasksComponent/Sidebar3.vue'
 
-const showDevBar = false
+const showDevBar = true
 
 let nextId = 2000
 function genId() { return nextId++ }
@@ -250,10 +250,13 @@ boards.value[boardIndex].stages[stageIndex].tasks.push({ id: genId(), title: `Ta
 function deleteTask(boardIndex: number, stageIndex: number, taskIndex: number) {
 boards.value[boardIndex].stages[stageIndex].tasks.splice(taskIndex, 1)
 }
-function openTaskDialog(boardIndex: number, stageIndex: number, taskIndex: number) {
-editingInfo.value = { boardIndex, stageIndex, taskIndex }
-editedTaskTitle.value = boards.value[boardIndex].stages[stageIndex].tasks[taskIndex].title
-isTaskDialogOpen.value = true
+function openTaskDialog(boardIndex: number, stageIndex: number, taskId: number) {
+  const tasks    = boards.value[boardIndex].stages[stageIndex].tasks
+  const realIdx  = tasks.findIndex(t => t.id === taskId)
+  if (realIdx !== -1) {
+    editingInfo.value = { boardIndex, stageIndex, taskIndex: realIdx }
+    isTaskDialogOpen.value = true
+  }
 }
 function closeTaskDialog() {
 isTaskDialogOpen.value = false
