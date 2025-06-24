@@ -1,5 +1,4 @@
 <template>
-  <div class="card-1">
 <v-row class="justify-space-between attachment-manager align-center ma-2" style="border-bottom:2px solid #e0e0e0; padding: 8px 16px">
   <div>
     <h2> Transcript</h2>
@@ -12,7 +11,7 @@
     </v-tooltip>
     <v-tooltip :text="isEditMode ? 'Finish Editing' : 'Edit Transcript'" location="bottom">
       <template v-slot:activator="{ props }">
-        <v-btn :icon="isEditMode ? 'mdi-check' : 'mdi-fountain-pen-tip'"  variant="text"  v-bind="props" @click="toggleEditMode"></v-btn>
+        <v-btn :icon="isEditMode ? 'mdi-check-outline' : 'mdi-square-edit-outline'"  variant="text"  v-bind="props" @click="toggleEditMode"></v-btn>
       </template>
     </v-tooltip>
     <v-tooltip text="To Minutes" location="bottom">
@@ -168,7 +167,6 @@
         </v-row>
     </div>  
   </v-container>
-  </div>
 </template>
 
 
@@ -435,10 +433,5 @@ const exportToPDF = () => {
     /* font-family: monospace; Often good for transcripts */ 
     border-radius: 4px;
     border: 1px solid #e0e0e0;
-}
- 
-.card-1 {
-    border: thin solid lightgray;
-    box-shadow: none;
 }
 </style>

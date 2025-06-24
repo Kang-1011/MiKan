@@ -1,26 +1,25 @@
-<template  >
-  <div class="card-1">
-<v-row class="justify-space-between align-center ma-2" style="border-bottom:2px solid #e0e0e0 ;padding: 8px 16px">
-  <div>
-    <h2> Minutes </h2>
-  </div>
-  <div>
-    <v-tooltip text="Download Minutes" location="bottom">
-      <template v-slot:activator="{ props }">
-        <v-btn icon="mdi-download-outline" variant="text"  v-bind="props" @click="exportToPDF"></v-btn>
-      </template>
-    </v-tooltip> 
-    <v-tooltip :text="isEditMode ? 'Finish Editing' : 'Edit Minutes'" location="bottom">
-      <template v-slot:activator="{ props }">
-        <v-btn :icon="isEditMode ? 'mdi-check' : 'mdi-fountain-pen-tip'" variant="text"  v-bind="props" @click="toggleEditMode"></v-btn>
-      </template>
-    </v-tooltip>
-    <v-tooltip text="To Manager Review" location="bottom">
-      <template v-slot:activator="{ props }">
-        <v-btn icon="mdi-send-outline"variant="text"   v-bind="props" @click="toTask"></v-btn>
-      </template>
-    </v-tooltip>
-  </div>
+<template>
+    <v-row class="justify-space-between align-center ma-2" style="border-bottom:2px solid #e0e0e0 ;padding: 8px 16px">
+        <div>
+            <h2> Minutes </h2>
+        </div>
+    <div>
+        <v-tooltip text="Download Minutes" location="bottom">
+        <template v-slot:activator="{ props }">
+            <v-btn icon="mdi-download-outline" variant="text"  v-bind="props" @click="exportToPDF"></v-btn>
+        </template>
+        </v-tooltip> 
+        <v-tooltip :text="isEditMode ? 'Finish Editing' : 'Edit Minutes'" location="bottom">
+        <template v-slot:activator="{ props }">
+            <v-btn :icon="isEditMode ? 'mdi-check-outline' : 'mdi-square-edit-outline'" variant="text"  v-bind="props" @click="toggleEditMode"></v-btn>
+        </template>
+        </v-tooltip>
+        <v-tooltip text="To Manager Review" location="bottom">
+        <template v-slot:activator="{ props }">
+            <v-btn icon="mdi-send-outline"variant="text"   v-bind="props" @click="toTask"></v-btn>
+        </template>
+        </v-tooltip>
+    </div>
 </v-row>
 
   <v-container fluid class="page-container" ref="pdfContent">
@@ -191,7 +190,7 @@
         </v-col>
       </v-row>
     </div>
-  </v-container></div>
+  </v-container>
 </template>
 
 <script setup>
@@ -260,7 +259,7 @@ const formatDate = (dateString) => {
 const toTask = () => {
   console.log("Task clicked");
   emit("action", { type: "Task" });
-  router.push("/ManagerReview");
+  router.push("/ManagerReviewV2");
 };
 
 
@@ -432,8 +431,5 @@ const isMainTask = (taskNumber) => {
 .main-task-cell {
   background-color: #e0e0e0; 
 }
-.card-1 {
-    border: thin solid lightgray;
-    box-shadow: none;
-}
+
 </style>
