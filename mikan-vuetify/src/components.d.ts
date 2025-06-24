@@ -24,6 +24,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     ShareButton: typeof import('./components/MinutesComponent/ShareButton.vue')['default']
     Sidebar: typeof import('./components/HomepageComponent/Sidebar.vue')['default']
+    Sidebar3: typeof import('./components/Sidebar3.vue')['default']
     Stage22: typeof import('./components/MyTasksComponent/Stage2-2.vue')['default']
     TaskCard2: typeof import('./components/MyTasksComponent/TaskCard2.vue')['default']
     TaskDraft: typeof import('./components/ManagerReviewComponent/TaskDraft.vue')['default']
