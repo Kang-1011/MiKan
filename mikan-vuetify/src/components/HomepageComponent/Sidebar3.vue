@@ -18,7 +18,7 @@
                 </v-avatar>
               </template>
 
-              <v-list-item-title><h1>Mikan</h1></v-list-item-title>
+              <v-list-item-title>Mikan</v-list-item-title>
             </v-list-item>
           </v-list>
 
