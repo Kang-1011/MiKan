@@ -11,7 +11,10 @@
       <v-card class="fill-height d-flex flex-column rounded-xl card-1" flat>
         <div class="sidebar-content align-center">
           <v-list density="compact" nav>
-            <v-list-item value="home">
+            <v-list-item 
+            value="home"
+            @click="router.push({ path: '/Homepage' })"
+            >
               <template #prepend>
                 <v-avatar size="32">
                   <v-img :src="mikanImage" />
@@ -29,17 +32,25 @@
               prepend-icon="mdi-home-city"
               title="Meeting Minute"
               value="home"
+              @click="router.push({ path: '/MinutesHomepage' })"
             ></v-list-item>
             <v-list-item
               prepend-icon="mdi-account"
               title="Manager Review"
               value="account"
-              @click="router.push({ path: '/Kanban-2' })"
+              @click="router.push({ path: '/ManagerReview' })"
             ></v-list-item>
             <v-list-item
               prepend-icon="mdi-account-group-outline"
               title="Users"
               value="users"
+              @click="router.push({ path: '/Loginpage' })"
+            ></v-list-item>
+            <v-list-item
+              prepend-icon="mdi-format-list-checkbox"
+              title="My Tasks"
+              value="my_tasks"
+              @click="router.push({ path: '/Kanban-2' })"
             ></v-list-item>
           </v-list>
 
