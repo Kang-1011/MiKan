@@ -25,3 +25,7 @@ registerPlugins(app);
 app.use(pinia);
 
 app.mount("#app");
+
+// vue-audio-visual
+import { AVPlugin } from "vue-audio-visual";
+app.use(AVPlugin);
