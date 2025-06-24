@@ -14,6 +14,10 @@ import App from "./App.vue";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 
+import PrimeVue from 'primevue/config';
+import Aura from '@primeuix/themes/aura';
+import ToastService from 'primevue/toastservice';
+
 // Styles
 import "unfonts.css";
 
@@ -23,5 +27,11 @@ const pinia = createPinia();
 registerPlugins(app);
 
 app.use(pinia);
+app.use(PrimeVue, {
+    theme: {
+        preset: Aura
+    }
+});
+app.use(ToastService);
 
 app.mount("#app");
