@@ -1,17 +1,9 @@
-<!-- // ========================
-// MyTasksPage.vue
-// ======================== -->
-<template>
-
-
-  <v-app>
-  <Sidebar class="position-fixed" />
-  <Topbar title="My Tasks" class="position-fixed" />
-
-    <v-main>
-   <!-- SUGGESTION: Replace the fixed container+row with Vuetify App Bar -->
-   <v-app-bar app fixed color="white" elevation="2">
-        <v-toolbar-title>MyTasks Dev Mode</v-toolbar-title>
+<template style="background:#fcfcfc;">
+    <Sidebar3></Sidebar3>
+<v-app class="grey lighten-4">
+    <!--DEVELOPER MODE -->
+        <v-app-bar v-if="showDevBar"  app fixed color="white" elevation="2">
+        <v-toolbar-title>Developer Mode!!!</v-toolbar-title>
 
         <!-- Board filter -->
         <v-select
@@ -51,9 +43,79 @@
           <v-icon left>mdi-plus</v-icon> Add Board
         </v-btn>
       </v-app-bar>
+      
+      <v-main  class="pa-0 bg-grey-lighten-4" >
+      <!-- Top pill bar -->
+  <div
+    class="pa-3 rounded-xl border-sm d-flex align-center ma-3"
+    style="background: white;" 
+  >
+    <span class="text-h5 pl-1 me-4">My Tasks</span>
+    <v-spacer></v-spacer>
+    <!-- Priority filter -->
+    <v-select
+      v-model="selectedPriority"
+      :items="priorityOptions"
+      label="Priority"
+      clearable
+      variant="outlined"
+      density="compact"
+      single-line
+      hide-details
+      class="me-4 border-sm rounded-xl"
+      style="background: #f5f5f5; max-width:150px"
+    />
+
+    <!-- Due date filter -->
+    <v-menu
+      v-model="dueDateMenu"
+      :close-on-content-click="false"
+      dense
+      hide-details
+
+    >
+      <template #activator="{ props }">
+        <v-text-field
+          v-model="selectedDueDate"
+          label="Due Before"
+          variant="outlined"
+          class="me-4 border-sm rounded-xl"
+          density="compact"
+          single-line
+          clearable
+
+          hide-details
+          v-bind="props"
+          style="background: #f5f5f5;max-width:150px"
+        />
+      </template>
+      <v-date-picker
+      
+        v-model="selectedDueDate"
+        @input="dueDateMenu = false"
+      />
+    </v-menu>
+
+    <!-- Assignee filter (auto-selected on load) -->
+    <v-select
+      v-model="selectedAssignee"
+      :items="assigneeOptions"
+      label="Assignee"
+      clearable
+      variant="outlined"
+      class="me-4 border-sm rounded-xl"
+      density="compact"
+      single-line
+      hide-details
+      style="background: #f5f5f5; max-width:150px"
+    />
+  </div>
 
 
-      <v-container fluid class="pt-16">
+   <!-- SUGGESTION: Replace the fixed container+row with Vuetify App Bar -->
+
+
+      <v-container fluid class="pa-0 pr-6">
         <!-- No boards at all -->
         <div v-if="boards.length === 0" class="text-center grey--text pa-4">
           No boards defined
@@ -72,22 +134,33 @@
           :animation="150"
           
           class="d-flex flex-column"
+          
           :disabled="visitorMode || !allowBoardReordering"
         >
           <template #item="{ element: board, index: bIndex }">
-            <Board 
+
+            <Board
               v-show="!selectedBoard || board.title === selectedBoard"
-             :board="selectedAssignee
-               ? {
-                   ...board,
-                   stages: board.stages
-                     .map(sg => ({
-                       ...sg,
-                       tasks: sg.tasks.filter(t => t.assignee === selectedAssignee)
-                     }))
-                     .filter(sg => sg.tasks.length > 0)
-                 }
-               : board"
+              :board="
+                (selectedAssignee || selectedPriority || selectedDueDate)
+                  ? {
+                      ...board,
+                      stages: board.stages
+                        .map(sg => ({
+                          ...sg,
+                          tasks: sg.tasks.filter(t =>
+                            // Assignee filter
+                            (!selectedAssignee   || t.assignee === selectedAssignee) &&
+                            // Priority filter
+                            (!selectedPriority   || t.priority === selectedPriority) &&
+                            // Due-before filter
+                            (!selectedDueDate    || new Date(t.dueDate) <= new Date(selectedDueDate))
+                          )
+                        }))
+                        .filter(sg => sg.tasks.length > 0)
+                    }
+                  : board
+              "
               :boardIndex="bIndex"
               :visitorMode="visitorMode"
               :selectedAssignee="selectedAssignee"
@@ -101,46 +174,20 @@
               @delete-stage="deleteStage"
               @open-task-dialog="openTaskDialog"
             />
+
           </template>
         </draggable>
         
       </v-container>
-  </v-main>
-    <!-- TASK EDIT DIALOG w/ DELETE -->
-    <v-dialog v-model="isTaskDialogOpen" max-width="500">
-      <v-card>
-        <v-toolbar flat dense color="grey lighten-3">
-          <template v-if="!visitorMode">
-            <v-toolbar-title>Edit Task</v-toolbar-title>
-            <v-spacer />
-            <v-btn icon small @click="closeTaskDialog">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </template>
-        </v-toolbar>
 
-        <v-card-text>
-          <v-text-field
-            v-model="editedTaskTitle"
-            label="Task Title"
-            autofocus
-            @keyup.enter="saveTaskEdit"
-            :disabled="visitorMode"
-          />
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer />
-          <v-btn text @click="closeTaskDialog">Cancel</v-btn>
-          <v-btn color="primary" @click="saveTaskEdit" :disabled="visitorMode">
-            Save
-          </v-btn>
-          <v-btn v-if="!visitorMode" color="red" @click="confirmDeleteTask">
-            Delete Task
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+      <!-- TASK MODAL REPLACEMENT -->
+      <TaskDetail
+        v-model="isTaskDialogOpen"
+        :task="selectedTask"
+        :visitorMode="visitorMode"
+        @save-task="handleTaskSave"
+        @delete-task="confirmDeleteTask"
+      />
 
     <!-- DELETE CONFIRMATION -->
     <v-dialog v-model="isDeleteConfirmOpen" max-width="400">
@@ -153,86 +200,30 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    </v-main>
   </v-app>
 </template>
-
 <script setup lang="ts">
 import { ref,computed, watch } from 'vue'
+import { boards } from '@/stores/boards'
 import draggable from 'vuedraggable'
-import Board from '@/components/MyTasksComponent/Board2-2.vue'
+import Board from '@/components/MyTasksComponent/Board2-3.vue'
+import TaskDetail from '@/components/MyTasksComponent/TaskDetail.vue'
 
-let nextId = 1
+// Toggle this in-file to show/hide the dev toolbar
+const showDevBar = false
+
+// ID generator for new items
+let nextId = 2000
 function genId() { return nextId++ }
 
-// Dynamically pull from existing board titles
-// const projectTitles = computed(() => boards.value.map(b => b.title))
-// ─── Mock data (already “filtered” for the current user) ───────────────────────
-// Placeholder for future assignee support
-// const assignees = ref([
-//   'Alice',
-//   'Bob',
-//   'Charlie',
-// ])
-
-// const boards = ref([ // initial mock data
-//   {
-//     id: genId(), title: 'Project Alpha', stages: [
-//       { id: genId(), title: 'To Do', tasks: [{ id: genId(), title: 'Task A1' }] },
-//       { id: genId(), title: 'Done', tasks: [] }
-//     ]
-//   }
-// ])
-
-// ─── 1. Your mock data as Board→Stage→Task ───────────────────────────
-const boards = ref([
-  {
-    id: genId(),
-    title: "Website Redesign",
-    stages: [
-      {
-        id: genId(),
-        title: "To Do",
-        tasks: [
-        // { id: genId(), title: "Wireframes", assignee: "Alice", dueDate: "2025-06-01", priority: "High", description: "There is a lot of stuff that needs to get done here", comments: [], attachments: [], ai_attachments: [], autostart: [], subtasks: [],reporter: "Rohimi" },
-          { id: genId(), title: "Wireframes", assignee: "Alice", dueDate: "2025-06-01", priority: "High", comments: [], attachments: [], subtasks: [] },
-          { id: genId(), title: "Assets",    assignee: "Bob",   dueDate: "2025-06-02", priority: "Med",  comments: [], attachments: [], subtasks: [] },
-        ],
-      },
-      {
-        id: genId(),
-        title: "Done",
-        tasks: [
-          { id: genId(), title: "Audit UI",   assignee: "Charlie", dueDate: "2025-05-20", priority: "Low", comments: [], attachments: [], subtasks: [] }
-        ],
-      },
-    ],
-  },
-  {
-    id: genId(),
-    title: "API Integration",
-    stages: [
-      {
-        id: genId(),
-        title: "To Do",
-        tasks: [
-          { id: genId(), title: "Design Schema",   assignee: "Frank",  dueDate: "2025-06-05", priority: "High", comments: [], attachments: [], subtasks: [] }
-        ],
-      },
-      {
-        id: genId(),
-        title: "In Progress",
-        tasks: [
-          { id: genId(), title: "Auth Middleware", assignee: "Grace",  dueDate: "2025-05-30", priority: "Critical", comments: [], attachments: [], subtasks: [] }
-        ],
-      },
-    ],
-  },
-  // …other boards…
-])
 
 // ─── 2. Filter state ────────────────────────────────────────────────
-const selectedBoard    = ref<string | null>(null)
-const selectedAssignee = ref<string | null>(null)
+const selectedBoard    = ref<string|null>(null)
+const selectedAssignee = ref<string|null>(null)
+const selectedPriority = ref<string|null>(null)
+const selectedDueDate  = ref<string|null>(null)
+const dueDateMenu      = ref(false)
 
 // ─── 3. Dropdown options ──────────────────────────────────────────
 // Board titles for the first dropdown
@@ -249,6 +240,24 @@ const assigneeOptions = computed(() => {
   return Array.from(s)
 })
 
+// Auto-select first assignee on load
+watch(assigneeOptions, opts => {
+  if (!selectedAssignee.value && opts.length) {
+    selectedAssignee.value = opts[0]
+  }
+}, { immediate: true })
+
+
+const priorityOptions = computed(() => {
+  const set = new Set<string>()
+  boards.value.forEach(b =>
+    b.stages.forEach(sg =>
+      sg.tasks.forEach(t => t.priority && set.add(t.priority))
+    )
+  )
+  return Array.from(set)
+})
+
 // ——— 4) COMPUTE FILTERED BOARDS ———
 /**
  * We flatten all boards from all (or the selected) projects,
@@ -257,36 +266,59 @@ const assigneeOptions = computed(() => {
  */
  const filteredBoards = computed(() => {
   return boards.value
-    // 4a) Keep only matching boards (or all if none selected)
+    // 1. keep only boards matching the board‐title filter
     .filter(b => !selectedBoard.value || b.title === selectedBoard.value)
-    // 4b) For each kept board, filter its stages & tasks
+    // 2. for each kept board, rebuild it with only the stages that still have visible tasks
     .map(b => ({
       ...b,
       stages: b.stages
-        // map each stage, filtering tasks by assignee
         .map(sg => ({
           ...sg,
-          tasks: selectedAssignee.value
-            ? sg.tasks.filter(t => t.assignee === selectedAssignee.value)
-            : sg.tasks
+          tasks: sg.tasks.filter(t =>
+            // assignee check
+            (!selectedAssignee.value   || t.assignee === selectedAssignee.value) &&
+            // priority check
+            (!selectedPriority.value   || t.priority === selectedPriority.value) &&
+            // dueDate check (tasks due *on or before* the selected date)
+            (!selectedDueDate.value    || new Date(t.dueDate) <= new Date(selectedDueDate.value))
+          )
         }))
-        // then drop any stage with zero tasks
+        // drop empty stages
         .filter(sg => sg.tasks.length > 0)
     }))
-    // 4c) drop any board where all stages got filtered out
+    // 3. drop any board that now has zero stages
     .filter(b => b.stages.length > 0)
 })
 // MOCK DATA ENDS HERE
 
-const visitorMode = ref(false)
+const visitorMode = ref(true)
 const allowBoardReordering = ref(false)
 const allowStageCrossBoard = ref(false)
 
 // Task dialog state
 const isTaskDialogOpen = ref(false)
 const isDeleteConfirmOpen = ref(false)
-const editingInfo = ref({ boardIndex: null as number | null, stageIndex: null as number | null, taskIndex: null as number | null })
+const editingInfo = ref<{
+  boardIndex: number|null,
+  stageIndex: number|null,
+  taskIndex: number|null
+}>({ boardIndex: null, stageIndex: null, taskIndex: null })
 const editedTaskTitle = ref('')
+
+const selectedTask = computed(() => {
+  const { boardIndex, stageIndex, taskIndex } = editingInfo.value
+  if (boardIndex!==null && stageIndex!==null && taskIndex!==null) {
+    return boards.value[boardIndex].stages[stageIndex].tasks[taskIndex]
+  }
+  return null
+})
+
+function handleTaskSave(updatedTask) {
+  const { boardIndex, stageIndex, taskIndex } = editingInfo.value
+  if (boardIndex!==null && stageIndex!==null && taskIndex!==null) {
+    boards.value[boardIndex].stages[stageIndex].tasks[taskIndex] = updatedTask
+  }
+}
 
 watch(selectedAssignee, assignee => {
   // whenever you pick someone, lock down the UI
@@ -328,13 +360,7 @@ function closeTaskDialog() {
   isTaskDialogOpen.value = false
   editedTaskTitle.value = ''
 }
-function saveTaskEdit() {
-  const { boardIndex, stageIndex, taskIndex } = editingInfo.value
-  if (boardIndex!==null && stageIndex!==null && taskIndex!==null) {
-    boards.value[boardIndex].stages[stageIndex].tasks[taskIndex].title = editedTaskTitle.value
-  }
-  closeTaskDialog()
-}
+
 function confirmDeleteTask() {
   isTaskDialogOpen.value = false
   isDeleteConfirmOpen.value = true
@@ -349,4 +375,60 @@ function deleteTaskConfirmed() {
 function logData() {
   console.log(JSON.stringify(boards.value, null, 2))
 }
+
+// Only show boards that match filters
+function boardVisible(b: typeof boards.value[0]) {
+  const byBoard    = !selectedBoard.value || b.title === selectedBoard.value
+  const byAssignee = !selectedAssignee.value
+    || b.stages.some(sg => sg.tasks.some(t => t.assignee === selectedAssignee.value))
+  return byBoard && byAssignee
+}
 </script>
+
+<style scoped>
+/* ============ NEUMORPHIC STYLES ============ */
+.neu {
+  background: #e0e0e0;
+  border-radius: 16px;
+  box-shadow:
+    8px 8px 16px #bebebe,
+   -8px -8px 16px #ffffff;
+  transition: all 0.3s ease;
+}
+
+.neu-inset {
+  box-shadow:
+    inset 8px 8px 16px #bebebe,
+    inset -8px -8px 16px #ffffff;
+}
+
+.neu-btn {
+  background: #e0e0e0;
+  border-radius: 12px;
+  box-shadow:
+    5px 5px 10px #bebebe,
+   -5px -5px 10px #ffffff;
+  transition: 0.2s ease;
+}
+
+.neu-btn:active {
+  box-shadow:
+    inset 5px 5px 10px #bebebe,
+    inset -5px -5px 10px #ffffff;
+}
+
+.fill-height {
+    height: 100%;
+    /* Make sure it fills the full screen */
+}
+
+.card-1 {
+    border: thin solid lightgray;
+    box-shadow: none;
+}
+
+::v-deep .v-field__outline,
+::v-deep .v-field__bottom {
+  display: none !important;
+}
+</style>
