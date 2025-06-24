@@ -8,9 +8,8 @@
     <slot name="input" :model="internalModel" />
 
     <!-- Action buttons are now more prominent and clear -->
-    <div class="button-group mt-4 d-flex justify-end">
-      <v-btn variant="text" @click="cancel">Cancel</v-btn>
-      <v-btn color="#ff3d00" variant="flat" @click="save">Save Changes</v-btn>
+    <div class="button-group mt-4 d-flex justify-end"> 
+      <v-btn color="#e0e0e0" variant="flat" @click="save">Save Changes</v-btn>
     </div>
   </div>
 </template>
