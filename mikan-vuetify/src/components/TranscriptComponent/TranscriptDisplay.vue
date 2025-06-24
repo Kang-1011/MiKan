@@ -1,13 +1,15 @@
 <template>
-<v-row class="justify-space-between align-center ma-2" style="padding: 8px 16px">
+  <div class="card-1">
+<v-row class="justify-space-between attachment-manager align-center ma-2" style="border-bottom:2px solid #e0e0e0; padding: 8px 16px">
+  <div>
+    <h2> Transcript</h2>
+  </div>
   <div>
     <v-tooltip text="Download Transcript" location="bottom">
       <template v-slot:activator="{ props }">
       <v-btn icon="mdi-download-outline" variant="text"  v-bind="props" @click="exportToPDF"></v-btn>
       </template>
     </v-tooltip>
-  </div>
-  <div>
     <v-tooltip :text="isEditMode ? 'Finish Editing' : 'Edit Transcript'" location="bottom">
       <template v-slot:activator="{ props }">
         <v-btn :icon="isEditMode ? 'mdi-check' : 'mdi-fountain-pen-tip'"  variant="text"  v-bind="props" @click="toggleEditMode"></v-btn>
@@ -15,7 +17,7 @@
     </v-tooltip>
     <v-tooltip text="To Minutes" location="bottom">
       <template v-slot:activator="{ props }">
-        <v-btn icon="mdi-send-outline"   class="ml-4" variant="text" v-bind="props" @click="toMinute"></v-btn>
+        <v-btn icon="mdi-send-outline"    variant="text" v-bind="props" @click="toMinute"></v-btn>
       </template>
     </v-tooltip>
   </div>
@@ -23,11 +25,11 @@
 
   <v-container fluid class="page-container" ref="pdfContent">
     
-    <div class="minutes-section-card">
+    <div class="attachment-manager minutes-section-card">
       <v-row no-gutters>
         <v-col cols="12">
           <div class="title-cell d-flex justify-center align-center">
-            <h1 class="text-h4 font-weight-bold">{{ transcriptHeaderData.title }}</h1> 
+            <h1 class="text-h4 font-weight-bold">{{ transcriptHeaderData.title }} - {{ transcriptHeaderData.project }}</h1> 
           </div>
         </v-col>
       </v-row>
@@ -35,7 +37,7 @@
       <v-row style= "border-bottom: 2px solid #eaeaea;" no-gutters class="pa-4">
         <v-col cols="12" md="3" class="pa-2">
           <div class="rounded-header-cell">
-            <span class="font-weight-bold">Location:</span>
+            <span class="font-weight-bold" style="font-size: 18px;">Location:</span>
             <div v-if="activeEditorKey !== 'location'" @click="isEditMode && setActiveEditor('location')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
               {{ transcriptHeaderData.location }}
             </div>
@@ -46,7 +48,7 @@
         </v-col>
         <v-col cols="12" md="3" class="pa-2">
           <div class="rounded-header-cell">
-            <span class="font-weight-bold">Written by:</span>
+            <span class="font-weight-bold" style="font-size: 18px;">Written by:</span>
             <div v-if="activeEditorKey !== 'createdBy'" @click="isEditMode && setActiveEditor('createdBy')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
               {{ transcriptHeaderData.createdBy }}
             </div>
@@ -57,7 +59,7 @@
         </v-col>
         <v-col cols="12" md="3" class="pa-2">
             <div class="rounded-header-cell">
-                <span class="font-weight-bold">Date:</span>
+                <span class="font-weight-bold" style="font-size: 18px;">Date:</span>
                 <div v-if="activeEditorKey !== 'date'" @click="isEditMode && setActiveEditor('date')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
                     {{ formatDate(transcriptHeaderData.date) }}
                 </div>
@@ -67,8 +69,8 @@
             </div>
         </v-col>
         <v-col cols="12" md="3" class="pa-2">
-            <div class="rounded-header-cell">
-                <span class="font-weight-bold">Project:</span>
+            <div class="rounded-header-cell" style="border-right: none;">
+                <span class="font-weight-bold" style="font-size: 18px;">Project:</span>
                 <div v-if="activeEditorKey !== 'project'" @click="isEditMode && setActiveEditor('project')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
                     {{ transcriptHeaderData.project }}
                 </div>
@@ -84,10 +86,10 @@
           <div class="content-cell">
             <v-row no-gutters align="start">
               <v-col cols="12" md="1">
-                <span class="font-weight-bold">Purpose:</span>
+                <span class="font-weight-bold" style="font-size: 18px;">Purpose:</span>
               </v-col>
               <v-col cols="12" md="11"> 
-                <div v-if="activeEditorKey !== 'Purpose'" @click="isEditMode && setActiveEditor('Purpose')" :class="{ 'editable-field': isEditMode }" class="mt-6 mb-0" style="min-height: 40px;">
+                <div v-if="activeEditorKey !== 'Purpose'" @click="isEditMode && setActiveEditor('Purpose')" :class="{ 'editable-field': isEditMode }" class=" mb-0" style="min-height: 40px;">
                   {{ transcriptHeaderData.Purpose }}
                 </div>
                 <VConfirmEdit v-if="isEditMode && activeEditorKey === 'Purpose'" :model-value="transcriptHeaderData.Purpose" @save="(newValue) => handleSaveHeaderField('Purpose', newValue)" @cancel="handleCancelEdit">
@@ -104,10 +106,10 @@
           <div class="content-cell" style="border-bottom: none;">
             <v-row no-gutters align="start">
               <v-col cols="12" md="1">
-                <span class="font-weight-bold">Attendees:</span>
+                <span class="font-weight-bold" style="font-size: 18px;">Attendees:</span>
               </v-col>
               <v-col cols="12" md="11"> 
-                <div v-if="activeEditorKey !== 'Attendees'" @click="isEditMode && setActiveEditor('Attendees')" :class="{ 'editable-field': isEditMode }" class="mt-6 mb-0 attendees-text" style="min-height: 40px;">
+                <div v-if="activeEditorKey !== 'Attendees'" @click="isEditMode && setActiveEditor('Attendees')" :class="{ 'editable-field': isEditMode }" class=" mb-0 attendees-text" style="min-height: 40px;">
                   {{ transcriptHeaderData.Attendees }}
                 </div>
                 <VConfirmEdit v-if="isEditMode && activeEditorKey === 'Attendees'" :model-value="transcriptHeaderData.Attendees" @save="(newValue) => handleSaveHeaderField('Attendees', newValue)" @cancel="handleCancelEdit">
@@ -125,7 +127,7 @@
       <v-row no-gutters>
         <v-col cols="12">
           <div class="task-list-header d-flex justify-center align-center ga-4">
-            <h3 class="font-weight-bold">Transcript List</h3> 
+            <h3 class="font-weight-bold" style="font-size: 24px;">Transcript List</h3> 
           </div>
         </v-col>
       </v-row>
@@ -166,6 +168,7 @@
         </v-row>
     </div>  
   </v-container>
+  </div>
 </template>
 
 
@@ -344,16 +347,22 @@ const exportToPDF = () => {
 
 <style scoped>
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+
+.attachment-manager,
+.attachment-manager * {
+  font-family: "Inter", serif !important; 
+  /* font-family: "Times New Roman", serif !important */
+}
 
 .transcript-container {
-    /* font-family: 'Courier New', Courier, monospace; */
-    background-color: #fdfdfd;
-    border-radius: 4px;
-    border: 1px solid #e0e0e0;
+    /* font-family: 'Courier New', Courier, monospace; */ 
+    border-radius: 4px; 
     padding: 16px;
     line-height: 1.6;    
     max-height: 400px; /* You can adjust this value as needed */
     overflow-y: auto;   /* Adds a scrollbar only when content exceeds max-height */
+  font-family: "Inter", serif !important; 
 
 }
 
@@ -361,13 +370,14 @@ const exportToPDF = () => {
     display: flex;
     align-items: flex-start;
     margin-bottom: 8px;
+  font-family: "Inter", serif !important; 
 }
 
 .speaker-info {
     flex-shrink: 0;
-    min-width: 300px;
-    font-weight: bold;
+    min-width: 300px; 
     color: #333;
+  font-family: "Inter", serif !important; 
 }
  
 .editable-field {
@@ -375,28 +385,26 @@ const exportToPDF = () => {
   border-radius: 4px;
   transition: background-color 0.2s ease-in-out;
   border: 2px dashed transparent;
+  font-family: "Inter", serif !important; 
 }
 .editable-field:hover {
   background-color: #e0e0e0; /* A very light yellow */
   border-color: #e0e0e0; /* A light orange/yellow */
 }
 
-.minutes-section-card {
-  background-color: white;
+.minutes-section-card { 
   border: 2px solid #e0e0e0;
   border-radius: 24px;
   overflow: hidden;
+  font-family: "Inter", serif !important; 
 }
-.tasks-section-card {
-  background-color: white;
+.tasks-section-card { 
   border: 2px solid #e0e0e0;
   border-radius: 24px;
   overflow: hidden;
 }
 .rounded-header-cell {
-  border: 2px solid #e0e0e0;
-  border-radius: 16px;
-  background-color: #f9f9f9;
+  border-right: 2px solid #e0e0e0; 
   height: 100%;
   padding: 12px;
   text-align: center;
@@ -411,10 +419,10 @@ const exportToPDF = () => {
 .title-cell {
   padding: 16px;
   border-bottom: 2px solid #e0e0e0;
+  font-family: "Inter", serif !important; 
 }
 .content-cell {
-  padding: 16px 8px;
-  border-bottom: 2px solid #e0e0e0;
+  padding: 16px 8px; 
 }
 .attendees-text {
   white-space: pre-wrap;
@@ -424,20 +432,13 @@ const exportToPDF = () => {
 .transcript-display {
     white-space: pre-wrap; /* Ensures newlines are respected */
     line-height: 1.6;
-    /* font-family: monospace; Often good for transcripts */
-    background-color: #f9f9f9;
+    /* font-family: monospace; Often good for transcripts */ 
     border-radius: 4px;
     border: 1px solid #e0e0e0;
 }
-
-.editable-field {
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.2s ease-in-out;
-  border: 2px dashed transparent;
-}
-.editable-field:hover {
-  background-color: #e0e0e0; /* A very light yellow */
-  border-color: #e0e0e0; /* A light orange/yellow */
+ 
+.card-1 {
+    border: thin solid lightgray;
+    box-shadow: none;
 }
 </style>

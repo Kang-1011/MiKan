@@ -1,13 +1,15 @@
-<template>
-<v-row class="justify-space-between align-center ma-2" style="padding: 8px 16px">
+<template  >
+  <div class="card-1">
+<v-row class="justify-space-between align-center ma-2" style="border-bottom:2px solid #e0e0e0 ;padding: 8px 16px">
+  <div>
+    <h2> Minutes </h2>
+  </div>
   <div>
     <v-tooltip text="Download Minutes" location="bottom">
       <template v-slot:activator="{ props }">
         <v-btn icon="mdi-download-outline" variant="text"  v-bind="props" @click="exportToPDF"></v-btn>
       </template>
-    </v-tooltip>
-  </div>
-  <div>
+    </v-tooltip> 
     <v-tooltip :text="isEditMode ? 'Finish Editing' : 'Edit Minutes'" location="bottom">
       <template v-slot:activator="{ props }">
         <v-btn :icon="isEditMode ? 'mdi-check' : 'mdi-fountain-pen-tip'" variant="text"  v-bind="props" @click="toggleEditMode"></v-btn>
@@ -15,7 +17,7 @@
     </v-tooltip>
     <v-tooltip text="To Manager Review" location="bottom">
       <template v-slot:activator="{ props }">
-        <v-btn icon="mdi-send-outline"variant="text"  class="ml-4" v-bind="props" @click="toTask"></v-btn>
+        <v-btn icon="mdi-send-outline"variant="text"   v-bind="props" @click="toTask"></v-btn>
       </template>
     </v-tooltip>
   </div>
@@ -26,7 +28,7 @@
       <v-row no-gutters>
         <v-col cols="12">
           <div class="title-cell d-flex justify-center align-center">
-            <h1 class="text-h4 font-weight-bold">{{ minuteHeaderData.title }}</h1> 
+            <h1 class="attachment-manager text-h4 font-weight-black">{{ minuteHeaderData.title }} - {{ minuteHeaderData.project }}</h1> 
           </div>
         </v-col>
       </v-row>
@@ -34,7 +36,7 @@
       <v-row style= "border-bottom: 2px solid #eaeaea;" no-gutters class="pa-4">
         <v-col cols="12" md="3" class="pa-2">
           <div class="rounded-header-cell">
-            <span class="font-weight-bold">Location:</span>
+            <span class="font-weight-bold  attachment-manager" style="font-size: 18px;">Location:</span>
             <div v-if="activeEditorKey !== 'location'" @click="isEditMode && setActiveEditor('location')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
               {{ minuteHeaderData.location }}
             </div>
@@ -45,7 +47,7 @@
         </v-col>
         <v-col cols="12" md="3" class="pa-2">
           <div class="rounded-header-cell">
-            <span class="font-weight-bold">Written by:</span>
+            <span class="font-weight-bold" style="font-size: 18px;">Written by:</span>
             <div v-if="activeEditorKey !== 'createdBy'" @click="isEditMode && setActiveEditor('createdBy')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
               {{ minuteHeaderData.createdBy }}
             </div>
@@ -55,8 +57,8 @@
           </div>
         </v-col>
         <v-col cols="12" md="3" class="pa-2">
-            <div class="rounded-header-cell">
-                <span class="font-weight-bold">Date:</span>
+            <div class="rounded-header-cell" >
+                <span class="font-weight-bold" style="font-size: 18px;">Date:</span>
                 <div v-if="activeEditorKey !== 'date'" @click="isEditMode && setActiveEditor('date')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
                     {{ formatDate(minuteHeaderData.date) }}
                 </div>
@@ -66,8 +68,8 @@
             </div>
         </v-col>
         <v-col cols="12" md="3" class="pa-2">
-            <div class="rounded-header-cell">
-                <span class="font-weight-bold">Project:</span>
+            <div class="rounded-header-cell" style="border-right: none;">
+                <span class="font-weight-bold" style="font-size: 18px;">Project:</span>
                 <div v-if="activeEditorKey !== 'project'" @click="isEditMode && setActiveEditor('project')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
                     {{ minuteHeaderData.project }}
                 </div>
@@ -83,10 +85,10 @@
           <div class="content-cell">
             <v-row no-gutters align="start">
               <v-col cols="12" md="1">
-                <span class="font-weight-bold">Purpose:</span>
+                <span class="font-weight-bold" style="font-size: 18px;" >Purpose:</span>
               </v-col>
               <v-col cols="12" md="11"> 
-                <div v-if="activeEditorKey !== 'Purpose'" @click="isEditMode && setActiveEditor('Purpose')" :class="{ 'editable-field': isEditMode }" class="mt-6 mb-0" style="min-height: 40px;">
+                <div v-if="activeEditorKey !== 'Purpose'" @click="isEditMode && setActiveEditor('Purpose')" :class="{ 'editable-field': isEditMode }" class="mb-0" style="min-height: 40px;">
                   {{ minuteHeaderData.Purpose }}
                 </div>
                 <VConfirmEdit v-if="isEditMode && activeEditorKey === 'Purpose'" :model-value="minuteHeaderData.Purpose" @save="(newValue) => handleSaveHeaderField('Purpose', newValue)" @cancel="handleCancelEdit">
@@ -103,11 +105,11 @@
           <div class="content-cell" style="border-bottom: none;">
             <v-row no-gutters align="start">
               <v-col cols="12" md="1">
-                <span class="font-weight-bold">Attendees:</span>
+                <span class="font-weight-bold attachment-manager" style="font-size: 18px;">Attendees:</span>
               </v-col>
               <v-col cols="12" md="11"> 
-                <div v-if="activeEditorKey !== 'Attendees'" @click="isEditMode && setActiveEditor('Attendees')" :class="{ 'editable-field': isEditMode }" class="mt-6 mb-0 attendees-text" style="min-height: 40px;">
-                  {{ minuteHeaderData.Attendees }}
+                <div v-if="activeEditorKey !== 'Attendees'" @click="isEditMode && setActiveEditor('Attendees')" :class="{ 'editable-field': isEditMode }" class="mb-0 attendees-text" style="min-height: 40px;">
+                  {{ minuteHeaderData.Attendees }} 
                 </div>
                 <VConfirmEdit v-if="isEditMode && activeEditorKey === 'Attendees'" :model-value="minuteHeaderData.Attendees" @save="(newValue) => handleSaveHeaderField('Attendees', newValue)" @cancel="handleCancelEdit">
                   <template #input="{ model }"><v-textarea v-model="model.value" label="Edit Attendees" variant="outlined" auto-grow rows="3"></v-textarea></template>
@@ -122,22 +124,21 @@
     <div class="my-6"></div>
 
    <div class="tasks-section-card">
-      <v-row no-gutters>
-        <v-col cols="12">
-          <div class="task-list-header d-flex justify-center align-center ga-4">
-            <h3 class="font-weight-bold">Task List</h3>
-            <v-btn v-if="isEditMode" color="#ff3d00" @click="handleAddTask" prepend-icon="mdi-plus-circle-outline">
-                Add Task
-            </v-btn>
-          </div>
-        </v-col>
-      </v-row>
+        <v-row no-gutters>
+          <v-col cols="12">
+            <div class="task-list-header d-flex align-center">
+              <h3 class="font-weight-bold mx-auto" style="font-size: 24px;">Task List</h3>
+              
+              <v-btn v-if="isEditMode" color="black mr-8" @click="handleAddTask" variant="text" icon="mdi-plus-circle-outline"></v-btn>
+            </div>
+          </v-col>
+        </v-row>
       <v-row no-gutters class="pa-1">
         <v-col cols="12">
           <v-table density="compact" class="tasks-table">
             <thead>
               <tr>
-                <th class="text-center font-weight-bold text-black" style="width: 8%;">Task No.</th>
+                <th class="text-center font-weight-bold text-black" style="width: 8%;"> No.</th>
                 <th class="text-center font-weight-bold text-black" :style="{ width: isEditMode ? '48%' : '60%' }">Task Description</th>
                 <th class="text-center font-weight-bold text-black" style="width: 18%;">Action by</th>
                 <th class="text-center font-weight-bold text-black" style="width: 14%;">Due Date</th>
@@ -190,7 +191,7 @@
         </v-col>
       </v-row>
     </div>
-  </v-container>
+  </v-container></div>
 </template>
 
 <script setup>
@@ -214,7 +215,7 @@ const {
   toggleEditMode,
   setActiveEditor,
   addTask,       
-  deleteTask,    
+  deleteTaskAndRenumber,    
 } = minuteStore;
 
 const handleAddTask = () => {
@@ -225,7 +226,7 @@ const handleAddTask = () => {
 const handleDeleteTask = (taskIndex) => {
     // This function will call the action in your Pinia store
     if (confirm('Are you sure you want to delete this task?')) {
-        deleteTask(taskIndex);
+        deleteTaskAndRenumber(taskIndex);
     }
 };
 
@@ -346,11 +347,21 @@ const isMainTask = (taskNumber) => {
 
 <style scoped>
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+
+.attachment-manager,
+.attachment-manager * {
+  font-family: "Inter", serif !important; 
+  /* font-family: "Times New Roman", serif !important */
+}
+
 .editable-field {
   cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.2s ease-in-out;
-  border: 2px dashed transparent;
+  border: 2px dashed transparent; 
+  font-family: "Inter", serif !important; 
+  font-size: 16px;
 }
 .editable-field:hover {
   background-color: #e0e0e0; /* A very light yellow */
@@ -361,18 +372,20 @@ const isMainTask = (taskNumber) => {
   background-color: white;
   border: 2px solid #e0e0e0;
   border-radius: 24px;
+  font-size: 16px;
+  font-family: "Inter", serif !important; 
   overflow: hidden;
 }
 .tasks-section-card {
   background-color: white;
   border: 2px solid #e0e0e0;
   border-radius: 24px;
+  font-size: 16px;
+  font-family: "Inter", serif !important; 
   overflow: hidden;
 }
 .rounded-header-cell {
-  border: 2px solid #e0e0e0;
-  border-radius: 16px;
-  background-color: #f9f9f9;
+  border-right: 2px solid #e0e0e0; 
   height: 100%;
   padding: 12px;
   text-align: center;
@@ -382,17 +395,20 @@ const isMainTask = (taskNumber) => {
   border-bottom: 2px solid #e0e0e0;
 }
 .content-cell {
-  padding: 16px 8px;
-  border-bottom: 2px solid #e0e0e0;
+  padding: 16px 8px; 
+  font-size: 16px;
 }
 .attendees-text {
   white-space: pre-wrap;
   line-height: 1.5;
+  font-family: "Inter", serif !important; 
 }
 .task-list-header {
   border-bottom: 2px solid #e0e0e0;
   padding: 16px; 
+  font-family: "Inter", serif !important; 
   text-align: center;
+  font-size: 20px;
 }
 .tasks-table {
   border: none; 
@@ -401,8 +417,10 @@ const isMainTask = (taskNumber) => {
 .tasks-table th,
 .tasks-table td {
   padding: 8px 16px !important;
+  font-size: 18px;
   vertical-align: top;
   border-bottom: 2px solid #e0e0e0;
+  font-family: "Inter", serif !important; 
   text-align: center;
 }
 .tasks-table thead th {
@@ -412,7 +430,10 @@ const isMainTask = (taskNumber) => {
   border-bottom: none;
 }
 .main-task-cell {
-  background-color: #eeeeee;
-  font-weight: bold;
+  background-color: #e0e0e0; 
+}
+.card-1 {
+    border: thin solid lightgray;
+    box-shadow: none;
 }
 </style>
