@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-sheet elevation="0">
           <!-- Attachments Mode -->
-          <template v-if="mode === 'attachments' && !visitorMode">
+          <template v-if="mode === 'attachments'">
             <!-- Hidden file input -->
             <input
               type="file"
@@ -82,7 +82,7 @@
             </div>
           </template>
 
-          <!-- Read-Only Modes (attachments when visitorMode, ai_attachments, autostart) -->
+          <!-- Read-Only Modes ( ai_attachments, autostart) -->
           <template v-else>
             <!-- Empty state -->
             <div v-if="uploadedFiles.length === 0" class="text-center text-body-2 attachment-manager grey--text pa-4 rounded-xl border-sm">
@@ -141,7 +141,7 @@ watch(
   () => props.modelValue,
   (val) => {
     uploadedFiles.value = Array.isArray(val) ? [...val] : []
-    isRecording.value = props.mode === 'attachments' && !props.visitorMode && uploadedFiles.value.length > 0
+    isRecording.value = props.mode === 'attachments' && uploadedFiles.value.length > 0
   },
   { immediate: true }
 )
@@ -203,7 +203,7 @@ function getKey(file: any, index: number) {
 }
 .attachment-manager,
 .attachment-manager * {
-  font-family: "Inter", serif !important;
+  /* font-family: "Inter", serif !important; */
   /* font-family: "Times New Roman", serif !important */
 }
 </style>
