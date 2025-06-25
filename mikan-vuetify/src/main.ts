@@ -15,6 +15,8 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import ToastService from 'primevue/toastservice';
 
+import { AVPlugin } from "vue-audio-visual";
+
 // Styles
 import "unfonts.css";
 import "vuetify/styles";    // makes sure Vuetify’s CSS variables exist
@@ -38,5 +40,7 @@ app.use(PrimeVue, {
     }
 });
 app.use(ToastService);
+
+app.use(AVPlugin);
 
 app.mount("#app");
