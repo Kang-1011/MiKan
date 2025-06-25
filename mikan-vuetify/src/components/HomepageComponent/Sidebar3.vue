@@ -35,7 +35,7 @@
               @click="router.push({ path: '/AudioInput' })"
             ></v-list-item>
             <v-list-item
-              prepend-icon="mdi-tag-check-outline"
+              prepend-icon="mdi-file-sign"
               title="Manager Review"
               value="account"
               @click="router.push({ path: '/ManagerReviewV2' })"
