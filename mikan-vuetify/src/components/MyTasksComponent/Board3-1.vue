@@ -31,7 +31,7 @@
           :menu-props="{
           contentClass: 'rounded-xl text-body-2',
           }"
-          style="background: #f5f5f5 ;max-width:150px"
+          style="background: #f5f5f5 ;max-width:180px"
         />
 
         <!-- Inline Priority Filter -->
@@ -48,7 +48,7 @@
           :menu-props="{
           contentClass: 'rounded-xl text-body-2 ',
       }"
-          style="background: #f5f5f5; max-width:150px; margin-left:8px; margin-right:8px"
+          style="background: #f5f5f5; max-width:180px; margin-left:8px; margin-right:8px"
         />
 
         <!-- Inline Due Date Filter -->
@@ -61,16 +61,15 @@
         >
           <template #activator="{ props: menuProps }">
             <v-text-field
-              v-model="selectedDueDateFilter"
+              v-model="formattedDate"
               label="Due Before"
               variant="outlined"
-              class="border-sm rounded-xl"
+              class="border-sm rounded-xl mr-4"
               density="compact"
               single-line
               hide-details clearable
               v-bind="menuProps"
-              
-              style="background: #f5f5f5; max-width:150px; margin-right:8px"
+              style="background: #f5f5f5; max-width:200px; margin-right:8px"
             />
           </template>
           <v-date-picker 
@@ -188,6 +187,20 @@ const selectedPriorityFilter = ref<string | null>(null)
 const selectedDueDateFilter = ref<string | null>(null)
 const dueDateMenu = ref(false)
 
+const formattedDate = computed<string>({
+  get() {
+    return selectedDueDateFilter.value
+      ? new Date(selectedDueDateFilter.value).toLocaleDateString(undefined, {
+          day:   'numeric', month: 'short', year:  'numeric'
+        })
+      : ''
+  },
+  set(v: string) {
+    selectedDueDateFilter.value = v
+      ? new Date(v).toISOString().split('T')[0]
+      : null
+  }
+})
 // Compute filter options
 const assigneeOptions = computed(() => {
   const set = new Set<string>()

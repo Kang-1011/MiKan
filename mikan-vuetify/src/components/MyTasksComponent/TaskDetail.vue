@@ -117,6 +117,7 @@
           <div class="input-label small-gap">Assignee</div>
           <v-combobox
             v-model="localTask.assignee"
+            transition="scale-transition"
             :items="assigneeOptions"
 
             label="Select assignee"
@@ -137,7 +138,7 @@
          <v-select
           v-model="localTask.priority"
           :items="['Low','Medium','High','Critical']"
-
+          single-line
           label="Select priority"
           clearable
           dense
@@ -150,32 +151,33 @@
           }"
         />
 
-          <!-- Due Date -->
-          <div class="input-label small-gap">Due Date</div>
-          <v-menu v-model="dateMenu" :close-on-content-click="false">
-            <template #activator="{ props }">
-              <div
-                class="custom-input-wrapper select-wrapper small-gap"
-                v-bind="props"
-              >
-                <input
-                  type="text"
-                  v-model="formattedDate"
-                  readonly
+        <!-- Due Date -->
+<div class="input-label small-gap">Due Date</div>
+<v-menu
+  v-model="dateMenu"
+  :close-on-content-click="false"
+  transition="scale-transition"
+>
+  <template #activator="{ props }">
+    <v-text-field
+      v-model="formattedDate"
+      variant="outlined"
+      density="compact"
+      hide-details
+      prepend-inner-icon="mdi-calendar"
+      class="rounded-xl border-md text-body-2"
+      placeholder="Due Date"
+      v-bind="props"
+    />
+  </template>
 
-                  class="custom-input"
-                  placeholder="Due Date"
-                />
-              </div>
-            </template>
-            <v-date-picker
-            class="rounded-xl border-md text-body-2"
-              v-model="localTask.dueDate"
-              @input="dateMenu = false"
-              title=""
-              
-            />
-          </v-menu>
+  <v-date-picker
+    v-model="localTask.dueDate"
+    @update:model-value="dateMenu = false"
+    class="rounded-xl border-md text-body-2"
+    no-title
+  />
+</v-menu>
 
           <!-- Comments input -->
           <div class="input-label small-gap">Add Comment</div>

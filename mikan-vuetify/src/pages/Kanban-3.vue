@@ -134,7 +134,7 @@ import Board from '@/components/MyTasksComponent/Board3-1.vue'
 import TaskDetail from '@/components/MyTasksComponent/TaskDetail.vue'
 // import Sidebar3 from '@/components/MyTasksComponent/Sidebar3.vue'
 
-const showDevBar = true
+const showDevBar = false
 
 let nextId = 2000
 function genId() { return nextId++ }

@@ -4,7 +4,7 @@
     :rail="rail"
     permanent
     @click="rail = false"
-    rail-width="80"
+    rail-width="86"
     border="0"
   >
     <v-card class="pa-3 fill-height bg-grey-lighten-4">

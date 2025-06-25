@@ -65,7 +65,7 @@
       single-line
       hide-details
       class="me-4 border-sm rounded-xl"
-      style="background: #f5f5f5; max-width:150px"
+      style="background: #f5f5f5; max-width:180px"
       :menu-props="{
           contentClass: 'rounded-xl text-body-2',
           }"
@@ -75,23 +75,20 @@
     <v-menu
       v-model="dueDateMenu"
       :close-on-content-click="false"
-      dense
-      hide-details
+      dense hide-details
 
     >
       <template #activator="{ props }">
         <v-text-field
-          v-model="selectedDueDate"
+          v-model="formattedDate"
           label="Due Before"
           variant="outlined"
           class="me-4 border-sm rounded-xl"
           density="compact"
           single-line
-          clearable
-
-          hide-details
+          clearable hide-details
           v-bind="props"
-          style="background: #f5f5f5;max-width:150px"
+          style="background: #f5f5f5;max-width:200px"
         />
       </template>
       <v-date-picker
@@ -112,7 +109,7 @@
       density="compact"
       single-line
       hide-details
-      style="background: #f5f5f5; max-width:150px"
+      style="background: #f5f5f5; max-width:180px"
       :menu-props="{
           contentClass: 'rounded-xl text-body-2',
           }"
@@ -219,7 +216,7 @@ import Board from '@/components/MyTasksComponent/Board2-3.vue'
 import TaskDetail from '@/components/MyTasksComponent/TaskDetail.vue'
 
 // Toggle this in-file to show/hide the dev toolbar
-const showDevBar = true
+const showDevBar = false
 
 // ID generator for new items
 let nextId = 2000
@@ -236,6 +233,21 @@ const dueDateMenu      = ref(false)
 // ─── 3. Dropdown options ──────────────────────────────────────────
 // Board titles for the first dropdown
 const boardOptions = computed(() => boards.value.map(b => b.title))
+
+const formattedDate = computed<string>({
+  get() {
+    return selectedDueDate.value
+      ? new Date(selectedDueDate.value).toLocaleDateString(undefined, {
+          day:   'numeric', month: 'short', year:  'numeric'
+        })
+      : ''
+  },
+  set(v: string) {
+    selectedDueDate.value = v
+      ? new Date(v).toISOString().split('T')[0]
+      : null
+  }
+})
 
 // Unique assignees across all tasks
 const assigneeOptions = computed(() => {
