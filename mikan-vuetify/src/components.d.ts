@@ -29,6 +29,7 @@ declare module 'vue' {
     TaskCard23: typeof import('./components/MyTasksComponent/TaskCard2-3.vue')['default']
     TaskDetail: typeof import('./components/MyTasksComponent/TaskDetail.vue')['default']
     TaskDraft: typeof import('./components/ManagerReviewComponent/TaskDraft.vue')['default']
+    'TaskDraft(Deprecated)': typeof import('./components/ManagerReviewComponent/TaskDraft(Deprecated).vue')['default']
     TaskDraftApproveOneTaskButton: typeof import('./components/ManagerReviewComponent/TaskDraftApproveOneTaskButton.vue')['default']
     TaskDraftDeleteOneTaskButton: typeof import('./components/ManagerReviewComponent/TaskDraftDeleteOneTaskButton.vue')['default']
     TaskDraftEditOneTaskButton: typeof import('./components/ManagerReviewComponent/TaskDraftEditOneTaskButton.vue')['default']

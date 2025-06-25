@@ -2,7 +2,7 @@
     <div>
         <v-tooltip text="Approve" location="top">
             <template #activator="{ props }">
-                <v-btn icon v-bind="props" @click.stop="dialog = true" variant="flat" density="compact">
+                <v-btn icon v-bind="props" @click.stop="dialog = true" variant="flat" density="compact" style="background: transparent;">
                     <v-icon size="large" color="grey-darken-3">mdi-check-circle-outline</v-icon>
                 </v-btn>
             </template>
