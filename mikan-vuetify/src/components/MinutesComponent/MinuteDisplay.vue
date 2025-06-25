@@ -1,243 +1,435 @@
-<template> 
-      <v-container fluid class="fill-height pa-0 ma-0">
-        <v-row justify="center" align="stretch" class="fill-height ma-0">
-          <v-col cols="12" md="12" class="pa-0 d-flex flex-column" style="height: 100%;">
-             <v-card class="meeting-minutes-card" flat tile light>
-              <v-row no-gutters class="pa-4 pb-0 text-center flex-shrink-0">
-                <v-col>
-                  <h1 class="text-h4 font-weight-bold text-black mb-0">{{ meetingHeaderData.title }}</h1>
-                </v-col>
-              </v-row>
+<template>
+    <v-row class="justify-space-between align-center ma-2" style="border-bottom:2px solid #e0e0e0 ;padding: 8px 16px">
+        <div>
+            <h2> Minutes </h2>
+        </div>
+    <div>
+        <v-tooltip text="Download Minutes" location="bottom">
+        <template v-slot:activator="{ props }">
+            <v-btn icon="mdi-download-outline" variant="text"  v-bind="props" @click="exportToPDF"></v-btn>
+        </template>
+        </v-tooltip> 
+        <v-tooltip :text="isEditMode ? 'Finish Editing' : 'Edit Minutes'" location="bottom">
+        <template v-slot:activator="{ props }">
+            <v-btn :icon="isEditMode ? 'mdi-check-outline' : 'mdi-square-edit-outline'" variant="text"  v-bind="props" @click="toggleEditMode"></v-btn>
+        </template>
+        </v-tooltip>
+        <v-tooltip text="To Manager Review" location="bottom">
+        <template v-slot:activator="{ props }">
+            <v-btn icon="mdi-send-outline"variant="text"   v-bind="props" @click="toTask"></v-btn>
+        </template>
+        </v-tooltip>
+    </div>
+</v-row>
 
-              <v-row class="pa-4 pt-2 pb-3 justify-center align-center flex-shrink-0" dense>
-                <v-col cols="12" sm="6" md="3" class="py-2 px-2">
-                  <v-card outlined class="metadata-card text-center pa-3 fill-height d-flex flex-column justify-center">
-                    <div class="text-caption text-black">Created by:</div>
-                    <div class="text-h6 font-weight-medium text-black mt-1">{{ meetingHeaderData.createdBy }}</div>
-                  </v-card>
-                </v-col>
-                <v-col cols="12" sm="6" md="3" class="py-2 px-2">
-                  <v-card outlined class="metadata-card text-center pa-3 fill-height d-flex flex-column justify-center">
-                    <div class="text-caption text-black">Date:</div>
-                    <div class="text-h6 font-weight-medium text-black mt-1">{{ formatDate(meetingHeaderData.date) }}</div>
-                  </v-card>
-                </v-col>
-                <v-col cols="12" sm="6" md="3" class="py-2 px-2">
-                  <v-card outlined class="metadata-card text-center pa-3 fill-height d-flex flex-column justify-center">
-                    <div class="text-caption text-black">Action Items:</div>
-                    <div class="text-h6 font-weight-medium text-black mt-1">{{ meetingHeaderData.actionItemsCount }}</div>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-divider class="mx-4 flex-shrink-0"></v-divider>
+  <v-container fluid class="page-container" ref="pdfContent">
+    <div class="minutes-section-card">
+      <v-row no-gutters>
+        <v-col cols="12">
+          <div class="title-cell d-flex justify-center align-center">
+            <h1 class="attachment-manager text-h4 font-weight-black">{{ minuteHeaderData.title }} - {{ minuteHeaderData.project }}</h1> 
+          </div>
+        </v-col>
+      </v-row>
 
-              <v-card-text class="meeting-details pa-4">
-                <div v-if="meetingBodyData.attendees && meetingBodyData.attendees.length" class="content-block pa-4 rounded mb-4">
-                  <h3 class="text-subtitle-1 font-weight-medium text-black mb-2">Attendees:</h3>
-                  <ul class="pl-5">
-                    <li v-for="attendee in meetingBodyData.attendees" :key="attendee.email" class="text-black text-body-2">
-                      {{ attendee.name }} ({{ attendee.email }})
-                    </li>
-                  </ul>
+      <v-row style= "border-bottom: 2px solid #eaeaea;" no-gutters class="pa-4">
+        <v-col cols="12" md="3" class="pa-2">
+          <div class="rounded-header-cell">
+            <span class="font-weight-bold  attachment-manager" style="font-size: 18px;">Location:</span>
+            <div v-if="activeEditorKey !== 'location'" @click="isEditMode && setActiveEditor('location')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
+              {{ minuteHeaderData.location }}
+            </div>
+            <VConfirmEdit v-if="isEditMode && activeEditorKey === 'location'" :model-value="minuteHeaderData.location" @save="(newValue) => handleSaveHeaderField('location', newValue)" @cancel="handleCancelEdit">
+              <template #input="{ model }"><v-text-field v-model="model.value" label="Edit Location" variant="outlined"></v-text-field></template>
+            </VConfirmEdit>
+          </div>  
+        </v-col>
+        <v-col cols="12" md="3" class="pa-2">
+          <div class="rounded-header-cell">
+            <span class="font-weight-bold" style="font-size: 18px;">Written by:</span>
+            <div v-if="activeEditorKey !== 'createdBy'" @click="isEditMode && setActiveEditor('createdBy')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
+              {{ minuteHeaderData.createdBy }}
+            </div>
+            <VConfirmEdit v-if="isEditMode && activeEditorKey === 'createdBy'" :model-value="minuteHeaderData.createdBy" @save="(newValue) => handleSaveHeaderField('createdBy', newValue)" @cancel="handleCancelEdit">
+              <template #input="{ model }"><v-text-field v-model="model.value" label="Edit Author" variant="outlined"></v-text-field></template>
+            </VConfirmEdit>
+          </div>
+        </v-col>
+        <v-col cols="12" md="3" class="pa-2">
+            <div class="rounded-header-cell" >
+                <span class="font-weight-bold" style="font-size: 18px;">Date:</span>
+                <div v-if="activeEditorKey !== 'date'" @click="isEditMode && setActiveEditor('date')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
+                    {{ formatDate(minuteHeaderData.date) }}
                 </div>
-
-                <div v-if="meetingBodyData.agenda && meetingBodyData.agenda.length" class="content-block pa-4 rounded mb-4">
-                  <h3 class="text-subtitle-1 font-weight-medium text-black mb-2">Agenda & Discussion:</h3>
-                  <div v-for="(item, index) in meetingBodyData.agenda" :key="index" class="mb-3">
-                    <p class="font-weight-medium text-black mb-1 text-body-1">{{ index + 1 }}. {{ item.topic }}</p>
-                    <div v-if="item.discussionPoints && item.discussionPoints.length" class="pl-4 mb-2">
-                      <p class="text-body-2 font-weight-medium text-black mb-1">Key Discussion Points:</p>
-                      <ul class="pl-5">
-                        <li v-for="(point, pIndex) in item.discussionPoints" :key="pIndex" class="text-body-2 text-black">{{ point }}</li>
-                      </ul>
-                    </div>
-                    <div v-if="item.decisionsMade && item.decisionsMade.length" class="pl-4">
-                      <p class="text-body-2 font-weight-medium text-black mb-1">Decisions Made:</p>
-                      <ul class="pl-5">
-                        <li v-for="(decision, dIndex) in item.decisionsMade" :key="dIndex" class="text-body-2 text-black">{{ decision }}</li>
-                      </ul>
-                    </div>
-                  </div>
+                <VConfirmEdit v-if="isEditMode && activeEditorKey === 'date'" :model-value="minuteHeaderData.date" @save="(newValue) => handleSaveHeaderField('date', newValue)" @cancel="handleCancelEdit">
+                    <template #input="{ model }"><v-text-field v-model="model.value" label="Edit Date" variant="outlined" hint="YYYY-MM-DD"></v-text-field></template>
+                </VConfirmEdit>
+            </div>
+        </v-col>
+        <v-col cols="12" md="3" class="pa-2">
+            <div class="rounded-header-cell" style="border-right: none;">
+                <span class="font-weight-bold" style="font-size: 18px;">Project:</span>
+                <div v-if="activeEditorKey !== 'project'" @click="isEditMode && setActiveEditor('project')" :class="{ 'editable-field': isEditMode }" class="pa-2" style="min-height: 40px;">
+                    {{ minuteHeaderData.project }}
                 </div>
-
-                <div v-if="meetingBodyData.nextSteps && meetingBodyData.nextSteps.length" class="content-block pa-4 rounded">
-                  <h3 class="text-subtitle-1 font-weight-medium text-black mb-2">Next Steps (Summary of all Action Items):</h3>
-                  <div v-for="(step, index) in meetingBodyData.nextSteps" :key="index" class="mb-2">
-                    <p class="text-body-2 text-black mb-1">{{ index + 1 }}. {{ step.task }}</p>
-                    <p class="text-caption text-black mb-0">
-                      (Responsible: {{ step.responsible }}, Due: {{ formatDate(step.dueDate) }})
-                    </p>
-                  </div>
+                <VConfirmEdit v-if="isEditMode && activeEditorKey === 'project'" :model-value="minuteHeaderData.project" @save="(newValue) => handleSaveHeaderField('project', newValue)" @cancel="handleCancelEdit">
+                    <template #input="{ model }"><v-text-field v-model="model.value" label="Edit Project" variant="outlined"></v-text-field></template>
+                </VConfirmEdit>
+            </div>
+        </v-col>
+      </v-row>
+      
+      <v-row no-gutters>
+        <v-col cols="12" class="px-4">
+          <div class="content-cell">
+            <v-row no-gutters align="start">
+              <v-col cols="12" md="1">
+                <span class="font-weight-bold" style="font-size: 18px;" >Purpose:</span>
+              </v-col>
+              <v-col cols="12" md="11"> 
+                <div v-if="activeEditorKey !== 'Purpose'" @click="isEditMode && setActiveEditor('Purpose')" :class="{ 'editable-field': isEditMode }" class="mb-0" style="min-height: 40px;">
+                  {{ minuteHeaderData.Purpose }}
                 </div>
-                </v-card-text>
-            </v-card>
-            </v-col>
-          
+                <VConfirmEdit v-if="isEditMode && activeEditorKey === 'Purpose'" :model-value="minuteHeaderData.Purpose" @save="(newValue) => handleSaveHeaderField('Purpose', newValue)" @cancel="handleCancelEdit">
+                  <template #input="{ model }"><v-textarea v-model="model.value" label="Edit Purpose" variant="outlined" auto-grow rows="3"></v-textarea></template>
+                </VConfirmEdit>
+              </v-col>
+            </v-row>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12" class="px-4 pb-4">
+          <div class="content-cell" style="border-bottom: none;">
+            <v-row no-gutters align="start">
+              <v-col cols="12" md="1">
+                <span class="font-weight-bold attachment-manager" style="font-size: 18px;">Attendees:</span>
+              </v-col>
+              <v-col cols="12" md="11"> 
+                <div v-if="activeEditorKey !== 'Attendees'" @click="isEditMode && setActiveEditor('Attendees')" :class="{ 'editable-field': isEditMode }" class="mb-0 attendees-text" style="min-height: 40px;">
+                  {{ minuteHeaderData.Attendees }} 
+                </div>
+                <VConfirmEdit v-if="isEditMode && activeEditorKey === 'Attendees'" :model-value="minuteHeaderData.Attendees" @save="(newValue) => handleSaveHeaderField('Attendees', newValue)" @cancel="handleCancelEdit">
+                  <template #input="{ model }"><v-textarea v-model="model.value" label="Edit Attendees" variant="outlined" auto-grow rows="3"></v-textarea></template>
+                </VConfirmEdit>
+              </v-col>
+            </v-row>
+          </div>
+        </v-col>
+      </v-row>
+    </div>
+
+    <div class="my-6"></div>
+
+   <div class="tasks-section-card">
+        <v-row no-gutters>
+          <v-col cols="12">
+            <div class="task-list-header d-flex align-center">
+              <h3 class="font-weight-bold mx-auto" style="font-size: 24px;">Task List</h3>
+              
+              <v-btn v-if="isEditMode" color="black mr-8" @click="handleAddTask" variant="text" icon="mdi-plus-circle-outline"></v-btn>
+            </div>
+          </v-col>
         </v-row>
-      </v-container> 
+      <v-row no-gutters class="pa-1">
+        <v-col cols="12">
+          <v-table density="compact" class="tasks-table">
+            <thead>
+              <tr>
+                <th class="text-center font-weight-bold text-black" style="width: 8%;"> No.</th>
+                <th class="text-center font-weight-bold text-black" :style="{ width: isEditMode ? '48%' : '60%' }">Task Description</th>
+                <th class="text-center font-weight-bold text-black" style="width: 18%;">Action by</th>
+                <th class="text-center font-weight-bold text-black" style="width: 14%;">Due Date</th>
+                <th v-if="isEditMode" class="text-center font-weight-bold text-black" style="width: 12%;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(task, index) in body.Tasks" :key="index">
+                <td :class="{ 'main-task-cell': isMainTask(task['Task No.']) }">{{ task['Task No.'] }}</td>
+                <td :class="{ 'main-task-cell': isMainTask(task['Task No.']) }">
+                  <div v-if="activeEditorKey !== `task-${index}-description`" @click="isEditMode && setActiveEditor(`task-${index}-description`)" :class="{ 'editable-field': isEditMode }" style="min-height: 24px;">
+                    {{ task.Description }}
+                  </div>
+                  <VConfirmEdit v-if="isEditMode && activeEditorKey === `task-${index}-description`" :model-value="task.Description" @save="(newValue) => handleSaveTaskField(index, 'Description', newValue)" @cancel="handleCancelEdit">
+                    <template #input="{ model }"><v-textarea v-model="model.value" label="Edit Description" variant="outlined" auto-grow rows="1"></v-textarea></template>
+                  </VConfirmEdit>
+                </td>
+                <td :class="{ 'main-task-cell': isMainTask(task['Task No.']) }">
+                    <div v-if="activeEditorKey !== `task-${index}-actionBy`" @click="isEditMode && setActiveEditor(`task-${index}-actionBy`)" :class="{ 'editable-field': isEditMode }" style="min-height: 24px;">
+                        {{ task['Action by'] }}
+                    </div>
+                    <VConfirmEdit v-if="isEditMode && activeEditorKey === `task-${index}-actionBy`" :model-value="task['Action by']" @save="(newValue) => handleSaveTaskField(index, 'Action by', newValue)" @cancel="handleCancelEdit">
+                        <template #input="{ model }"><v-text-field v-model="model.value" label="Edit Action by" variant="outlined"></v-text-field></template>
+                    </VConfirmEdit>
+                </td>
+                <td :class="{ 'main-task-cell': isMainTask(task['Task No.']) }">
+                    <div v-if="activeEditorKey !== `task-${index}-dueDate`" @click="isEditMode && setActiveEditor(`task-${index}-dueDate`)" :class="{ 'editable-field': isEditMode }" style="min-height: 24px;">
+                        {{ task['Due date'] }}
+                    </div>
+                    <VConfirmEdit v-if="isEditMode && activeEditorKey === `task-${index}-dueDate`" :model-value="task['Due date']" @save="(newValue) => handleSaveTaskField(index, 'Due date', newValue)" @cancel="handleCancelEdit">
+                        <template #input="{ model }"><v-text-field v-model="model.value" label="Edit Due Date" variant="outlined" hint="YYYY-MM-DD"></v-text-field></template>
+                    </VConfirmEdit>
+                </td>
+                <td v-if="isEditMode" :class="{ 'main-task-cell': isMainTask(task['Task No.']) }" class="text-center">
+                    <v-tooltip text="Delete Task" location="left">
+                        <template v-slot:activator="{ props }">
+                            <v-btn 
+                                icon="mdi-delete-outline" 
+                                variant="text"
+                                color="error" 
+                                v-bind="props" 
+                                @click="handleDeleteTask(index)">
+                            </v-btn>
+                        </template>
+                    </v-tooltip>
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
+        </v-col>
+      </v-row>
+    </div>
+  </v-container>
 </template>
 
-<script setup> 
-import { defineExpose, ref } from 'vue'; 
-const meetingHeaderData = ref({
-  title: 'Meeting 3 - Minutes',
-  createdBy: 'User 1',
-  date: '2025-05-15T10:00:00.000Z',
-  actionItemsCount: 5, // This could also be dynamically calculated from nextSteps.length if preferred
-});
+<script setup>
+import { computed, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useMinuteStore } from '@/stores/minutestore';
+import { useRouter } from "vue-router"; 
+import VConfirmEdit from '../VConfirmEdit.vue'; 
 
-defineExpose ({
-  meetingHeaderData
-})
+const minuteStore = useMinuteStore();
+const pdfContent = ref(null);  
+const router = useRouter();
 
-const meetingBodyData = ref({
-  attendees: [
-    { name: 'Alpha', email: 'email@example.com' },
-    { name: 'Bravo', email: 'email@example.com' },
-    { name: 'Charlie', email: 'charlie@example.com' },
-    { name: 'Delta', email: 'delta@example.com' },
-    { name: 'Echo', email: 'echo@example.com' },
-    { name: 'Foxtrot', email: 'foxtrot@example.com' },
-    { name: 'Golf', email: 'golf@example.com' },
-    { name: 'Hotel', email: 'hotel@example.com' },
-    { name: 'India', email: 'india@example.com' },
-    { name: 'Juliett', email: 'juliett@example.com' },
-    { name: 'Kilo', email: 'kilo@example.com' },
-    { name: 'Lima', email: 'lima@example.com' },
-    { name: 'Mike', email: 'mike@example.com' },
-    { name: 'November', email: 'november@example.com' },
-    { name: 'Oscar', email: 'oscar@example.com' },
-    { name: 'Papa', email: 'papa@example.com' },
-  ],
-  agenda: [
-    {
-      topic: 'New Marketing Campaign Proposal',
-      discussionPoints: [
-        'Presented three campaign concepts (Alpha, Bravo, Charlie).',
-        'Budget considerations for each concept were reviewed.',
-        'Timeline expectations and resource allocation discussed.',
-      ],
-      decisionsMade: ['Proceed with Concept Bravo, with modifications to target demographic based on feedback.'],
-    },
-    {
-      topic: 'Q2 Sales Performance Review',
-      discussionPoints: [
-        'Sales figures for Q2 presented and analyzed.',
-        'Regional performance variations highlighted.',
-        'Discussion on factors impacting sales (market trends, competitor actions).',
-      ],
-      decisionsMade: ['Implement a targeted training program for underperforming regions.', 'Adjust Q3 sales targets for specific product lines.'],
-    },
-    {
-      topic: 'Product Development Update - Project Phoenix',
-      discussionPoints: [
-        'Current development phase and milestones achieved.',
-        'Challenges encountered and mitigation strategies.',
-        'Feedback from early beta testers summarized.',
-      ],
-      decisionsMade: ['Allocate additional QA resources to address beta feedback.', 'Schedule a follow-up meeting to finalize feature set for next sprint.'],
-    },
-    {
-      topic: 'Employee Wellness Initiative Brainstorm',
-      discussionPoints: [
-        'Ideas for improving employee wellness presented (e.g., workshops, fitness challenges).',
-        'Potential costs and benefits of various initiatives.',
-        'Survey results on employee preferences discussed.',
-      ],
-      decisionsMade: ['Form a small working group to develop a detailed proposal for two selected initiatives.'],
-    },
-    {
-      topic: 'Review of Customer Feedback from Last Month',
-      discussionPoints: [
-        'Key themes from customer support tickets and surveys.',
-        'Positive feedback areas and areas for improvement.',
-        'Specific examples of customer pain points.',
-      ],
-      decisionsMade: ['Prioritize addressing the top 3 pain points in the next product update cycle.', 'Update FAQ documentation based on common queries.'],
-    },  
-  ],
-  nextSteps: [
-    { task: 'Brian to circulate the revised Concept Bravo marketing proposal to the team.', responsible: 'Brian M.', dueDate: '2025-05-22T10:00:00.000Z' },
-    { task: 'Alice to draft the Q3 sales target adjustments and present to management.', responsible: 'Alice W.', dueDate: '2025-05-29T10:00:00.000Z' },
-    { task: 'David to coordinate with QA for additional resources for Project Phoenix.', responsible: 'David K.', dueDate: '2025-05-20T10:00:00.000Z' },
-    { task: 'Sarah to lead the working group for the employee wellness initiative proposal.', responsible: 'Sarah P.', dueDate: '2025-06-05T10:00:00.000Z' },
-    { task: 'Mike to compile a list of FAQ updates based on recent customer feedback.', responsible: 'Mike L.', dueDate: '2025-05-24T10:00:00.000Z' },
-    { task: 'Team to review Project Phoenix beta feedback individually before next sprint planning.', responsible: 'All Dev Team', dueDate: '2025-05-21T10:00:00.000Z' },
-    { task: 'Finance department to provide budget impact analysis for Concept Bravo.', responsible: 'Finance Team', dueDate: '2025-05-23T10:00:00.000Z' },
-    { task: 'HR to schedule interviews for the wellness working group participants.', responsible: 'HR Department', dueDate: '2025-05-28T10:00:00.000Z' },
-    { task: 'Customer Support to implement immediate workaround for critical issue X reported by users.', responsible: 'Support Lead', dueDate: '2025-05-17T10:00:00.000Z' },
-    { task: 'Marketing team to research competitor strategies for similar campaigns.', responsible: 'Marketing Team', dueDate: '2025-06-01T10:00:00.000Z' },
-  ],
-});
+// FIX: Re-added defineEmits as it is used by the toTask function.
+const emit = defineEmits(["action"]);
+
+const { header: minuteHeaderData, body, isEditMode, activeEditorKey } = storeToRefs(minuteStore);
+const { 
+  updateHeaderField,
+  updateTaskField,
+  toggleEditMode,
+  setActiveEditor,
+  addTask,       
+  deleteTaskAndRenumber,    
+} = minuteStore;
+
+const handleAddTask = () => {
+    // This function will call the action in your Pinia store
+    addTask(); 
+};
+
+const handleDeleteTask = (taskIndex) => {
+    // This function will call the action in your Pinia store
+    if (confirm('Are you sure you want to delete this task?')) {
+        deleteTaskAndRenumber(taskIndex);
+    }
+};
+
+const handleSaveHeaderField = (field, value) => {
+  updateHeaderField({ field, value });
+  setActiveEditor(null);
+};
+
+const handleSaveTaskField = (taskIndex, field, value) => {
+  updateTaskField({ taskIndex, field, value });
+  setActiveEditor(null);
+};
+
+const handleCancelEdit = () => {
+  setActiveEditor(null);
+};
 
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A';
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
   try {
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  } catch (e) { 
+    const date = new Date(dateString);
+    if (isNaN(date)) return dateString;
+    return date.toLocaleDateString('en-US', options);
+  } catch (e) {
     console.error("Error formatting date:", e);
-    return dateString; 
+    return dateString;
   }
 };
 
-const handleMinutesAction = (action) => {
-  // Placeholder for handling actions from the ActionButtonsBar
-  console.log('Action triggered:', action);
-  // Example: if (action === 'edit') { router.push('/edit-minutes/' + meetingId); }
+const toTask = () => {
+  console.log("Task clicked");
+  emit("action", { type: "Task" });
+  router.push("/ManagerReviewV2");
 };
 
+
+const exportToPDF = () => {
+  console.log("Export to PDF triggered!");
+
+  const elementToCapture = pdfContent.value?.$el;
+
+  if (!elementToCapture) {
+    console.error("Could not find the element to capture.");
+    alert("Error: PDF content not found.");
+    return;
+  }
+
+  // --- START OF CHANGES ---
+  const title = minuteHeaderData.value?.title || 'Meeting-Minutes';
+  const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.pdf';
+  console.log(`Using filename: ${safeFilename}`);
+
+  const { jsPDF } = window.jspdf;
+  const html2canvas = window.html2canvas;
+
+  if (!html2canvas || !jsPDF) {
+    console.error("PDF generation libraries not loaded!");
+    alert("Sorry, the PDF export feature is currently unavailable.");
+    return;
+  }
+
+  html2canvas(elementToCapture, {
+    scale: 2,
+    useCORS: true,
+    // It can be beneficial to set the width explicitly if responsive issues persist
+    width: elementToCapture.scrollWidth
+  }).then(canvas => {
+    console.log("html2canvas was SUCCESSFUL.");
+    const imgData = canvas.toDataURL('image/png');
+    
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt', // Using points is often more reliable
+      format: 'a4' // Standard page size
+    });
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    const canvasAspectRatio = canvas.width / canvas.height;
+    const pdfAspectRatio = pdfWidth / pdfHeight;
+
+    let finalCanvasWidth, finalCanvasHeight;
+
+    // Fit canvas to PDF page width
+    finalCanvasWidth = pdfWidth;
+    finalCanvasHeight = finalCanvasWidth / canvasAspectRatio;
+    
+    // If the content is too tall for one page, you might need to handle multi-page PDFs.
+    // For a single-page output, this will scale it down.
+    if (finalCanvasHeight > pdfHeight) {
+        console.warn("Content is taller than a single A4 page. It will be scaled to fit.");
+        finalCanvasHeight = pdfHeight;
+        finalCanvasWidth = finalCanvasHeight * canvasAspectRatio;
+    }
+
+
+    const xOffset = (pdfWidth - finalCanvasWidth) / 2;
+    const yOffset = 0; // Or center it vertically: (pdfHeight - finalCanvasHeight) / 2;
+
+
+    pdf.addImage(imgData, 'PNG', xOffset, yOffset, finalCanvasWidth, finalCanvasHeight);
+    pdf.save(safeFilename);
+
+    console.log("PDF generation complete.");
+  }).catch(error => {
+    console.error("Oops, something went wrong with html2canvas!", error);
+    alert("Could not generate PDF. Please check the console for errors.");
+  });
+};
+
+
+const isMainTask = (taskNumber) => {
+  return !String(taskNumber).includes('.');
+};
 </script>
 
 <style scoped>
-/* Styles from original Minutes.vue */
-.content-block {
-  background-color: #FFFFFF; /* Each section row background color */
-  /* Using Vuetify classes for padding (pa-4) and border-radius (rounded) in template */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+
+.attachment-manager,
+.attachment-manager * {
+  font-family: "Inter", serif !important; 
+  /* font-family: "Times New Roman", serif !important */
 }
 
-/* Styles from original MinuteDisplay.vue */
-.meeting-minutes-card {
-  background-color: #FFFFFF; /* Whole minutes section background */
-  border-radius: 8px; 
-  height: 100%; 
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  color: black;
-  width:100%
+.editable-field {
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease-in-out;
+  border: 2px dashed transparent; 
+  font-family: "Inter", serif !important; 
+  font-size: 16px;
+}
+.editable-field:hover {
+  background-color: #e0e0e0; /* A very light yellow */
+  border-color: #e0e0e0; /* A light orange/yellow */
 }
 
-.metadata-card {
-  background-color: #FFFFFF; 
-  border: 1px solid #E0E0E0; 
+.minutes-section-card {
+  background-color: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 24px;
+  font-size: 16px;
+  font-family: "Inter", serif !important; 
+  overflow: hidden;
 }
-
-.meeting-details {
-  background-color: #EBEBEB; /* "Board" background color */
-  flex-grow: 1;
-  overflow-y: auto;
-  line-height: 1.6;
-  /* Padding on the board itself, around the content blocks */
+.tasks-section-card {
+  background-color: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 24px;
+  font-size: 16px;
+  font-family: "Inter", serif !important; 
+  overflow: hidden;
+}
+.rounded-header-cell {
+  border-right: 2px solid #e0e0e0; 
+  height: 100%;
+  padding: 12px;
+  text-align: center;
+}
+.title-cell {
+  padding: 16px;
+  border-bottom: 2px solid #e0e0e0;
+}
+.content-cell {
+  padding: 16px 8px; 
+  font-size: 16px;
+}
+.attendees-text {
+  white-space: pre-wrap;
+  line-height: 1.5;
+  font-family: "Inter", serif !important; 
+}
+.task-list-header {
+  border-bottom: 2px solid #e0e0e0;
   padding: 16px; 
-  margin: 0 16px 16px 16px; /* Margin for the board area from main card edges */
-  border-radius: 6px; /* Rounded corners for the board area */
+  font-family: "Inter", serif !important; 
+  text-align: center;
+  font-size: 20px;
+}
+.tasks-table {
+  border: none; 
+  text-align: center;
+}
+.tasks-table th,
+.tasks-table td {
+  padding: 8px 16px !important;
+  font-size: 18px;
+  vertical-align: top;
+  border-bottom: 2px solid #e0e0e0;
+  font-family: "Inter", serif !important; 
+  text-align: center;
+}
+.tasks-table thead th {
+  border-bottom: 2px solid #bdbdbd; 
+}
+.tasks-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.main-task-cell {
+  background-color: #e0e0e0; 
 }
 
-/* Custom Scrollbar Styling */
-.meeting-details::-webkit-scrollbar {
-  width: 8px;
-}
-
-.meeting-details::-webkit-scrollbar-track {
-  background: #E0E0E0; /* Slightly lighter than board for contrast */
-  border-radius: 10px;
-}
-
-.meeting-details::-webkit-scrollbar-thumb {
-  background-color: #FA3915; /* User requested color */
-  border-radius: 10px;
-  border: 2px solid #E0E0E0; /* Creates padding around thumb */
-}
 </style>

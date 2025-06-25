@@ -1,34 +1,35 @@
 <template>
-  <div>
-    <v-btn
-      icon
-      color="red-darken-2"
-      @click="dialog = true"
-      variant="flat"
-      density="compact"
-    >
-      <v-icon size="default">mdi-delete</v-icon>
-    </v-btn>
+    <div>
+        <v-tooltip text="Delete" location="top">
+            <template #activator="{ props }">
+                <v-btn icon v-bind="props" @click.stop="dialog = true" variant="flat" density="compact">
+                    <v-icon size="large" color="grey-darken-3">mdi-delete-outline</v-icon>
+                </v-btn>
+            </template>
+        </v-tooltip>
 
-    <v-dialog v-model="dialog" max-width="500px" align="center">
-      <v-card>
-        <v-card-title class="text-headline pa-2">Delete Item</v-card-title>
-        <div class="icon-container">
-          <v-icon size="50" class="close-icon">mdi-close</v-icon>
-        </div>
-        <v-card-subtitle class="pa-2">
-          Are you sure you want to delete this item?<br />This action cannot be
-          undone.
-        </v-card-subtitle>
+        <v-dialog v-model="dialog" max-width="500px">
+            <v-card class="rounded-xl pa-3 px-6">
+                <v-card-title>Delete Task?</v-card-title>
+                <div align="center" class="mb-2">
+                    <v-icon size="60">mdi-delete-alert-outline</v-icon>
+                </div>
+                <v-card-subtitle align="center">
+                    Are you sure you want to delete this task?<br />This action cannot be
+                    undone.
+                </v-card-subtitle>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="grey" text @click="dialog = false">Cancel</v-btn>
-          <v-btn color="red" text @click="deleteTask">Delete</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+                <v-card-actions class="my-2">
+                <v-btn color="black" variant="outlined" class="text-body-2 mr-2" rounded="lg" @click="dialog = false">
+                    Cancel
+                </v-btn>
+                <v-btn color="black" variant="flat" class="text-body-2 mr-2" rounded="lg" @click="deleteTask">
+                    Delete
+                </v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-dialog>
+    </div>
 </template>
 
 <script setup>
@@ -37,34 +38,22 @@ import { useDraftStore } from '@/stores/drafts';
 const draftStore = useDraftStore()
 
 const dialog = ref(false);
-const emit = defineEmits(["task-deleted"]);
+const openDialog = () => {
+    dialog.value = true
+}
+defineExpose({ openDialog })
+
 const taskIndex = inject("taskIndex");
+const emit = defineEmits(["task-deleted"]);
 
 function deleteTask() {
-  console.log("Item deleted");
-  draftStore.deleteDraft(taskIndex);
-  dialog.value = false;
-  emit("task-deleted");
+    console.log("Item deleted");
+    draftStore.deleteDraft(taskIndex);
+    dialog.value = false;
+    emit("task-deleted");
 }
 </script>
 
 <style scoped>
-.headline {
-  font-weight: bold;
-}
 
-.icon-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 16px; /* Adjust as needed */
-}
-
-.close-icon {
-  border: 6px solid red;
-  border-radius: 50%;
-  padding: 30px;
-  color: red;
-  cursor: pointer;
-}
 </style>
