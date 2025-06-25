@@ -38,11 +38,11 @@
                     </v-card-subtitle>
                 </div>
 
-                <v-container v-if="draftStore.drafts.length === 0 && !snackbar" style="height: 90%;"
+                <v-container v-if="draftStore.drafts.length === 0 && !snackbar" style="height: 90%;" fluid
                     class="d-flex align-center justify-center">
                     <h2 class="text-center text-black">No pending tasks</h2>
                 </v-container>
-                <v-container>
+                <v-container fluid>
                     <v-row>
                         <v-col cols="12" sm="6" md="4" v-for="draft in draftStore.drafts" :key="draft.id">
                             <TaskDraft :taskIndex="draft.id" :title="draft.title" :dueDate="draft.dueDate"
