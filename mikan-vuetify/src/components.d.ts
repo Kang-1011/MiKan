@@ -12,6 +12,8 @@ declare module 'vue' {
     Attachment: typeof import('./components/MyTasksComponent/Attachment.vue')['default']
     AttachmentUpload: typeof import('./components/MyTasksComponent/AttachmentUpload.vue')['default']
     AudioConverter: typeof import('./components/AudioComponent/AudioConverter.vue')['default']
+    AudioRecordDialog: typeof import('./components/AudioComponent/AudioRecordDialog.vue')['default']
+    AudioUploadDialog: typeof import('./components/AudioComponent/AudioUploadDialog.vue')['default']
     Board22: typeof import('./components/MyTasksComponent/Board2-2.vue')['default']
     ManagerReviewApproveAllDialog: typeof import('./components/ManagerReviewComponent/ManagerReviewApproveAllDialog.vue')['default']
     ManagerReviewCreateTaskDialog: typeof import('./components/ManagerReviewComponent/ManagerReviewCreateTaskDialog.vue')['default']

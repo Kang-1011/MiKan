@@ -18,6 +18,8 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import ToastService from 'primevue/toastservice';
 
+import { AVPlugin } from "vue-audio-visual";
+
 // Styles
 import "unfonts.css";
 
@@ -33,5 +35,7 @@ app.use(PrimeVue, {
     }
 });
 app.use(ToastService);
+
+app.use(AVPlugin);
 
 app.mount("#app");
