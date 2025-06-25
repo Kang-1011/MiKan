@@ -1,7 +1,11 @@
 <template>
-  <Sidebar />
+  <Sidebar>
+    <AudioConverter />
+  </Sidebar>
   <Topbar title="Homepage" />
-  <AudioConverter />
+  
 </template>
 
 <script></script>
+<style>
+</style>

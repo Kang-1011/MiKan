@@ -193,6 +193,7 @@ const boards = ref([
         id: genId(),
         title: "To Do",
         tasks: [
+        // { id: genId(), title: "Wireframes", assignee: "Alice", dueDate: "2025-06-01", priority: "High", description: "There is a lot of stuff that needs to get done here", comments: [], attachments: [], ai_attachments: [], autostart: [], subtasks: [],reporter: "Rohimi" },
           { id: genId(), title: "Wireframes", assignee: "Alice", dueDate: "2025-06-01", priority: "High", comments: [], attachments: [], subtasks: [] },
           { id: genId(), title: "Assets",    assignee: "Bob",   dueDate: "2025-06-02", priority: "Med",  comments: [], attachments: [], subtasks: [] },
         ],

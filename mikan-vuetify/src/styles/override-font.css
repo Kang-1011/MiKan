@@ -1,0 +1,53 @@
+/* Load Inter from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Shortlist This */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap'); 
+/* font-family: 'Poppins', sans-serif !important; */
+
+/* Shortlist This */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap');
+/* font-family: 'Nunito', sans-serif !important; */
+
+/* Shortlist This */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap');
+/* font-family: 'Work Sans', sans-serif !important; */
+
+/* Don't want this */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+/* font-family: 'Lato', sans-serif !important; */
+
+
+
+
+/* 1) Everything under the normal app wrapper… */
+.v-application,
+.v-application *,
+
+/* 2) Any dialog content (teleported out)… */
+.v-dialog,
+.v-dialog *,
+
+/* 3) Any menu or select dropdown content (teleported out)… */
+.v-menu__content,
+.v-menu__content * {
+
+    /* font-family: "Times New Roman", serif !important; */
+    /* font-family: "Inter", sans-serif !important; */
+    font-family: 'Poppins', sans-serif !important;
+    /* font-family: 'Nunito', sans-serif !important; */
+    /* font-family: 'Work Sans', sans-serif !important; */
+}
+
+.v-overlay,
+.v-overlay * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* And make sure native form controls inherit it */
+.v-application input,
+.v-application textarea,
+.v-application select,
+.v-application button {
+  font-family: inherit !important;
+}

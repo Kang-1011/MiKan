@@ -2,20 +2,21 @@
 // Board.vue
 // ======================== -->
 <template>
-  <v-card class="ma-2" elevation="2" style="width:100%" >
+  
+  <v-card class="border-sm rounded-xl ma-3" elevation="0" style="width:100%" color="white" >
 
-    <v-toolbar flat dense color="grey lighten-3">
+    <v-toolbar density="compact" color="white"  >
       <template v-if="!isEditing">
-        <v-toolbar-title class="text-h6">{{ board.title }}</v-toolbar-title>
+        <v-toolbar-title class="">{{ board.title }}</v-toolbar-title>
         <v-spacer />
-        <v-btn icon small v-if="!visitorMode" @click="startRename">
+        <v-btn icon v-if="!visitorMode" @click="startRename">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn icon small v-if="!visitorMode" @click="$emit('delete-board', boardIndex)">
-          <v-icon color="red">mdi-delete</v-icon>
+        <v-btn  icon  v-if="!visitorMode" @click="$emit('delete-board', boardIndex)">
+          <v-icon>mdi-delete</v-icon>
         </v-btn>
-        <v-btn small color="primary" @click="$emit('add-stage', boardIndex)" :disabled="visitorMode">
-        <v-icon left small>mdi-plus</v-icon>Add Stage
+        <v-btn icon v-if="!visitorMode" @click="$emit('add-stage', boardIndex)" >
+        <v-icon>mdi-plus</v-icon>
       </v-btn>
       </template>
       <template v-else>
@@ -29,7 +30,7 @@
         />
       </template>
     </v-toolbar>
-
+    <v-divider/>
 
 
     <div v-if="board.stages.length === 0" class="text-center grey--text pa-4">
@@ -47,6 +48,7 @@
         put: allowStageCrossBoard ? ['stages'] : false 
         }"
       class="d-flex flex-row overflow-auto pa-2"
+     
       :disabled="visitorMode"
     >
       <template #item="{ element: stage, index: sIndex }">
@@ -73,7 +75,7 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue'
 import draggable from 'vuedraggable'
-import Stage from './Stage2-2.vue'
+import Stage from './Stage2-3.vue'
 
 const props = defineProps({
   board: Object,
@@ -92,3 +94,18 @@ function saveRename() {
   isEditing.value = false
 }
 </script>
+
+<style>
+.card-soft {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 16px;
+}
+/* .custom-toolbar {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  min-height: 0px; 
+} */
+</style>
