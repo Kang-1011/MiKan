@@ -2,7 +2,7 @@
     <div>
         <v-tooltip text="Delete" location="top">
             <template #activator="{ props }">
-                <v-btn icon v-bind="props" @click.stop="dialog = true" variant="flat" density="compact">
+                <v-btn icon v-bind="props" @click.stop="dialog = true" variant="flat" density="compact" style="background: transparent;">
                     <v-icon size="large" color="grey-darken-3">mdi-delete-outline</v-icon>
                 </v-btn>
             </template>

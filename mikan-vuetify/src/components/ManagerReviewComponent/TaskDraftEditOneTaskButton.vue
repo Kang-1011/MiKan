@@ -1,13 +1,5 @@
 <template>
     <div>
-        <!-- <v-btn
-      icon
-      @click="dialog = true"
-      variant="flat"
-      density="compact"
-    >
-      <v-icon size="default">mdi-pencil</v-icon>
-    </v-btn> -->
         <v-dialog v-model="dialog" max-width="500px" persistent>
             <v-card class="rounded-xl pa-2">
                 <v-card-title class="ml-3">Edit Draft</v-card-title>
