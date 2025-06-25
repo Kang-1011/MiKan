@@ -4,7 +4,7 @@
     :rail="rail"
     permanent
     @click="rail = false"
-    rail-width="86"
+    rail-width="90"
     border="0"
   >
     <v-card class="pa-3 fill-height bg-grey-lighten-4">
@@ -29,23 +29,23 @@
 
           <v-list density="compact" nav>
             <v-list-item
-              prepend-icon="mdi-home-city"
-              title="Meeting Minute"
+              prepend-icon="mdi-plus-circle-outline"
+              title="New Meeting"
               value="home"
-              @click="router.push({ path: '/MinutesHomepage' })"
+              @click="router.push({ path: '/AudioInput' })"
             ></v-list-item>
             <v-list-item
-              prepend-icon="mdi-account"
+              prepend-icon="mdi-tag-check-outline"
               title="Manager Review"
               value="account"
-              @click="router.push({ path: '/ManagerReview' })"
+              @click="router.push({ path: '/ManagerReviewV2' })"
             ></v-list-item>
-            <v-list-item
+            <!-- <v-list-item
               prepend-icon="mdi-account-group-outline"
               title="Users"
               value="users"
               @click="router.push({ path: '/Loginpage' })"
-            ></v-list-item>
+            ></v-list-item> -->
             <v-list-item
               prepend-icon="mdi-format-list-checkbox"
               title="My Tasks"
