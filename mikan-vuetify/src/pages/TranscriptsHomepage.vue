@@ -9,6 +9,7 @@
             </v-card>
         </v-card>
     </v-main>
+    <TranscriptChatbot />
 </template>
  
 <style scoped> 
