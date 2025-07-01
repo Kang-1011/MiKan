@@ -142,6 +142,7 @@
       </v-card>
     </v-card>
   </v-navigation-drawer>
+  <CreateNewProjectDialog v-model="createNewProjectDialogFlag" @close-create-project-dialog="createNewProjectDialogFlag = false;" />
 </template>
 
 <!-------------------------------------------SCRIPT---------------------------------------->
@@ -150,7 +151,7 @@
 import { ref, computed, defineEmits, watch } from "vue";
 import { useRouter } from "vue-router";
 import { boards } from "@/stores/boards";
-import mikanImage from "@/assets/mikan.png";
+import CreateNewProjectDialog from "@/components/HomepageComponent/CreateNewProjectDialog.vue";
 
 const drawer = ref(true);
 const rail = ref(true);
@@ -160,6 +161,7 @@ const emit = defineEmits<{
 }>();
 const projectItems = computed(() => boards.value.map((b) => b.title));
 const router = useRouter();
+const createNewProjectDialogFlag = ref(false);
 
 function handleClick(name: string) {
   router.push({
@@ -179,6 +181,8 @@ watch(rail, (newVal) => {
 });
 
 function createNewProject() {
+  createNewProjectDialogFlag.value = true;
+
   console.log("Trigger create new project dialog/modal");
   const newId = Math.max(...boards.value.map((b) => b.id)) + 1;
   boards.value.push({ id: newId, title: "New Project", stages: [] });
