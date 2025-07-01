@@ -34,6 +34,7 @@ declare module 'vue' {
     TaskDraftDeleteOneTaskButton: typeof import('./components/ManagerReviewComponent/TaskDraftDeleteOneTaskButton.vue')['default']
     TaskDraftEditOneTaskButton: typeof import('./components/ManagerReviewComponent/TaskDraftEditOneTaskButton.vue')['default']
     Topbar: typeof import('./components/HomepageComponent/Topbar.vue')['default']
+    TranscriptChatbot: typeof import('./components/TranscriptChatbot.vue')['default']
     TranscriptDisplay: typeof import('./components/TranscriptComponent/TranscriptDisplay.vue')['default']
     Uploadfile: typeof import('./components/AudioComponent/Uploadfile.vue')['default']
     UploadFileCustom: typeof import('./components/AudioComponent/UploadFileCustom.vue')['default']
