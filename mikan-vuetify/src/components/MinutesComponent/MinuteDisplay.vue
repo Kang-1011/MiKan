@@ -198,12 +198,17 @@ import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMinuteStore } from '@/stores/minutestore';
 import { useRouter } from "vue-router"; 
+import { useChatbotStore } from '@/stores/chatbotStore'; // Import the chatbot store
 import VConfirmEdit from '../VConfirmEdit.vue'; 
 
 const minuteStore = useMinuteStore();
 const pdfContent = ref(null);  
 const router = useRouter();
+const chatbotStore = useChatbotStore(); // Create an instance of the chatbot store
 
+// This 'watch' effect monitors the minutes data. When the data is available or changes,
+// it calls the `setPageContext` action in the chatbot store, providing the current
+// page's data as context.
 // FIX: Re-added defineEmits as it is used by the toTask function.
 const emit = defineEmits(["action"]);
 
@@ -216,6 +221,7 @@ const {
   addTask,       
   deleteTaskAndRenumber,    
 } = minuteStore;
+
 
 const handleAddTask = () => {
     // This function will call the action in your Pinia store
@@ -337,11 +343,55 @@ const exportToPDF = () => {
     alert("Could not generate PDF. Please check the console for errors.");
   });
 };
-
-
+ 
 const isMainTask = (taskNumber) => {
   return !String(taskNumber).includes('.');
 };
+
+ 
+
+// 2. Define a reusable function to set the context
+const updateChatContext = () => {
+    // Directly access the .value of the reactive refs
+    const headerData = minuteHeaderData.value;
+    const bodyData = body.value;
+
+    // Check if both parts of the minutes data are available
+    if (headerData && bodyData) {
+        // Combine header and body into a single context object
+        const fullPageContext = {
+            header: headerData,
+            body: bodyData
+        };
+        chatbotStore.setPageContext(fullPageContext, 'Meeting Minutes Page');
+        console.log("Chatbot context SET for Meeting Minutes page.");
+    } else {
+        // This log correctly indicates that data isn't ready yet.
+        console.log("No minutes data available to set as context yet.");
+    }
+};
+
+// 3. Watch for changes in the data
+// This handles the case where data loads AFTER the component has already mounted.
+// Watching both refs ensures the context is updated when either part changes.
+watch([minuteHeaderData, body], () => {
+    updateChatContext();
+}, {
+  deep: true // Important for watching complex objects
+});
+
+// 4. Use onMounted to set the context as soon as the component is on the page
+// This handles cases where the data is already in the store from a previous visit.
+onMounted(() => {
+    updateChatContext();
+});
+
+// 5. Use onUnmounted to clean up when leaving the page
+onUnmounted(() => {
+  chatbotStore.clearPageContext();
+  console.log("Chatbot context CLEARED from Minutes page.");
+});
+
 </script>
 
 <style scoped>

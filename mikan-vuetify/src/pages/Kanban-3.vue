@@ -122,7 +122,8 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-  </v-main>
+  <Chatbot />
+  </v-main> 
 
 </template>
 <script setup lang="ts">
@@ -132,6 +133,8 @@ import { useRoute } from "vue-router";
 import draggable from 'vuedraggable'
 import Board from '@/components/MyTasksComponent/Board3-1.vue'
 import TaskDetail from '@/components/MyTasksComponent/TaskDetail.vue'
+import { useChatbotStore } from '@/stores/chatbotStore'; // 1. Import the chatbot store 
+const chatbotStore = useChatbotStore(); // 2. Create an instance of the chatbot store
 // import Sidebar3 from '@/components/MyTasksComponent/Sidebar3.vue'
 
 const showDevBar = false
@@ -300,6 +303,47 @@ function logData() {
     )
   )
 }
+
+
+// ------------------------------------------- CHATBOT -------------------------------------------
+// 2. Define a reusable function to set the context based on the Kanban view
+const updateChatContext = () => {
+    // The most relevant context is what the user is currently seeing.
+    // We use the `filteredBoards` computed property for this.
+    const currentViewData = filteredBoards.value;
+
+    // Check if there is data to provide as context
+    if (currentViewData && currentViewData.length > 0) {
+        chatbotStore.setPageContext(currentViewData, 'Kanban Board Page');
+        console.log("Chatbot context SET for Kanban Board page.");
+    } else {
+        // If filters result in no boards being displayed, clear the context
+        // to prevent the chatbot from answering based on old or hidden data.
+        chatbotStore.clearPageContext();
+        console.log("No filtered boards available; chatbot context cleared.");
+    }
+};
+
+// 3. Watch for changes in the filtered data
+// This will automatically fire whenever the user changes a filter,
+// ensuring the chatbot's context is always up-to-date.
+watch(filteredBoards, () => {
+    updateChatContext();
+}, {
+  deep: true // Necessary for watching changes within the array of boards and tasks
+});
+
+// 4. Use onMounted to set the initial context when the component loads
+onMounted(() => {
+    updateChatContext();
+});
+
+// 5. Use onUnmounted to clean up and clear the context when leaving the page
+onUnmounted(() => {
+  chatbotStore.clearPageContext();
+  console.log("Chatbot context CLEARED from Kanban page.");
+});
+
 </script>
 
 <style scoped>
