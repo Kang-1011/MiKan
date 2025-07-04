@@ -8,6 +8,7 @@
             </v-card>
         </v-card>
     </v-main>
+    <Chatbot />
 </template>
 
 <style scoped>

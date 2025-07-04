@@ -64,6 +64,8 @@
                 </v-container>
             </v-card>
         </v-card>
+        
+    <Chatbot />
     </v-main>
 </template>
 
@@ -75,6 +77,8 @@ import CreateTaskDialog from "@/components/ManagerReviewComponent/ManagerReviewC
 import TaskDraft from "@/components/ManagerReviewComponent/TaskDraft.vue";
 const newTaskDialogFlag = ref(false);
 const approveAllDialogFlag = ref(false);
+import { useChatbotStore } from '@/stores/chatbotStore'; // 1. Import the chatbot store 
+const chatbotStore = useChatbotStore(); // 2. Create an instance of the chatbot store
 
 import Toast from 'primevue/toast';
 import { useToast } from "primevue/usetoast";
@@ -152,6 +156,44 @@ function oneTaskEdited() {
     toastSummary.value = "Task Edited!";
     showBottomRight(toastSeverity.value, toastSummary.value);
 }
+
+
+
+// 2. Define a reusable function to set the context
+const updateChatContext = () => {
+    // Directly access the store's state to get the most current data
+    const drafts = draftStore.drafts;
+    if (drafts && drafts.length > 0) {
+        chatbotStore.setPageContext(drafts, 'Manager Review Page');
+        console.log("Chatbot context SET for Manager Review page.");
+    } else {
+        // We don't clear the context here to prevent flickering while data might be loading.
+        // onUnmounted will handle the final cleanup.
+        console.log("No drafts available to set as context yet.");
+    }
+};
+
+// 3. Watch for changes in the data
+// This handles the case where data loads AFTER the component has already mounted.
+watch(() => draftStore.drafts, () => {
+    updateChatContext();
+}, {
+  deep: true // Important for watching arrays of objects
+});
+
+// 4. Use onMounted to set the context as soon as the component is on the page
+// This handles cases where the data is already in the store from a previous visit.
+onMounted(() => {
+    updateChatContext();
+});
+
+// 5. Use onUnmounted to clean up when leaving the page
+onUnmounted(() => {
+  chatbotStore.clearPageContext();
+  console.log("Chatbot context CLEARED.");
+});
+
+
 
 </script>
 

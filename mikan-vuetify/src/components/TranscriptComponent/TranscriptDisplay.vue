@@ -176,6 +176,8 @@ import { storeToRefs } from 'pinia';
 import { useTranscriptStore } from '@/stores/transcriptstore';
 import { useRouter } from "vue-router"; 
 import VConfirmEdit from '../VConfirmEdit.vue'; 
+import { useChatbotStore } from '@/stores/chatbotStore'; // 1. Import the chatbot store 
+const chatbotStore = useChatbotStore(); // 2. Create an instance of the chatbot store
 
 const transcriptStore = useTranscriptStore();
 const pdfContent = ref(null);  
@@ -338,6 +340,49 @@ const exportToPDF = () => {
   });
 };
 
+
+
+// 2. Define a reusable function to set the context
+const updateChatContext = () => {
+    // Directly access the .value of the reactive refs
+    const headerData = transcriptHeaderData.value;
+    const bodyData = body.value;
+
+    // Check if both parts of the minutes data are available
+    if (headerData && bodyData) {
+        // Combine header and body into a single context object
+        const fullPageContext = {
+            header: headerData,
+            body: bodyData
+        };
+        chatbotStore.setPageContext(fullPageContext, 'Meeting Transcript Page');
+        console.log("Chatbot context SET for Meeting Transcript page.");
+    } else {
+        // This log correctly indicates that data isn't ready yet.
+        console.log("No minutes data available to set as context yet.");
+    }
+};
+
+// 3. Watch for changes in the data
+// This handles the case where data loads AFTER the component has already mounted.
+// Watching both refs ensures the context is updated when either part changes.
+watch([transcriptHeaderData, body], () => {
+    updateChatContext();
+}, {
+  deep: true // Important for watching complex objects
+});
+
+// 4. Use onMounted to set the context as soon as the component is on the page
+// This handles cases where the data is already in the store from a previous visit.
+onMounted(() => {
+    updateChatContext();
+});
+
+// 5. Use onUnmounted to clean up when leaving the page
+onUnmounted(() => {
+  chatbotStore.clearPageContext();
+  console.log("Chatbot context CLEARED from Minutes page.");
+});
 
 </script>
 
