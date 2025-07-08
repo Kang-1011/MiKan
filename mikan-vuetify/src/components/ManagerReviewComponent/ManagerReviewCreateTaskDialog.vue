@@ -18,7 +18,7 @@
 
                     <!-- <v-text-field clearable label="Project" variant="outlined" density="compact" v-model="project"
                         rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']"></v-text-field> -->
-                    <v-select v-model="project" :items="projectOptions" item-title="project" item-value="id" label="Project" 
+                    <v-select v-model="project" :items="projectOptions" item-title="title" item-value="id" label="Project" 
                     clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
                     :rules="[(v) => !!v || 'Project is required']" />
 
@@ -42,6 +42,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/users'
+import { useProjectStore } from '@/stores/projects'
 import { useDraftStore } from "@/stores/drafts";
 
 const userStore = useUserStore()
@@ -53,19 +54,18 @@ onMounted(() => {
 const assignee = ref(null)
 const assigneeOptions = computed(() => userStore.users)
 
-const userStore = useUserStore()
+const projectStore = useProjectStore()
 onMounted(() => {
-  if (userStore.users.length === 0) {
-    userStore.fetchUsers()
-  }
+  if (projectStore.projects.length === 0) {
+    projectStore.fetchProjects()
+}
 })
-const assignee = ref(null)
-const assigneeOptions = computed(() => userStore.users)
+const project = ref(null)
+const projectOptions = computed(() => projectStore.projects)
 
 const draftStore = useDraftStore();
 const title = ref("");
 const dueDate = ref("");
-const project = ref("");
 const description = ref("");
 
 const emit = defineEmits(["close-create-task-dialog", "pass-created-task"]);
