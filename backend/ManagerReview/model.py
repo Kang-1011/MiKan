@@ -73,10 +73,7 @@ class Draft(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     due_date = Column(Date)
-    status = Column(String)
-    priority = Column(String, nullable=False)
-    comment = Column(String, nullable=True)
-
+    approved = Boolean(String)
     created_at = Column(Date, default=func.now())
 
     # Relationships
