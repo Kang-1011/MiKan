@@ -17,6 +17,8 @@
                         <v-select
                             v-model="assignee"
                             :items="assigneeOptions"
+                            item-title="name"
+                            item-value="id"
                             label="Assignee"
                             clearable
                             variant="outlined"
@@ -48,16 +50,17 @@
 </template>
 
 <script setup>
-import { ref, computed onMounted} from "vue";
-import {useUserStore} from "@/stores/users"
+import { ref, computed, onMounted } from 'vue'
+import { useUserStore } from '@/stores/users'
 import { useDraftStore } from "@/stores/drafts";
 
+const userStore = useUserStore()
+onMounted(() => {
+  userStore.fetchUsers()
+})
+
 const assignee = ref(null)
-const assigneeOptions = [
-  'Alice',
-  'Bob',
-  'Charlie'
-]
+const assigneeOptions = computed(() => userStore.users)
 
 const draftStore = useDraftStore();
 const title = ref("");
