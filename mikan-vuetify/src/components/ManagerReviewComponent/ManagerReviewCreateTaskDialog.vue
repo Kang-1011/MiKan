@@ -56,7 +56,9 @@ import { useDraftStore } from "@/stores/drafts";
 
 const userStore = useUserStore()
 onMounted(() => {
-  userStore.fetchUsers()
+  if (userStore.users.length === 0) {
+    userStore.fetchUsers()
+  }
 })
 
 const assignee = ref(null)
