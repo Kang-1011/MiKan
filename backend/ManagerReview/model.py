@@ -73,7 +73,7 @@ class Draft(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     due_date = Column(Date)
-    approved = Boolean(String)
+    approved = Column(Boolean, default=False)
     created_at = Column(Date, default=func.now())
 
     # Relationships
@@ -183,9 +183,7 @@ class DraftBase(BaseModel):
     title: str
     description: str
     due_date: date
-    status: str = 'pending'
-    priority: str
-    comment: Optional[str] = None
+    approved: bool = 'False'
 
     class Config:
         orm_mode = True
