@@ -183,7 +183,7 @@ class DraftBase(BaseModel):
     title: str
     description: str
     due_date: date
-    approved: bool = 'False'
+    approved: bool = False
 
     class Config:
         orm_mode = True

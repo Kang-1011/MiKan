@@ -16,8 +16,11 @@
                         clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
                         :rules="[(v) => !!v || 'Assignee is required']" />
 
-                    <v-text-field clearable label="Project" variant="outlined" density="compact" v-model="project"
-                        rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']"></v-text-field>
+                    <!-- <v-text-field clearable label="Project" variant="outlined" density="compact" v-model="project"
+                        rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']"></v-text-field> -->
+                    <v-select v-model="project" :items="projectOptions" item-title="project" item-value="id" label="Project" 
+                    clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                    :rules="[(v) => !!v || 'Project is required']" />
 
                     <v-textarea clearable label="Task Description" variant="outlined" density="compact"
                         v-model="description" rounded="lg" rows="3" class="mb-0"
@@ -47,7 +50,15 @@ onMounted(() => {
     userStore.fetchUsers()
   }
 })
+const assignee = ref(null)
+const assigneeOptions = computed(() => userStore.users)
 
+const userStore = useUserStore()
+onMounted(() => {
+  if (userStore.users.length === 0) {
+    userStore.fetchUsers()
+  }
+})
 const assignee = ref(null)
 const assigneeOptions = computed(() => userStore.users)
 
