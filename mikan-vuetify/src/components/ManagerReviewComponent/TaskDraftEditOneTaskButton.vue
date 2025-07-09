@@ -16,7 +16,7 @@
 
                         <!-- <v-text-field clearable label="Assignee" variant="outlined" density="compact" v-model="assignee"
                             rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Assignee is required']"></v-text-field> -->
-                            <v-select
+                        <v-select
                             v-model="assignee"
                             :items="assigneeOptions"
                             item-title="name"
@@ -29,9 +29,12 @@
                             class="mb-1"
                             :rules="[(v) => !!v || 'Assignee is required']"
                             />
-
+<!-- 
                         <v-text-field clearable label="Project" variant="outlined" density="compact" v-model="project"
-                            rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']"></v-text-field>
+                            rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']"></v-text-field> -->
+                        <v-select v-model="project" :items="projectOptions" item-title="title" item-value="id" label="Project" 
+                            clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                            :rules="[(v) => !!v || 'Project is required']" />
 
                         <v-textarea clearable label="Task Description" variant="outlined" density="compact"
                             v-model="taskDescription" rounded="lg" rows="3" class="mb-0"
@@ -54,6 +57,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/users'
+import { useProjectStore } from '@/stores/projects'
 import { useDraftStore } from '@/stores/drafts';
 
 const userStore = useUserStore()
@@ -65,6 +69,15 @@ onMounted(() => {
 const assignee = ref(null)
 const assigneeOptions = computed(() => userStore.users)
 
+const projectStore = useProjectStore()
+onMounted(() => {
+  if (projectStore.projects.length === 0) {
+    projectStore.fetchProjects()
+}
+})
+const project = ref(null)
+const projectOptions = computed(() => projectStore.projects)
+
 const draftStore = useDraftStore()
 
 const taskIndex = inject("taskIndex");
@@ -73,7 +86,7 @@ let retrievedDraft = draftStore.getDraftById(taskIndex)
 const taskTitle = ref("");
 const dueDate = ref("");
 // const assignee = ref("");
-const project = ref("");
+// const project = ref("");
 const taskDescription = ref("");
 
 const dialog = ref(false);
