@@ -81,7 +81,7 @@ const projectOptions = computed(() => projectStore.projects)
 const draftStore = useDraftStore()
 
 const taskIndex = inject("taskIndex");
-let retrievedDraft = draftStore.getDraftById(taskIndex)
+// let retrievedDraft = draftStore.getDraftById(taskIndex)
 
 const taskTitle = ref("");
 const dueDate = ref("");
@@ -91,15 +91,17 @@ const taskDescription = ref("");
 
 const dialog = ref(false);
 const openDialog = () => {
-    dialog.value = true
+    dialog.value = true;
 
-    retrievedDraft = draftStore.getDraftById(taskIndex)
+    retrievedDraft = draftStore.getDraftById(taskIndex);
+
     taskTitle.value = retrievedDraft.title;
     dueDate.value = retrievedDraft.dueDate;
-    assignee.value = retrievedDraft.assignee;
-    project.value = retrievedDraft.project;
+    assignee.value = retrievedDraft.assignee?.id ?? null;  // <--- here
+    project.value = retrievedDraft.project?.id ?? null;    // <--- here
     taskDescription.value = retrievedDraft.description;
 }
+
 defineExpose({ openDialog })
 
 const emit = defineEmits(["task-edited"]);
@@ -123,13 +125,36 @@ function cancel() {
     dialog.value = false;
 }
 
+// async function save() {
+//     // Validate the form
+//     const { valid } = await taskForm.value.validate();
+
+//     if (valid) {
+//         dialog.value = false;
+//         // emit("task-edited");
+//         emit("task-edited", editedDraft);
+
+
+//         const editedDraft = {
+//             title: taskTitle.value,
+//             dueDate: dueDate.value,
+//             assignee: assignee.value,
+//             project: project.value,
+//             description: taskDescription.value,
+//         }
+//         draftStore.editDraft(taskIndex, editedDraft);
+
+//         // Reset validation state after successful submission
+//         if (taskForm.value) {
+//             taskForm.value.resetValidation();
+//         }
+//     }
+// }
 async function save() {
-    // Validate the form
     const { valid } = await taskForm.value.validate();
 
     if (valid) {
         dialog.value = false;
-        emit("task-edited");
 
         const editedDraft = {
             title: taskTitle.value,
@@ -137,13 +162,14 @@ async function save() {
             assignee: assignee.value,
             project: project.value,
             description: taskDescription.value,
-        }
+        };
         draftStore.editDraft(taskIndex, editedDraft);
+        emit("task-edited", editedDraft);  // emit with payload
 
-        // Reset validation state after successful submission
         if (taskForm.value) {
             taskForm.value.resetValidation();
         }
     }
 }
+
 </script>

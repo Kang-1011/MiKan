@@ -71,7 +71,6 @@
 
 <script setup>
 import { ref } from "vue";
-import { useDraftStore } from "@/stores/drafts";
 import ApproveAllDialog from "@/components/ManagerReviewComponent/ManagerReviewApproveAllDialog.vue";
 import CreateTaskDialog from "@/components/ManagerReviewComponent/ManagerReviewCreateTaskDialog.vue";
 import TaskDraft from "@/components/ManagerReviewComponent/TaskDraft.vue";
@@ -79,6 +78,13 @@ const newTaskDialogFlag = ref(false);
 const approveAllDialogFlag = ref(false);
 import { useChatbotStore } from '@/stores/chatbotStore'; // 1. Import the chatbot store 
 const chatbotStore = useChatbotStore(); // 2. Create an instance of the chatbot store
+
+import { useDraftStore } from "@/stores/drafts";
+const draftStore = useDraftStore();
+onMounted(async () => {
+  await draftStore.loadDrafts();
+});
+
 
 import Toast from 'primevue/toast';
 import { useToast } from "primevue/usetoast";
@@ -92,8 +98,6 @@ const showBottomRight = (paramSeverity, paramSummary) => {
 const snackbar = ref(false);
 const snackbarMessage = ref("");
 const snackbarColor = ref("");
-
-const draftStore = useDraftStore();
 
 function openCreateTaskDialog() {
     newTaskDialogFlag.value = true;
@@ -192,8 +196,6 @@ onUnmounted(() => {
   chatbotStore.clearPageContext();
   console.log("Chatbot context CLEARED.");
 });
-
-
 
 </script>
 

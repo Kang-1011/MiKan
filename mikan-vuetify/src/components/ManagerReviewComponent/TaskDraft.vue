@@ -61,8 +61,8 @@ const props = defineProps({
     taskIndex: Number,
     title: String,
     dueDate: String,
-    assignee: String,
-    project: String,
+    assignee: Object,
+    project: Object,
     description: String,
 });
 

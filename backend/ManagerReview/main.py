@@ -6,6 +6,8 @@ from model import *
 from typing import *
 import io
 import traceback
+from sqlalchemy.orm import joinedload
+
 
 
 app = FastAPI()
@@ -242,9 +244,21 @@ def download_minutes_file(meeting_id: int, db: db_dependency):
 
 # -------------------------------------------------------- Draft Task Routes --------------------------------------------------------
 
+# @app.get("/drafts", response_model=List[DraftOut])
+# def get_drafts(db: db_dependency):
+#     return db.query(Draft).all()
+# @app.get("/drafts", response_model=List[DraftOut])
+# def get_unapproved_drafts(db: db_dependency):
+#     return db.query(Draft).filter(Draft.approved == False).all()
+
 @app.get("/drafts", response_model=List[DraftOut])
 def get_drafts(db: db_dependency):
-    return db.query(Draft).all()
+    unapproved_drafts = db.query(Draft).options(
+        joinedload(Draft.assignee),
+        joinedload(Draft.project)
+    ).filter(Draft.approved == False)
+    return unapproved_drafts.all()
+
 
 @app.get("/drafts/{draft_id}", response_model=DraftOut)
 def get_draft(draft_id: int, db: db_dependency):

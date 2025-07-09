@@ -205,9 +205,10 @@ class DraftOut(BaseModel):
     title: str
     description: str
     due_date: Optional[date]
-    status: str
-    priority: str
-    comment: Optional[str]
+    # These are not needed - Rohimi
+    # status: str
+    # priority: str
+    # comment: Optional[str]
     assignee: UserOut
     project: ProjectOut
 
