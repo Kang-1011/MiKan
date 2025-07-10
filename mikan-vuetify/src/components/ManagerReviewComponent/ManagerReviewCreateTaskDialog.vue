@@ -53,7 +53,7 @@ onMounted(() => {
 const assignee = ref(null)
 const assigneeOptions = computed(() => userStore.users)
 
-// display project title on dropdown
+// display project titles on dropdown
 const projectStore = useProjectStore()
 onMounted(() => {
   if (projectStore.projects.length === 0) {
@@ -103,7 +103,6 @@ function closeDialog() {
 }
 
 async function createDraft() {
-    // Validate the form
     const { valid } = await taskForm.value.validate();
 
     if (valid) {
@@ -115,16 +114,16 @@ async function createDraft() {
             description: description.value,
             approved: false
         };
-        console.log(newDraft)
 
-        draftStore.addNewDraft(newDraft);
-
-        emit("pass-created-task");
-        clearAllFields();
-        // Reset validation state after successful submission
-        if (taskForm.value) {
-            taskForm.value.resetValidation();
+        try {
+            await draftStore.addNewDraft(newDraft); // <-- make sure to await
+            emit("pass-created-task");
+            clearAllFields();
+            taskForm.value?.resetValidation();
+        } catch (error) {
+            console.error("Failed to create draft from UI:", error);
         }
     }
 }
+
 </script>
