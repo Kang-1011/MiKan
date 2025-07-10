@@ -93,7 +93,8 @@ function clearAllFields() {
     description.value = "";
 }
 
-function closeDialog() {
+// match FastAPI field 
+    function closeDialog() {
     emit("close-create-task-dialog");
     clearAllFields();
     // Reset validation state when closing the dialog
