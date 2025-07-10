@@ -43,6 +43,7 @@ import { useUserStore } from '@/stores/users'
 import { useProjectStore } from '@/stores/projects'
 import { useDraftStore } from "@/stores/drafts";
 
+// display assignee names on dropdown
 const userStore = useUserStore()
 onMounted(() => {
   if (userStore.users.length === 0) {
@@ -52,6 +53,7 @@ onMounted(() => {
 const assignee = ref(null)
 const assigneeOptions = computed(() => userStore.users)
 
+// display project title on dropdown
 const projectStore = useProjectStore()
 onMounted(() => {
   if (projectStore.projects.length === 0) {
@@ -111,9 +113,11 @@ async function createDraft() {
             assignee: assignee.value,
             project: project.value,
             description: description.value,
+            approved: false
         };
+        console.log(newDraft)
 
-        draftStore.addDraft(newDraft);
+        draftStore.addNewDraft(newDraft);
 
         emit("pass-created-task");
         clearAllFields();

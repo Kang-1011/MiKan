@@ -244,20 +244,20 @@ def download_minutes_file(meeting_id: int, db: db_dependency):
 
 # -------------------------------------------------------- Draft Task Routes --------------------------------------------------------
 
-# @app.get("/drafts", response_model=List[DraftOut])
-# def get_drafts(db: db_dependency):
-#     return db.query(Draft).all()
+@app.get("/drafts", response_model=List[DraftOut])
+def get_drafts(db: db_dependency):
+    return db.query(Draft).all()
 # @app.get("/drafts", response_model=List[DraftOut])
 # def get_unapproved_drafts(db: db_dependency):
 #     return db.query(Draft).filter(Draft.approved == False).all()
 
-@app.get("/drafts", response_model=List[DraftOut])
-def get_drafts(db: db_dependency):
-    unapproved_drafts = db.query(Draft).options(
-        joinedload(Draft.assignee),
-        joinedload(Draft.project)
-    ).filter(Draft.approved == False)
-    return unapproved_drafts.all()
+# @app.get("/drafts", response_model=List[DraftOut])
+# def get_drafts(db: db_dependency):
+#     unapproved_drafts = db.query(Draft).options(
+#         joinedload(Draft.assignee),
+#         joinedload(Draft.project)
+#     ).filter(Draft.approved == False)
+#     return unapproved_drafts.all()
 
 
 @app.get("/drafts/{draft_id}", response_model=DraftOut)

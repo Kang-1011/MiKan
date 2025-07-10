@@ -6,12 +6,20 @@ import axios from 'axios';
 // Draft type based on your FastAPI DraftOut schema
 interface Draft {
   id: number;
-  title: string;
+  title: number;
   description: string;
   dueDate: string;
-  assignee: string;
+  assignee: number;
   project: string;
   approved: boolean;
+}
+
+interface NewDraft{
+  assignee_id: number;
+  project_id: number;
+  title: string;
+  description: string;
+  due_date: string;
 }
 
 export const useDraftStore = defineStore('drafts', () => {
@@ -27,14 +35,44 @@ export const useDraftStore = defineStore('drafts', () => {
     }
   };
 
+  const addDraft = async () => {
+    const payload = {
+      ...NewDraft,
+      approved : false
+    }
+    console.log("payload: " , payload)
+  }
+
+  // async function addNewDraft(NewDraft: NewDraft){
+  //   const payload = {
+  //     ...NewDraft,
+  //     approved : false
+  //   }
+
+  //   console.log("payload ", payload)
+
+  //   try{
+  //     const response = await axios.post('http://127.0.0.1:8000/add_draft', payload, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       }
+  //     });
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Failed to fetch drafts:", error);
+  //   }
+  // }
+
   const approveAllDrafts = () => {
     drafts.value = [];
     // Later: Add API logic to persist approval
   };
 
-  const addDraft = (newDraft: Draft) => {
-    drafts.value.push(newDraft);
-  };
+  // const addDraft = (newDraft: Draft) => {
+  //   drafts.value.push(newDraft);
+  // };
+  
+
 
   const updateDraft = (updatedDraft: Draft) => {
     const index = drafts.value.findIndex(d => d.id === updatedDraft.id);
@@ -51,8 +89,9 @@ export const useDraftStore = defineStore('drafts', () => {
     drafts,
     loadDrafts,
     approveAllDrafts,
-    addDraft,
+    addNewDraft,
     updateDraft,
     deleteDraft
   };
 });
+

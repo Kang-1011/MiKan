@@ -45,8 +45,8 @@
                 <v-container fluid>
                     <v-row>
                         <v-col cols="12" sm="6" md="4" v-for="draft in draftStore.drafts" :key="draft.id">
-                            <TaskDraft :taskIndex="draft.id" :title="draft.title" :dueDate="draft.dueDate"
-                                :assignee="draft.assignee" :project="draft.project" :description="draft.description"
+                            <TaskDraft :taskIndex="draft.id" :title="draft.title" :dueDate="draft.due_date"
+                                :assignee="draft.assignee.name" :project="draft.project.title" :description="draft.description"
                                 @task-approved="oneTaskApproved($event)" @task-deleted="oneTaskDeleted($event)"
                                 @task-edited="oneTaskEdited($event)"></TaskDraft>
                         </v-col>
@@ -84,7 +84,10 @@ const draftStore = useDraftStore();
 onMounted(async () => {
   await draftStore.loadDrafts();
 });
-
+// import { drafts, fetchDrafts } from '@/stores/dummy';
+// onMounted(() => {
+//     fetchDrafts();
+// });
 
 import Toast from 'primevue/toast';
 import { useToast } from "primevue/usetoast";

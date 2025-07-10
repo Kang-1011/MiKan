@@ -73,6 +73,11 @@ class Draft(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     due_date = Column(Date)
+    # these are not needed - Rohimi
+    # status = Column(String)
+    # priority = Column(String, nullable=False)
+    # comment = Column(String, nullable=True)
+
     approved = Column(Boolean, default=False)
     created_at = Column(Date, default=func.now())
 
@@ -183,6 +188,10 @@ class DraftBase(BaseModel):
     title: str
     description: str
     due_date: date
+    # these are not needed - Rohimi
+    # status: str = 'pending'
+    # priority: str
+    # comment: Optional[str] = None
     approved: bool = False
 
     class Config:
