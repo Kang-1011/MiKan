@@ -1,82 +1,42 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import *
+from model import *
+from database import *
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from database import SessionLocal  # import your sessionmaker here
-from database import Base, engine, get_db
-from model import Transcript
-from crud import get_transcript_by_id, create_mock_data
-from schema import TranscriptResponse
-from schema import TranscriptCreate, TranscriptResponse 
-from crud import create_transcript  
-from fastapi.responses import FileResponse
-from pathlib import Path
-import os
-from generate_minutes import generate_minutes
 
-# Create tables
-Base.metadata.create_all(bind=engine)
+from routers.users import router as users_router
+from routers.projects import router as projects_router
+from routers.tasks import router as tasks_router
+from routers.attachments import router as attachments_router
+from routers.ai_attachments import router as ai_attachments_router
+from routers.autostart import router as autostart_router
+from routers.drafts import router as drafts_router
+from routers.meetings import router as meetings_router
+from routers.comments import router as comments_router
+from routers.subtasks import router as subtasks_router
+from routers.boards import router as boards_router
 
 app = FastAPI()
+create_tables()
+db_dependency = Annotated[Session, Depends(get_db)]
 
-# Allow CORS for frontend dev
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Allow requests from frontend
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
 )
 
-@app.on_event("startup")
-def init_mock_data():
-    db = SessionLocal()
-    try:
-        create_mock_data(db)
-    finally:
-        db.close()
+security = HTTPBearer()
 
-# ... all imports and app setup remain unchanged ...
-
-@app.get("/transcripts/generated")
-def serve_generated_minutes():
-    file_path = Path(__file__).parent / "generated_minutes.json"
-    if file_path.exists():
-        return FileResponse(path=file_path, media_type='application/json')
-    return {"error": "File not found"}
-
-@app.get("/transcripts/latest")
-def get_latest_transcript(db: Session = Depends(get_db)):
-    try:
-        latest = db.query(Transcript).order_by(Transcript.id.desc()).first()
-        if not latest:
-            raise HTTPException(status_code=404, detail="No transcript found")
-        return {"id": latest.id}
-    except Exception as e:
-        import traceback
-        print("[DEBUG] Exception in /transcripts/latest:")
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail="Internal Server Error")
-        
-
-@app.get("/transcripts/{transcript_id}", response_model=TranscriptResponse)
-def read_transcript(transcript_id: int, db: Session = Depends(get_db)):
-    transcript = get_transcript_by_id(db, transcript_id)
-    if not transcript:
-        raise HTTPException(status_code=404, detail="Transcript not found")
-
-    return transcript
-
-@app.post("/transcripts", response_model=TranscriptResponse)
-def create_transcript_api(transcript: TranscriptCreate, db: Session = Depends(get_db)):
-    return create_transcript(db, transcript)
-
-@app.post("/minutes/generate")
-def generate_minutes_api():
-    try:
-        result = generate_minutes()
-        return result
-    except Exception as e:
-        import traceback
-        print("[ERROR] Failed to generate minutes:")
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail="Minutes generation failed")
+app.include_router(users_router, prefix="/users", tags=["Users"])
+app.include_router(projects_router, prefix="/projects", tags=["Projects"])
+app.include_router(tasks_router, prefix="/tasks", tags=["Tasks"])
+app.include_router(comments_router, prefix="/comments", tags=["Comments"])
+app.include_router(subtasks_router, prefix="/subtasks", tags=["Subtasks"])
+app.include_router(attachments_router, prefix="/attachments", tags=["Attachments"])
+app.include_router(ai_attachments_router, prefix="/ai_attachments", tags=["AI Attachments"])
+app.include_router(autostart_router, prefix="/autostart", tags=["Autostart"])
+app.include_router(drafts_router, prefix="/drafts", tags=["Drafts"])
+app.include_router(meetings_router, prefix="/meetings", tags=["Meetings"])
+app.include_router(boards_router, prefix="/boards", tags=["Boards"])
