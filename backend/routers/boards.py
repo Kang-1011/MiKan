@@ -28,13 +28,13 @@ def get_project_boards(db: db_dependency):
 				Comment.date.label("comment_date"),
 
 				Attachment.id.label("attachment_id"),
-				Attachment.name.label("attachment_name"),
+				Attachment.title.label("attachment_name"),
 				Attachment.type.label("attachment_type"),
 
-				AIAttachment.name.label("ai_attachment_name"),
+				AIAttachment.title.label("ai_attachment_name"),
 				AIAttachment.url.label("ai_attachment_url"),
                 
-				Autostart.name.label("autostart_name"),
+				Autostart.title.label("autostart_name"),
 				Autostart.url.label("autostart_url")
             )
             .outerjoin(Task, Task.project_id == Project.id)

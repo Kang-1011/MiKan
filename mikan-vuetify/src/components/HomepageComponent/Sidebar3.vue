@@ -142,7 +142,7 @@
       </v-card>
     </v-card>
   </v-navigation-drawer>
-  <CreateNewProjectDialog v-model="createNewProjectDialogFlag" @close-create-project-dialog="createNewProjectDialogFlag = false;" />
+  <CreateNewProjectDialog v-model="createNewProjectDialogFlag" @close-create-project-dialog="createNewProjectDialogFlag = false;" @project-created="handleNewProject"/>
 </template>
 
 <!-------------------------------------------SCRIPT---------------------------------------->
@@ -182,10 +182,15 @@ watch(rail, (newVal) => {
 
 function createNewProject() {
   createNewProjectDialogFlag.value = true;
-
   console.log("Trigger create new project dialog/modal");
-  const newId = Math.max(...boards.value.map((b) => b.id)) + 1;
-  boards.value.push({ id: newId, title: "New Project", stages: [] });
+}
+
+function handleNewProject(project: { id: number; title: string }) {
+  boards.value.push({
+    id: project.id,
+    title: project.title,
+    stages: [],
+  });
 }
 </script>
 
