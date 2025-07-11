@@ -7,7 +7,8 @@
                     <div>New Meeting</div>
                 </v-card-title>
 
-                <v-container class="fill-height">
+                <!-- <v-container class="fill-height"> -->
+                <v-container class="d-flex flex-column justify-space-around" style="height: 1100px;">
                     <!-- <div class="text-center mb-12">
                         <h1 class="text-h4 text-md-h3 font-weight-bold mb-3">Create a Story</h1>
                         <h2 class="text-h6 text-md-h5 font-weight-regular text-grey-lighten-1 mb-4">
@@ -33,8 +34,8 @@
                                     <div class="glow-circle"></div>
                                     <div class="glow-circle middle-circle"></div>
                                     <div class="glow-circle inner-circle">
-                                    <v-icon color="black" size="40">mdi-microphone-outline</v-icon>
-                                </div>
+                                        <v-icon color="black" size="40">mdi-microphone-outline</v-icon>
+                                    </div>
                                 </div>
 
                                 <v-card-title class="font-weight-bold text-h5">Live Transcription</v-card-title>
@@ -83,6 +84,28 @@
                             </v-card>
                         </v-col>
                     </v-row>
+
+                    <v-data-table :items-per-page=5 :headers="headers" :items="meetings" :items-length="meetingsCount"
+                        :loading="loading" loading-text="Loading meetings..." dense @update:options="loadItems">
+                        <template v-slot:no-data>
+                            <!-- <template v-slot:item.actions="{ item }">
+                                <div class="d-flex gap-2">
+                                    <v-btn color="primary" size="small" variant="outlined" @click="downloadTranscript(item.id)"
+                                        >
+                                        Transcript
+                                    </v-btn>
+
+                                    <v-btn color="success" size="small" variant="outlined" @click="downloadMinutes(item.id)"
+                                        >
+                                        Minutes
+                                    </v-btn>
+                                </div>
+                            </template> -->
+                            <v-alert type="info" text>
+                                No meetings found in the databases.
+                            </v-alert>
+                        </template>
+                    </v-data-table>
                 </v-container>
             </v-card>
         </v-card>
@@ -90,8 +113,32 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useMeetingsStore } from '@/stores/meetings'
+
+const meetingsStore = useMeetingsStore()
+const { meetings, loading, error, meetingsCount } = storeToRefs(meetingsStore)
+const { fetchMeetings } = meetingsStore
+
 const audioRecordDialog = ref(false);
 const audioUploadDialog = ref(false);
+
+const headers = [
+    { title: 'ID', key: 'id' },
+    { title: 'Date', key: 'date' },
+    { title: 'Created At', key: 'created_at' },
+    { title: 'Actions', key: 'actions', sortable: false }
+]
+
+const loadItems = async (options) => {
+    await meetingsStore.fetchMeetings(options)
+}
+
+onMounted(() => {
+    loadItems({ page: 1, itemsPerPage: 10 })
+})
+
 </script>
 
 <style scoped>

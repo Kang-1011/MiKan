@@ -15,6 +15,7 @@ declare module 'vue' {
     AudioUploadDialog: typeof import('./components/AudioComponent/AudioUploadDialog.vue')['default']
     Board23: typeof import('./components/MyTasksComponent/Board2-3.vue')['default']
     Board31: typeof import('./components/MyTasksComponent/Board3-1.vue')['default']
+    Chatbot: typeof import('./components/chatbot.vue')['default']
     CreateNewProjectDialog: typeof import('./components/HomepageComponent/CreateNewProjectDialog.vue')['default']
     DeleteDialog: typeof import('./components/MyTasksComponent/DeleteDialog.vue')['default']
     KanbanBoard: typeof import('./components/MyTasksComponent/KanbanBoard.vue')['default']
