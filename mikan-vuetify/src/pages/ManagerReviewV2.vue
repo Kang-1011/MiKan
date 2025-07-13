@@ -82,7 +82,7 @@ const chatbotStore = useChatbotStore(); // 2. Create an instance of the chatbot 
 import { useDraftStore } from "@/stores/drafts";
 const draftStore = useDraftStore();
 onMounted(async () => {
-  await draftStore.loadDrafts();
+  await draftStore.fetchFromAPI();
 });
 // import { drafts, fetchDrafts } from '@/stores/dummy';
 // onMounted(() => {

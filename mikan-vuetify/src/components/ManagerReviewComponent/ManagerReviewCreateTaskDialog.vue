@@ -117,7 +117,7 @@ async function createDraft() {
         };
 
         try {
-            await draftStore.addNewDraft(newDraft); // <-- make sure to await
+            await draftStore.addDraft(newDraft); // <-- make sure to await
             emit("pass-created-task");
             clearAllFields();
             taskForm.value?.resetValidation();

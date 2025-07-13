@@ -52,10 +52,10 @@ import { useProjectStore } from '@/stores/projects'
 // load drafts data
 import { useDraftStore } from '@/stores/drafts';
 const draftStore = useDraftStore()
-onMounted(async () => {
-  await draftStore.loadDrafts();
-});
- 
+// onMounted(async () => {
+//   await draftStore.getDraftById();
+// });
+    
 // display assignee names on dropdown
 const userStore = useUserStore()
 // onMounted(() => {
@@ -84,7 +84,7 @@ const projectOptions = computed(() => projectStore.projects)
 
 
 const taskIndex = inject("taskIndex");
-// let retrievedDraft = draftStore.getDraftById(taskIndex)
+let retrievedDraft = draftStore.getDraftById(taskIndex)
 
 const taskTitle = ref("");
 const dueDate = ref("");
@@ -104,7 +104,6 @@ const openDialog = () => {
     project.value = retrievedDraft.project?.id ?? null;    // <--- here
     taskDescription.value = retrievedDraft.description;
 }
-
 defineExpose({ openDialog })
 
 const emit = defineEmits(["task-edited"]);
