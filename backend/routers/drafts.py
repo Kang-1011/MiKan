@@ -7,7 +7,8 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 @router.get("/", response_model=List[DraftOut])
 def get_drafts(db: db_dependency):
-    return db.query(Draft).all()
+    drafts = db.query(Draft).filter(Draft.approved == 'False')
+    return drafts
 
 @router.post("/add_draft", response_model=DraftOut)
 def add_draft(draft_data: DraftCreate, db: db_dependency):
@@ -20,3 +21,52 @@ def add_draft(draft_data: DraftCreate, db: db_dependency):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/update_draft/{draft_id}", response_model=DraftOut)
+def update_draft(draft_id: int, draft_data: DraftUpdate, db: db_dependency):
+    draft = db.query(Draft).filter(Draft.id == draft_id).first()
+
+    if not draft:
+        raise HTTPException(status_code=404, detail="Draft not found")
+
+    for key, value in draft_data.dict(exclude_unset=True).items():
+        setattr(draft, key, value)
+
+    db.commit()
+    db.refresh(draft)
+    print(f"Draft updated: " , {draft})
+    return draft
+
+@router.put("/approve_draft/{draf_id}" , response_model=DraftOut)
+def approve_one_draft(draft_id: int, draft_data: DraftApprove, db: db_dependency):
+    draft = db.query(Draft).filter(Draft.id == draft_id).first()
+    if not draft:
+        raise HTTPException(status_code=404, detail="Draft not found")
+
+    if draft.approved is not None:  
+        draft.approved = draft_data.approved
+        db.commit()
+        db.refresh(draft)
+        print("draft approved")
+
+    return draft
+
+@router.put("/approve_all_drafts/" , response_model=List[DraftOut])
+def approve_all_drafts(draft_data: DraftApprove, db: db_dependency):
+    drafts = db.query(Draft).filter(Draft.approved == False).all()
+    for draft in drafts:
+        draft.approved = draft_data.approved
+        db.commit()
+        db.refresh(draft)
+        print("draft approved")
+
+    return drafts
+
+@router.delete("/delete_draft/{draf_id}")
+def delete_draft(draf_id: int, db: db_dependency):
+    draft = db.query(Draft).filter(Draft.id == draf_id).first()
+    if not draft:
+        raise HTTPException(status_code=404, detail="Draft detail not found")
+    db.delete(draft)
+    db.commit()
+    return draft
