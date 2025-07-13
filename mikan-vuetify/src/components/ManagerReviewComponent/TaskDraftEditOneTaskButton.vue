@@ -16,19 +16,9 @@
 
                         <!-- <v-text-field clearable label="Assignee" variant="outlined" density="compact" v-model="assignee"
                             rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Assignee is required']"></v-text-field> -->
-                        <v-select
-                            v-model="assignee"
-                            :items="assigneeOptions"
-                            item-title="name"
-                            item-value="id"
-                            label="Assignee"
-                            clearable
-                            variant="outlined"
-                            density="compact"
-                            rounded="lg"
-                            class="mb-1"
-                            :rules="[(v) => !!v || 'Assignee is required']"
-                            />
+                        <v-select v-model="assignee" :items="assigneeOptions" item-title="name" item-value="id" label="Assignee" 
+                            clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                            :rules="[(v) => !!v || 'Assignee is required']" />
 <!-- 
                         <v-text-field clearable label="Project" variant="outlined" density="compact" v-model="project"
                             rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']"></v-text-field> -->
@@ -58,27 +48,40 @@
 import { ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/users'
 import { useProjectStore } from '@/stores/projects'
-import { useDraftStore } from '@/stores/drafts';
 
+// load drafts data
+import { useDraftStore } from '@/stores/drafts';
+const draftStore = useDraftStore()
+onMounted(async () => {
+  await draftStore.loadDrafts();
+});
+ 
+// display assignee names on dropdown
 const userStore = useUserStore()
+// onMounted(() => {
+//   if (userStore.users.length === 0) {
+//     userStore.fetchUsers()
+//   }
+// })
 onMounted(() => {
-  if (userStore.users.length === 0) {
-    userStore.fetchUsers()
-  }
+        userStore.fetchUsers()
 })
 const assignee = ref(null)
 const assigneeOptions = computed(() => userStore.users)
 
+// display project titles on dropdown
 const projectStore = useProjectStore()
+// onMounted(() => {
+//   if (projectStore.projects.length === 0) {
+//     projectStore.fetchProjects()
+// }
+// })
 onMounted(() => {
-  if (projectStore.projects.length === 0) {
     projectStore.fetchProjects()
-}
 })
 const project = ref(null)
 const projectOptions = computed(() => projectStore.projects)
 
-const draftStore = useDraftStore()
 
 const taskIndex = inject("taskIndex");
 // let retrievedDraft = draftStore.getDraftById(taskIndex)
