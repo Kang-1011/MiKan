@@ -32,7 +32,7 @@ export const useDraftStore = defineStore("draft", {
           assignee: draft.assignee,
           project: draft.project,
           approved: draft.approved,
-        }));
+        })).sort((a, b) => a.id - b.id);
         console.log(this.drafts);
       } catch (error) {
         console.error("Error fetching drafts:", error);
@@ -155,7 +155,10 @@ export const useDraftStore = defineStore("draft", {
       }
     },    
 
-    getDraftById(id: number): DraftCreate | undefined {
+    // getDraftById(id: number): DraftCreate | undefined {
+    //   return this.drafts.find(draft => draft.id === id);
+    // },
+    getDraftById(id: number): Draft | undefined { // ✅ Use Draft instead of DraftCreate
       return this.drafts.find(draft => draft.id === id);
     },
   },
