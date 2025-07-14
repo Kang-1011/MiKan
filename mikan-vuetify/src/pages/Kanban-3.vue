@@ -95,6 +95,7 @@
             @rename-stage="renameStage"
             @delete-stage="deleteStage"
             @open-task-dialog="openTaskDialog"
+			@task-updated="taskDropped"
           />
 
         </template>
@@ -128,6 +129,7 @@
 </template>
 <script setup lang="ts">
 import { ref,computed, watch } from 'vue'
+import axios from 'axios'
 import { boards } from '@/stores/boards'
 import { useRoute } from "vue-router";
 import draggable from 'vuedraggable'
@@ -215,12 +217,37 @@ if (boardIndex!==null && stageIndex!==null && taskIndex!==null) {
 return null
 })
 
-function handleTaskSave(updatedTask) {
-const { boardIndex, stageIndex, taskIndex } = editingInfo.value
-if (boardIndex!==null && stageIndex!==null && taskIndex!==null) {
-  boards.value[boardIndex].stages[stageIndex].tasks[taskIndex] = updatedTask
+function handleTaskSave(taskId, updatedTask) {
+  const { boardIndex, stageIndex, taskIndex } = editingInfo.value;
+  if (boardIndex !== null && stageIndex !== null && taskIndex !== null) {
+    boards.value[boardIndex].stages[stageIndex].tasks[taskIndex] = updatedTask;
+    
+	const project_id = boards.value[boardIndex].id;
+    const payload = {
+      ...updatedTask,
+      project_id: project_id,
+    };
+	console.log(payload)
+    axios.put(`http://localhost:8000/tasks/update_task/${taskId}`, payload)
+      .then(() => {
+        console.log(`✅ Task updated from dialog with Project ID : ${project_id}`);
+		isTaskDialogOpen.value = false;
+      })
+      .catch(err => {
+        console.error("❌ Failed to update task from dialog:", err);
+      });
+  }
 }
+
+async function taskDropped(taskId, payload) {
+  try {
+    await axios.put(`http://localhost:8000/tasks/update_task/${taskId}`, payload)
+    console.log("Task updated successfully")
+  } catch (err) {
+    console.error("❌ Failed to update task:", err.response?.data || err.message)
+  }
 }
+
 
 watch(selectedAssignee, assignee => {
 // whenever you pick someone, lock down the UI
