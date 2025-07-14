@@ -63,19 +63,26 @@ export const useDraftStore = defineStore("draft", {
       }
     },    
     
-    // async deleteDraft(id: number) {
-    //   const response = await axios.delete(`http://127.0.0.1:8000/drafts/update_draft/${draftId}`)
-    // }
-    deleteDraft(id: number) {
-      const initialLength = this.drafts.length;
-      // Filter out the draft with the specified ID
-      this.drafts = this.drafts.filter(draft => draft.id !== id);
-      if (this.drafts.length < initialLength) {
-        console.log(`Draft with ID ${id} deleted.`);
-      } else {
-        console.warn(`Draft with ID ${id} not found for deletion.`);
+    async deleteDraft(draftId: number) {
+      try {
+        await axios.delete(`http://127.0.0.1:8000/drafts/delete_draft/${draftId}`);
+        this.drafts = this.drafts.filter(d => d.id !== draftId);
+        console.log(`Draft ${draftId} deleted successfully`);
+      } catch (error) {
+        console.error(`Failed to delete draft ${draftId}:`, error);
       }
     },
+
+    // deleteDraft(id: number) {
+    //   const initialLength = this.drafts.length;
+    //   // Filter out the draft with the specified ID
+    //   this.drafts = this.drafts.filter(draft => draft.id !== id);
+    //   if (this.drafts.length < initialLength) {
+    //     console.log(`Draft with ID ${id} deleted.`);
+    //   } else {
+    //     console.warn(`Draft with ID ${id} not found for deletion.`);
+    //   }
+    // },
 
     async editDraft(draftId: number, draftData: {
       title: string;
