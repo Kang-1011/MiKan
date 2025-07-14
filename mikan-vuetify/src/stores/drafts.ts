@@ -73,17 +73,6 @@ export const useDraftStore = defineStore("draft", {
       }
     },
 
-    // deleteDraft(id: number) {
-    //   const initialLength = this.drafts.length;
-    //   // Filter out the draft with the specified ID
-    //   this.drafts = this.drafts.filter(draft => draft.id !== id);
-    //   if (this.drafts.length < initialLength) {
-    //     console.log(`Draft with ID ${id} deleted.`);
-    //   } else {
-    //     console.warn(`Draft with ID ${id} not found for deletion.`);
-    //   }
-    // },
-
     async editDraft(draftId: number, draftData: {
       title: string;
       description: string;
@@ -128,14 +117,19 @@ export const useDraftStore = defineStore("draft", {
         const response = await axios.put(`http://127.0.0.1:8000/drafts/approve_draft/${draftId}`, {
           approved: true,
         });
+                
         const index = this.drafts.findIndex(d => d.id === draftId);
         if (index !== -1) {
-          this.drafts[index] = response.data;
-        }
-      } catch (error) {
+          this.drafts[index] = {
+            ...this.drafts[index],
+            approved: true
+          };
+          await this.fetchFromAPI();
+      }
+    } catch (error) {
         console.error(`Failed to approve draft ${draftId}:`, error);
-      } 
-    },    
+      }
+    },
 
     async approveAllDrafts() {
       try {

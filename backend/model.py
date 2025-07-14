@@ -297,7 +297,7 @@ class DraftUpdate(BaseModel):
     approved: Optional[bool] = None
 
 class DraftApprove(BaseModel):
-    approved: bool
+    approved: bool = True
 
 class DraftOut(BaseModel):
     id: int

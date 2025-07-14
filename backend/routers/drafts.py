@@ -38,7 +38,7 @@ def update_draft(draft_id: int, draft_data: DraftUpdate, db: db_dependency):
     return draft
 
 # approve one draft
-@router.put("/approve_draft/{draf_id}" , response_model=DraftOut)
+@router.put("/approve_draft/{draft_id}" , response_model=DraftOut)
 def approve_one_draft(draft_id: int, draft_data: DraftApprove, db: db_dependency):
     draft = db.query(Draft).filter(Draft.id == draft_id).first()
     if not draft:
@@ -58,7 +58,6 @@ def approve_all_drafts(draft_data: DraftApprove, db: db_dependency):
         db.commit()
         db.refresh(draft)
         # print("draft approved")
-
     return drafts
 
 # delete a draft
