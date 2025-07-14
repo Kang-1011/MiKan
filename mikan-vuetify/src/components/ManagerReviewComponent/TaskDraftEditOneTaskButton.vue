@@ -46,8 +46,6 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useUserStore } from '@/stores/users'
-import { useProjectStore } from '@/stores/projects'
 
 // load drafts data
 import { useDraftStore } from '@/stores/drafts';
@@ -57,6 +55,7 @@ const draftStore = useDraftStore()
 // });
     
 // display assignee names on dropdown
+import { useUserStore } from '@/stores/users'
 const userStore = useUserStore()
 // onMounted(() => {
 //   if (userStore.users.length === 0) {
@@ -70,6 +69,7 @@ const assignee = ref(null)
 const assigneeOptions = computed(() => userStore.users)
 
 // display project titles on dropdown
+import { useProjectStore } from '@/stores/projects'
 const projectStore = useProjectStore()
 // onMounted(() => {
 //   if (projectStore.projects.length === 0) {

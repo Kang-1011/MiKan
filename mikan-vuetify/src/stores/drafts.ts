@@ -6,7 +6,7 @@ interface Draft {
   id: number;
   title: string;
   description: string;
-  due_date: string;
+  dueDate: string;
   assignee: number;
   project: number;
   approved: boolean;
@@ -56,6 +56,10 @@ export const useDraftStore = defineStore("draft", {
           project_id: draftData.project,
           approved: draftData.approved,
         });
+        const transformedDraft = {
+          ...response.data,
+          dueDate: response.data.due_date
+        };
         console.log("Draft created:", response.data);
         this.drafts.push(response.data);
       } catch (error) {
@@ -91,7 +95,10 @@ export const useDraftStore = defineStore("draft", {
         console.log("Draft modified:", response.data);    
         const index = this.drafts.findIndex(d => d.id === draftId);
         if (index !== -1) {
-          this.drafts[index] = response.data;
+          this.drafts[index] = {
+            ...response.data,
+            dueDate: response.data.due_date // ✅ Transform due_date back to dueDate
+          };
         }
       } catch (error) {
         console.error("Failed to modify draft:", error);
