@@ -45,7 +45,7 @@
                 <v-container fluid>
                     <v-row>
                         <v-col cols="12" sm="6" md="4" v-for="draft in draftStore.drafts" :key="draft.id">
-                            <TaskDraft :taskIndex="draft.id" :title="draft.title" :dueDate="draft.due_date"
+                            <TaskDraft :taskIndex="draft.id" :title="draft.title" :dueDate="draft.dueDate"
                                 :assignee="draft.assignee.name" :project="draft.project.title" :description="draft.description"
                                 @task-approved="oneTaskApproved($event)" @task-deleted="oneTaskDeleted($event)"
                                 @task-edited="oneTaskEdited($event)"></TaskDraft>
