@@ -7,16 +7,6 @@
       <h2>Minutes</h2>
     </div>
     <div>
-      <v-tooltip text="Download Minutes" location="bottom">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            icon="mdi-download-outline"
-            variant="text"
-            v-bind="props"
-            @click="exportToPDF"
-          ></v-btn>
-        </template>
-      </v-tooltip>
       <v-tooltip
         :text="isEditMode ? 'Finish Editing' : 'Edit Minutes'"
         location="bottom"
@@ -27,6 +17,17 @@
             variant="text"
             v-bind="props"
             @click="toggleEditMode"
+          ></v-btn>
+        </template>
+      </v-tooltip>
+      
+      <v-tooltip text="Download Minutes" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            icon="mdi-download-outline"
+            variant="text"
+            v-bind="props"
+            @click="exportToPDF"
           ></v-btn>
         </template>
       </v-tooltip>

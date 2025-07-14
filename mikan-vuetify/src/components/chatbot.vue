@@ -29,21 +29,13 @@
             </div>
             <div class="message-content">
               <div class="message-bubble" :class="`bubble-${message.role}`">
-                <!-- Use v-html for potential markdown rendering later, or just <p> for plain text -->
-                <p>{{ message.content }}</p>
+                  <p v-if="message.content">{{ message.content }}</p>
+                  <div v-else-if="message.role === 'assistant'" class="typing-indicator">
+                      <span></span><span></span><span></span>
+                  </div>
               </div>
             </div>
-          </div>
-          
-          <!-- Loading Indicator -->
-          <div v-if="chatbotStore.isLoading" class="message-row message-row-assistant">
-            <div class="avatar avatar-assistant"><v-icon color="white">mdi-robot-happy-outline</v-icon></div>
-            <div class="message-content">
-              <div class="message-bubble bubble-assistant typing-indicator">
-                <span></span><span></span><span></span>
-              </div>
-            </div>
-          </div>
+          </div> 
         </div>
 
         <footer class="mikan-chat-footer">
@@ -84,34 +76,43 @@ const handleSendMessage = () => {
   userMessage.value = '';
 };
 
+
 // Function to scroll to the bottom of the chat
 const scrollToBottom = () => {
-  if (messageList.value) {
-    messageList.value.scrollTop = messageList.value.scrollHeight;
-  }
+  // Use a small timeout to ensure the DOM has fully rendered the new height
+  setTimeout(() => {
+    if (messageList.value) {
+      messageList.value.scrollTop = messageList.value.scrollHeight;
+    }
+  }, 50);
 };
 
-// Watch for new messages and scroll down
-watch(() => chatbotStore.messages.length, async () => {
-  // Use nextTick to wait for the DOM to update before scrolling
-  await nextTick();
-  scrollToBottom();
-});
+// ✨ NEW: A single deep watcher to handle all scrolling
+// This will trigger when a new message is added OR when the content of an existing message changes (i.e., streaming).
+watch(
+  () => chatbotStore.messages,
+  async () => {
+    // Wait for the DOM to update with the new content
+    await nextTick();
+    scrollToBottom();
+  },
+  { deep: true } // The key to making this work!
+);
 
-// Also watch for loading state changes
-watch(() => chatbotStore.isLoading, async (newValue) => {
-    if(newValue) {
-        await nextTick();
-        scrollToBottom();
+// Watch for when the chat window is opened to scroll to the bottom
+watch(() => chatbotStore.isOpen, async (newValue) => {
+    if (newValue) {
+      await nextTick();
+      scrollToBottom();
     }
-})
+});
 
 </script>
 
 <style scoped>
 /* --- Launcher Button Styling --- */
 .mikan-launcher-button {
-  background-color: #B71C1C; /* Vuetify red-darken-4 */
+  background-color: #c62828; /* Vuetify red-darken-4 */
   border: none;
   border-radius: 50%;
   height: 60px;
@@ -140,9 +141,10 @@ watch(() => chatbotStore.isLoading, async (newValue) => {
   width: 400px;
   height: 600px;
   max-height: calc(100vh - 120px);
+  border-color: #212529;
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -221,7 +223,7 @@ watch(() => chatbotStore.isLoading, async (newValue) => {
   flex-shrink: 0;
   background-color: #6c757d; /* Default for bot */
 }
-.avatar-user { background-color: #1976D2; } /* Vuetify primary blue */
+.avatar-user { background-color: #4CAF50; } /* Vuetify primary blue */
 .avatar .v-icon {
   font-size: 24px;
 }
@@ -242,7 +244,7 @@ watch(() => chatbotStore.isLoading, async (newValue) => {
 }
 .bubble-assistant { border-bottom-left-radius: 4px; }
 .bubble-user {
-  background-color: #1976D2; /* Vuetify primary blue */
+  background-color: #4CAF50; /* Vuetify primary blue */
   color: white;
   border-bottom-right-radius: 4px;
 }
@@ -271,7 +273,7 @@ watch(() => chatbotStore.isLoading, async (newValue) => {
 }
 .message-form input:focus {
     outline: none;
-    border-color: #1976D2;
+    border-color:  #4CAF50;
     box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
 }
 .message-form button {
@@ -279,7 +281,7 @@ watch(() => chatbotStore.isLoading, async (newValue) => {
   background: none;
   padding: 0.5rem;
   cursor: pointer;
-  color: #1976D2;
+  color: #4CAF50;
 }
 .message-form button .v-icon { font-size: 24px; }
 .message-form button:disabled {
@@ -291,7 +293,7 @@ watch(() => chatbotStore.isLoading, async (newValue) => {
 .typing-indicator span {
   height: 8px;
   width: 8px;
-  background-color: #6c757d;
+  background-color: #c62828;
   border-radius: 50%;
   display: inline-block;
   animation: bounce 1.4s infinite ease-in-out both;

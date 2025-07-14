@@ -45,9 +45,8 @@ You could try asking about specific action items, deadlines, or decisions mentio
 citation_prompt_template = ChatPromptTemplate.from_template("""
 You are a citation-finding expert. Based on the provided `Answer` and the `Source Context`, find the single, most relevant original transcript line from the `Source Context` that directly supports the `Answer`.
 
-- Respond with ONLY that exact transcript at the timestamp by the speaker in full with the following format: [timestamp including the square bracket for timestamp] [speaker name]: [content].  
-For example: '[00:07:32] Azfar: Rohimi is right. For Dan Savi, two loading bays are assigned, but we need strict time slots. We cannot have any overlap. And the Maylo Falcon S and CYD Nova EV are quite large. So maneuvering them into Center Court will require precise coordination with security. For Shaver Gaming, it is less about the size, but more about the volume of smaller crates and personal equipment. We need a clear path from the loading bay to the main event area without disrupting shoppers. I will map out specific routes and timings this afternoon.'
-'[00:04:18] Jet: Yes, I will confirm the custom rack specs with Tech Zone and email the dash dimensions to use partner by Saturday, July 12th. That should cover the immediate needs for the event.'
+- Respond with ONLY that exact line in full with the following format: [timestamp] [speaker name]: [content].  For example: '00:07:32 Azfar: Rohimi is right. For Dan Savi, two loading bays are assigned, but we need strict time slots. We cannot have any overlap. And the Maylo Falcon S and CYD Nova EV are quite large. So maneuvering them into Center Court will require precise coordination with security. For Shaver Gaming, it is less about the size, but more about the volume of smaller crates and personal equipment. We need a clear path from the loading bay to the main event area without disrupting shoppers. I will map out specific routes and timings this afternoon.
+'
 - Do not add any explanation or introductory text.
 - If no single line is a direct source for the answer, respond with the exact string "N/A".
 

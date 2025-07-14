@@ -111,6 +111,19 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
+  // ✨ ADDED: State for the highlighted transcript line
+  const highlightedLine = ref<string | null>(null);
+   
+  // ✨ ADDED: Action to set or clear the highlight
+  function setHighlightedLine(line: string | null) {
+    highlightedLine.value = line;
+    if (line) {
+        console.log(`Highlighting line: ${line}`);
+    } else {
+        console.log("Clearing highlight.");
+    }
+  }
+
   return {
     isEditMode,
     activeEditorKey,
@@ -119,6 +132,8 @@ export const useTranscriptStore = defineStore("transcript", () => {
     transcriptHeaderData,
     transcriptBodyData,
     fullTranscriptText,
+    highlightedLine,
+    setHighlightedLine,
     toggleEditMode,
     setActiveEditor,
     updateHeaderField,

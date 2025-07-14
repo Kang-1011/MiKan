@@ -1,27 +1,23 @@
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse # ✨ NEW IMPORT
 from pydantic import BaseModel
+from typing import List, Dict, Literal 
+import json
 
-# Import the core AI function from our other file
-from chatbot import get_ai_response
+# Import the two separated AI functions
+from chatbot import stream_answer, find_citation
 
 # --- FastAPI App Setup ---
-
 app = FastAPI(
     title="Mikan AI API",
     description="Backend for the Mikan Meeting Assistant with a context-aware chatbot.",
-    version="0.3.0"
+    version="1.1.0" # Version bump for new architecture
 )
 
-# CORS Middleware to allow communication with your Vue frontend
-origins = [
-    "http://localhost:5173",  # The default Vite/Vue dev server port
-    "http://localhost:3000",  # Common port for React/Next.js
-    "http://127.0.0.1:5173",
-    "http://localhost:8080",  # Common port for older Vue CLI
-]
-
+# CORS Middleware
+origins = ["*"] # Allow all for local dev
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -30,34 +26,51 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Pydantic Models for Request/Response ---
+# --- Pydantic Models for Requests/Responses ---
 
-class ChatRequest(BaseModel):
+# Model for the streaming request body 
+    
+class StreamRequest(BaseModel):
     query: str
     context: str
     context_name: str
+    messages: List[Dict]
 
-class ChatResponse(BaseModel):
+class CitationRequest(BaseModel):
     answer: str
+    context: str
 
-# --- API Endpoint ---
+class CitationResponse(BaseModel):
+    sourceLine: str
 
-@app.post("/chat-with-context/", response_model=ChatResponse)
-async def chat_with_context(request: ChatRequest):
+# --- API Endpoints ---
+
+@app.post("/stream-answer/")
+async def stream_answer_endpoint(request: StreamRequest):
     """
-    Receives a user query and context, calls the AI logic from chatbot.py,
-    and returns the response.
+    Receives a POST request with a body and returns a streaming response.
     """
-    print(f"Received chat query for context: {request.context_name}")
+    print(f"Streaming request received for query: '{request.query[:50]}...'")
+    # The generator function is now defined directly within the endpoint
+    async def event_generator():
+        try:
+            async for chunk in stream_answer(request.context, request.query, request.messages):
+                yield chunk
+        except Exception as e:
+            print(f"Error in stream_answer event_generator: {e}")
+            yield "An error occurred while streaming the response."
+            
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
 
+
+@app.post("/find-citation/", response_model=CitationResponse)
+async def find_citation_endpoint(request: CitationRequest):
+    """Receives context and an answer, returns the most relevant source line."""
+    print(f"Received citation request for answer: '{request.answer[:50]}...'")
     try:
-        # Call the imported function to get the AI's response
-        answer_text = get_ai_response(context=request.context, query=request.query)
-
-        print(f"Generated Answer: {answer_text}")
-        return {"answer": answer_text}
-
+        source_line = find_citation(context=request.context, answer=request.answer)
+        print(f"Returning Citation: {source_line}")
+        return {"sourceLine": source_line}
     except Exception as e:
-        # Handle any exceptions that occurred in the AI logic
-        print(f"An error occurred during LLM invocation: {e}")
-        raise HTTPException(status_code=500, detail="An error occurred while processing your request with the AI model.")
+        print(f"An error occurred during find_citation_endpoint: {e}")
+        raise HTTPException(status_code=500, detail="Error finding citation from AI model.")
