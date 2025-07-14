@@ -28,16 +28,13 @@ def add_draft(draft_data: DraftCreate, db: db_dependency):
 @router.put("/update_draft/{draft_id}", response_model=DraftOut)
 def update_draft(draft_id: int, draft_data: DraftUpdate, db: db_dependency):
     draft = db.query(Draft).filter(Draft.id == draft_id).first()
-
     if not draft:
         raise HTTPException(status_code=404, detail="Draft not found")
-
     for key, value in draft_data.dict(exclude_unset=True).items():
         setattr(draft, key, value)
-
     db.commit()
     db.refresh(draft)
-    print(f"Draft updated: " , {draft})
+    # print(f"Draft updated: " , {draft})
     return draft
 
 # approve one draft
@@ -46,13 +43,10 @@ def approve_one_draft(draft_id: int, draft_data: DraftApprove, db: db_dependency
     draft = db.query(Draft).filter(Draft.id == draft_id).first()
     if not draft:
         raise HTTPException(status_code=404, detail="Draft not found")
-
-    if draft.approved is not None:  
-        draft.approved = draft_data.approved
-        db.commit()
-        db.refresh(draft)
-        print("draft approved")
-
+    draft.approved = draft_data.approved
+    db.commit()
+    db.refresh(draft)
+    # print("draft approved")
     return draft
 
 # approve all drafts
@@ -63,7 +57,7 @@ def approve_all_drafts(draft_data: DraftApprove, db: db_dependency):
         draft.approved = draft_data.approved
         db.commit()
         db.refresh(draft)
-        print("draft approved")
+        # print("draft approved")
 
     return drafts
 

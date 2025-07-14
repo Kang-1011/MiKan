@@ -28,7 +28,7 @@ export const useDraftStore = defineStore("draft", {
           id: draft.id,
           title: draft.title,
           description: draft.description,
-          dueDate: draft.due_date,
+          dueDate: draft.due_date, 
           assignee: draft.assignee,
           project: draft.project,
           approved: draft.approved,
@@ -38,17 +38,6 @@ export const useDraftStore = defineStore("draft", {
         console.error("Error fetching drafts:", error);
       }
     },
-
-    // addDraft(newDraftData: Omit<DraftCreate, "id">) {
-    //   const draftWithId: DraftCreate = {
-    //     id:
-    //       this.drafts.length > 0
-    //         ? Math.max(...this.drafts.map((draft) => draft.id)) + 1
-    //         : 1,
-    //     ...newDraftData,
-    //   };
-    //   this.drafts.push(draftWithId);
-    // },
 
     async addDraft(draftData: {
       title: string;
@@ -67,7 +56,6 @@ export const useDraftStore = defineStore("draft", {
           project_id: draftData.project,
           approved: draftData.approved,
         });
-    
         console.log("Draft created:", response.data);
         this.drafts.push(response.data);
       } catch (error) {
@@ -86,16 +74,6 @@ export const useDraftStore = defineStore("draft", {
       }
     },
 
-    // editDraft(id: number, updatedDraftData: Partial<Omit<DraftCreate, 'id'>>) {
-    //   const index = this.drafts.findIndex((draft) => draft.id === id);
-    //   if (index !== -1) {
-    //     this.drafts[index] = { ...this.drafts[index], ...updatedDraftData };
-    //     console.log(`Draft with ID ${id} updated.`);
-    //   } else {
-    //     console.warn(`Draft with ID ${id} not found for editing.`);
-    //   }
-    // },
-
     async editDraft(draftId: number, draftData: {
       title: string;
       description: string;
@@ -110,7 +88,6 @@ export const useDraftStore = defineStore("draft", {
           due_date: draftData.dueDate,
           assignee_id: draftData.assignee,
           project_id: draftData.project,
-          approved: draftData.approved,
         });
         console.log("Draft modified:", response.data);    
         const index = this.drafts.findIndex(d => d.id === draftId);
@@ -122,27 +99,33 @@ export const useDraftStore = defineStore("draft", {
       }
     },
 
-    async approveByID(draftId: number) {
+    // async approveOneDraft(draftId: number) {
+    //   try {
+    //     const response = await axios.put(`http://127.0.0.1:8000/drafts/approve_draft/${draftId}`, {
+    //       approved: true,
+    //     });
+    //     const index = this.drafts.findIndex(d => d.id === draftId);
+    //     if (index !== -1) {
+    //       this.drafts[index] = response.data;
+    //     }
+    //   } catch (error) {
+    //     console.error(`Failed to approve draft ${draftId}:`, error);
+    //   }
+    // },
+
+    async approveOneDraft(draftId: number) {
       try {
-        const response = await axios.put(`http://127.0.0.1:8000/drafts/update_draft/${draftId}`, {
+        const response = await axios.put(`http://127.0.0.1:8000/drafts/approve_draft/${draftId}`, {
           approved: true,
         });
-    
-        const updatedDraft = response.data;
-    
         const index = this.drafts.findIndex(d => d.id === draftId);
         if (index !== -1) {
-          this.drafts[index] = {
-            ...this.drafts[index],
-            approved: updatedDraft.approved,
-          };
+          this.drafts[index] = response.data;
         }
-    
-        console.log(`Draft ${draftId} approved.`);
       } catch (error) {
         console.error(`Failed to approve draft ${draftId}:`, error);
       }
-    },
+    },    
 
     async approveAllDrafts() {
       try {
