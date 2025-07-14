@@ -63,9 +63,9 @@ export const useDraftStore = defineStore("draft", {
       }
     },    
     
-    async deleteDraft(id: number) {
-      const response = await axios.delete(`http://127.0.0.1:8000/drafts/update_draft/${draftId}`)
-    }
+    // async deleteDraft(id: number) {
+    //   const response = await axios.delete(`http://127.0.0.1:8000/drafts/update_draft/${draftId}`)
+    // }
     deleteDraft(id: number) {
       const initialLength = this.drafts.length;
       // Filter out the draft with the specified ID
