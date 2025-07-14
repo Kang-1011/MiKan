@@ -24,8 +24,6 @@ export const useDraftStore = defineStore("draft", {
       try {
         const response = await axios.get("http://localhost:8000/drafts");
         const data = response.data;
-    
-        // Map snake_case to camelCase
         this.drafts = data.map((draft: any) => ({          
           id: draft.id,
           title: draft.title,
@@ -35,14 +33,11 @@ export const useDraftStore = defineStore("draft", {
           project: draft.project,
           approved: draft.approved,
         }));
-    
         console.log(this.drafts);
       } catch (error) {
         console.error("Error fetching drafts:", error);
       }
     },
-    
-    
 
     // addDraft(newDraftData: Omit<DraftCreate, "id">) {
     //   const draftWithId: DraftCreate = {
@@ -67,7 +62,7 @@ export const useDraftStore = defineStore("draft", {
         const response = await axios.post('http://127.0.0.1:8000/drafts/add_draft', {
           title: draftData.title,
           description: draftData.description,
-          due_date: draftData.dueDate,  // Convert camelCase to snake_case
+          due_date: draftData.dueDate,
           assignee_id: draftData.assignee,
           project_id: draftData.project,
           approved: draftData.approved,
@@ -91,19 +86,80 @@ export const useDraftStore = defineStore("draft", {
       }
     },
 
-    editDraft(id: number, updatedDraftData: Partial<Omit<DraftCreate, 'id'>>) {
-      const index = this.drafts.findIndex((draft) => draft.id === id);
-      if (index !== -1) {
-        this.drafts[index] = { ...this.drafts[index], ...updatedDraftData };
-        console.log(`Draft with ID ${id} updated.`);
-      } else {
-        console.warn(`Draft with ID ${id} not found for editing.`);
+    // editDraft(id: number, updatedDraftData: Partial<Omit<DraftCreate, 'id'>>) {
+    //   const index = this.drafts.findIndex((draft) => draft.id === id);
+    //   if (index !== -1) {
+    //     this.drafts[index] = { ...this.drafts[index], ...updatedDraftData };
+    //     console.log(`Draft with ID ${id} updated.`);
+    //   } else {
+    //     console.warn(`Draft with ID ${id} not found for editing.`);
+    //   }
+    // },
+
+    async editDraft(draftId: number, draftData: {
+      title: string;
+      description: string;
+      dueDate: string;
+      assignee: number;
+      project: number;
+    }) {
+      try {
+        const response = await axios.put(`http://127.0.0.1:8000/drafts/update_draft/${draftId}`, {
+          title: draftData.title,
+          description: draftData.description,
+          due_date: draftData.dueDate,
+          assignee_id: draftData.assignee,
+          project_id: draftData.project,
+          approved: draftData.approved,
+        });
+        console.log("Draft modified:", response.data);    
+        const index = this.drafts.findIndex(d => d.id === draftId);
+        if (index !== -1) {
+          this.drafts[index] = response.data;
+        }
+      } catch (error) {
+        console.error("Failed to modify draft:", error);
       }
     },
 
-    approveAllDrafts() {
-      this.drafts = []
+    async approveByID(draftId: number) {
+      try {
+        const response = await axios.put(`http://127.0.0.1:8000/drafts/update_draft/${draftId}`, {
+          approved: true,
+        });
+    
+        const updatedDraft = response.data;
+    
+        const index = this.drafts.findIndex(d => d.id === draftId);
+        if (index !== -1) {
+          this.drafts[index] = {
+            ...this.drafts[index],
+            approved: updatedDraft.approved,
+          };
+        }
+    
+        console.log(`Draft ${draftId} approved.`);
+      } catch (error) {
+        console.error(`Failed to approve draft ${draftId}:`, error);
+      }
     },
+
+    async approveAllDrafts() {
+      try {
+        const response = await axios.put('http://127.0.0.1:8000/drafts/approve_all_drafts', {
+          approved: true,
+        });
+    
+        this.drafts = this.drafts.map(draft => ({
+          ...draft,
+          approved: true,
+        }));
+        console.log("All drafts approved:", response.data);
+        await this.fetchFromAPI();
+      } catch (error) {
+        console.error("Failed to approve drafts:", error);
+      }
+    },    
 
     getDraftById(id: number): DraftCreate | undefined {
       return this.drafts.find(draft => draft.id === id);

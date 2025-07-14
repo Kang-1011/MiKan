@@ -8,7 +8,7 @@ db_dependency = Annotated[Session, Depends(get_db)]
 # get all drafts
 @router.get("/", response_model=List[DraftOut])
 def get_drafts(db: db_dependency):
-    drafts = db.query(Draft).filter(Draft.approved == 'False')
+    drafts = db.query(Draft).filter(Draft.approved == False)
     return drafts
 
 # create new draft manually
