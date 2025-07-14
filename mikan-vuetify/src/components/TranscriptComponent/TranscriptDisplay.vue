@@ -288,20 +288,20 @@
             :class="{ 'editable-field': isEditMode }"
             @click="isEditMode && setActiveEditor('transcript')"
           >
-            <div
-              v-for="(line, index) in body.transcriptLines"
-              :key="index"
-              class="transcript-line"
-              :class="{ highlight: line.transcript === highlightedLine }"
-              :ref="(el) => setLineRef(el, line.transcript)"
-            >
-              <span class="speaker-info"
-                >{{ parseLine(line.transcript).speaker }}:</span
+          <div
+                v-for="(line, index) in body.transcriptLines"
+                :key="index"
+                class="transcript-line"
+                :class="{ highlight: normalizeString(line.transcript) === activelyHighlightedLine }"
+                :ref="(el) => setLineRef(el, line.transcript)"
               >
-              <span class="content">{{
-                parseLine(line.transcript).content
-              }}</span>
-            </div>
+                <span class="speaker-info"
+                  >{{ parseLine(line.transcript).speaker }}:</span
+                >
+                <span class="content">{{
+                  parseLine(line.transcript).content
+                }}</span>
+              </div>
           </div>
           <VConfirmEdit
             v-if="isEditMode && activeEditorKey === 'transcript'"
@@ -554,46 +554,79 @@ const exportToPDF = () => {
   console.log("Styled, text-based Transcript PDF generation complete.");
 };
 
-// --- ✨ HIGHLIGHT & SCROLL LOGIC ---
+// transcript.vue -> <script setup> section
 
-const { lastSourceLine } = storeToRefs(chatbotStore);
+// --- ✨ START: UNIFIED HIGHLIGHT & SCROLL LOGIC ---
+
+const { lastSourceLine } = storeToRefs(chatbotStore); 
 const lineRefs = new Map();
 
+// ✅ NEW: A dedicated reactive state to hold the full, matched line
+const activelyHighlightedLine = ref(null);
+
+// Helper to normalize strings for comparison (removes extra whitespace)
 const normalizeString = (str) => {
   if (!str) return "";
   return str.trim().replace(/\s+/g, " ");
 };
 
+// Function to populate the map of refs
 const setLineRef = (el, line) => {
   if (el) {
     lineRefs.set(normalizeString(line), el);
   }
 };
 
+// Watch for a new source line from the chatbot
 watch(lastSourceLine, (newLine) => {
   transcriptStore.setHighlightedLine(newLine);
 });
 
+// ✅ MODIFIED: This watcher now sets the 'activelyHighlightedLine' state
+// which drives BOTH highlighting and scrolling.
 watch(highlightedLine, (newVal) => {
+  // If the citation from the AI exists...
   if (newVal) {
     nextTick(() => {
-      const normalizedKey = normalizeString(newVal);
-      const targetElement = lineRefs.get(normalizedKey);
+      const partialNormalizedKey = normalizeString(newVal);
+      if (!partialNormalizedKey) {
+        activelyHighlightedLine.value = null;
+        return;
+      }
 
-      if (targetElement) {
-        console.log("✅ Element found, scrolling to:", targetElement);
-        targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      let foundKey = null;
+
+      // Iterate through the full, original lines to find a match
+      for (const fullLineKey of lineRefs.keys()) {
+        if (fullLineKey.includes(partialNormalizedKey)) {
+          foundKey = fullLineKey; // We found the full line!
+          break;
+        }
+      }
+
+      // If a match was found...
+      if (foundKey) {
+        const targetElement = lineRefs.get(foundKey);
+        // 1. Set the state for the visual highlight
+        activelyHighlightedLine.value = foundKey;
+        // 2. Scroll to the element
+        if (targetElement) {
+          console.log(`✅ Match found! Highlighting and scrolling to: "${foundKey}"`);
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       } else {
-        console.error(
-          `❌ Target element not found in map for normalized key: "${normalizedKey}"`
-        );
+        // If no match was found, clear the highlight
+        activelyHighlightedLine.value = null;
+        console.error(`❌ No match found for partial key: "${partialNormalizedKey}"`);
       }
     });
+  } else {
+    // If the citation from the AI is cleared, clear our highlight state
+    activelyHighlightedLine.value = null;
   }
 });
 
-// --- END HIGHLIGHT & SCROLL LOGIC ---
-
+// --- ✨ END: UNIFIED HIGHLIGHT & SCROLL LOGIC ---
 const updateChatContext = () => {
   const headerData = transcriptHeaderData.value;
   const bodyData = body.value;

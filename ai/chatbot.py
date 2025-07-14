@@ -43,13 +43,17 @@ You could try asking about specific action items, deadlines, or decisions mentio
 
 # 2. CITATION TEMPLATE: Focused only on finding the source line.
 citation_prompt_template = ChatPromptTemplate.from_template("""
+
 You are a citation-finding expert. Based on the provided `Answer` and the `Source Context`, find the single, most relevant original transcript line from the `Source Context` that directly supports the `Answer`.
 
-- Respond with ONLY that exact transcript at the timestamp by the speaker in full with the following format: [timestamp including the square bracket for timestamp] [speaker name]: [content].  
-For example: '[00:07:32] Azfar: Rohimi is right. For Dan Savi, two loading bays are assigned, but we need strict time slots. We cannot have any overlap. And the Maylo Falcon S and CYD Nova EV are quite large. So maneuvering them into Center Court will require precise coordination with security. For Shaver Gaming, it is less about the size, but more about the volume of smaller crates and personal equipment. We need a clear path from the loading bay to the main event area without disrupting shoppers. I will map out specific routes and timings this afternoon.'
-'[00:04:18] Jet: Yes, I will confirm the custom rack specs with Tech Zone and email the dash dimensions to use partner by Saturday, July 12th. That should cover the immediate needs for the event.'
-- Do not add any explanation or introductory text.
+- Your primary goal is to return exactly ONE line.
+- Respond with ONLY that exact transcript line at the timestamp by the speaker in full. Your response MUST begin with the timestamp.
+- For example: '[00:07:32] Azfar: Rohimi is right. For Dan Savi, two loading bays are assigned, but we need strict time slots. We cannot have any overlap. And the Maylo Falcon S and CYD Nova EV are quite large. So maneuvering them into Center Court will require precise coordination with security. For Shaver Gaming, it is less about the size, but more about the volume of smaller crates and personal equipment. We need a clear path from the loading bay to the main event area without disrupting shoppers. I will map out specific routes and timings this afternoon.'
+- For example: `[00:04:18] Jet: Yes, I will confirm the custom rack specs with Tech Zone and email the dash dimensions to use partner by Saturday, July 12th. That should cover the immediate needs for the event.`
+- DO NOT add any explanation, introductory text, or any other content.
+- DO NOT return multiple lines, even if multiple lines seem relevant. Choose the one that provides the most critical information supporting the answer.
 - If no single line is a direct source for the answer, respond with the exact string "N/A".
+
 
 Source Context:
 ---

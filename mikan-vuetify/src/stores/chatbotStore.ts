@@ -82,15 +82,28 @@ export const useChatbotStore = defineStore('chatbot', {
           lastMessage.content += value;
         }
 
-        // Now that the full answer is received, find the citation
-        const citationResponse = await axios.post(`${backendUrl}/find-citation/`, {
-            answer: lastMessage.content,
-            context: payload.context,
-        });
+      // Now that the full answer is received, find the citation
+      const citationResponse = await axios.post(`${backendUrl}/find-citation/`, {
+          answer: lastMessage.content,
+          context: payload.context,
+      });
 
-        if (citationResponse.data && citationResponse.data.sourceLine) {
-            this.lastSourceLine = citationResponse.data.sourceLine;
-        }
+      if (citationResponse.data && citationResponse.data.sourceLine) {
+          let source = citationResponse.data.sourceLine;
+          
+          // ✅ START: NEW ROBUST HANDLING
+          // Check for multiple timestamps, which indicate multiple lines
+          const timestamps = source.match(/\[\d{2}:\d{2}:\d{2}\]/g);
+
+          if (timestamps && timestamps.length > 1) {
+              console.warn("Multiple citation lines received from backend. Using the first one.");
+              // Split the string at the second timestamp and keep only the first part
+              source = source.substring(0, source.indexOf(timestamps[1])).trim();
+          }
+          // ✅ END: NEW ROBUST HANDLING
+
+          this.lastSourceLine = source;
+      }
 
       } catch (error) {
         console.error("Chatbot API error:", error);
