@@ -18,10 +18,10 @@
                         </a>
                     </div> -->
                     <AudioRecordDialog v-model="audioRecordDialog" />
-                    <AudioUploadDialog v-model="audioUploadDialog" />
+                    <AudioUploadDialog v-model="audioUploadDialog" @close-dialog="audioUploadDialog = false"/>
 
                     <v-row class="d-flex align-center justify-center">
-                        <!-- Script Card -->
+                        <!-- Live Transcription Card -->
                         <v-col cols="12" md="5" lg="4">
                             <v-card class="story-card rounded-xl pa-4 text-center d-flex flex-column" height="100%"
                                 @click="audioRecordDialog = true">
@@ -39,7 +39,7 @@
 
                                 <v-card-title class="font-weight-bold text-h5">Live Transcription</v-card-title>
                                 <v-card-text class="text-grey-lighten-1 flex-grow-1">
-                                    Transcribe your meeting in real time using your microphone. Ideal for capturing
+                                    Transcribe audio in real time using your microphone. Ideal for capturing
                                     discussions as they happen.
                                 </v-card-text>
 
@@ -52,7 +52,7 @@
                             </v-card>
                         </v-col>
 
-                        <!-- Storyboard Card -->
+                        <!-- Audio Upload Card -->
                         <v-col cols="12" md="5" lg="4">
                             <v-card class="story-card rounded-xl pa-4 text-center d-flex flex-column" height="100%"
                                 @click="audioUploadDialog = true">
