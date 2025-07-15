@@ -130,6 +130,7 @@
           @add-task="() => $emit('add-task', boardIndex, sIndex)"
           @open-task-dialog="tIdx => $emit('open-task-dialog', boardIndex, sIndex, tIdx)"
           @delete-stage="sIdx => $emit('delete-stage', boardIndex, sIdx)"
+		  @task-dropped="taskDropped"
          />
        </template>
      </draggable>
@@ -168,7 +169,8 @@ const emit = defineEmits([
   'delete-stage',
   'add-task',
   'open-task-dialog',
-  'rename-stage'
+  'rename-stage',
+  'task-updated'
 ])
 
 const isEditing = ref(false)
@@ -238,6 +240,9 @@ const filteredStages = computed(() =>
   }))
 )
 
+function taskDropped(taskId, payload) {
+  emit('task-updated', taskId, payload)
+}
 
 
 </script>

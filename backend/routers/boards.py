@@ -21,6 +21,7 @@ def get_project_boards(db: db_dependency):
 				Task.due_date,
 				Task.priority,
                 
+				User.id.label("assignee_id"),
 				User.name.label("assignee_name"),
 				User.username.label("assignee_username"),
                 
@@ -81,6 +82,7 @@ def get_project_boards(db: db_dependency):
                 task_tracker[task_id] = {
                     "id": task_id,
                     "title": row["task_title"],
+                    "assignee_id": row["assignee_id"],
                     "assignee": row["assignee_name"] or "Unassigned",
                     "dueDate": row["due_date"],
                     "priority": row["priority"],
