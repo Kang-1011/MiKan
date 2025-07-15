@@ -45,7 +45,7 @@
 
             <v-card-actions class="justify-end mb-2">
                 <div v-if="stopped">
-                    <v-btn @click="resetRecording" variant="outlined" class="text-body-2 mr-4 rounded-lg"
+                    <v-btn @click="resetRecording" variant="outlined" class="text-body-2 mr-2 rounded-lg"
                         color="grey-darken-1" :disabled="isTranscribing">
                         Retake
                     </v-btn>
