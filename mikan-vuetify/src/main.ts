@@ -33,7 +33,6 @@ const app = createApp(App);
 app.use(vuetify);
 registerPlugins(app);
 const pinia = createPinia();
-app.use(pinia);
 app.use(PrimeVue, {
     theme: {
         preset: Aura
