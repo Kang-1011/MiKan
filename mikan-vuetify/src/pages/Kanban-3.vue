@@ -1,5 +1,5 @@
 <template  >
-      <Sidebar3 @select-project="selectedBoard = $event" />
+      <Sidebar @select-project="selectedBoard = $event" />
 
       <v-app-bar  v-if="showDevBar" app fixed color="white" elevation="2">
       <v-toolbar-title>Developer Mode!!!</v-toolbar-title>
