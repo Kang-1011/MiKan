@@ -16,11 +16,6 @@ from routers.subtasks import router as subtasks_router
 from routers.boards import router as boards_router
 from routers.chatbot import router as chatbot_router 
 
-
-from fastapi.responses import StreamingResponse # ✨ NEW IMPORT
-from pydantic import BaseModel
-from typing import List, Dict, Literal 
-
 app = FastAPI()
 create_tables()
 db_dependency = Annotated[Session, Depends(get_db)]
