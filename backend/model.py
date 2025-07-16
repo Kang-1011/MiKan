@@ -295,6 +295,9 @@ class DraftUpdate(BaseModel):
     due_date: Optional[date] = None
     approved: Optional[bool] = None
 
+class DraftApprove(BaseModel):
+    approved: bool = True
+
 class DraftOut(BaseModel):
     id: int
     title: str

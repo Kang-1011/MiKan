@@ -8,7 +8,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppFooter: typeof import('./components/AppFooter.vue')['default']
     AttachmentManager: typeof import('./components/MyTasksComponent/AttachmentManager.vue')['default']
     AudioConverter: typeof import('./components/AudioComponent/AudioConverter.vue')['default']
     AudioRecordDialog: typeof import('./components/AudioComponent/AudioRecordDialog.vue')['default']
@@ -26,13 +25,11 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('./components/HomepageComponent/Sidebar.vue')['default']
     'Sidebar(Deprecated)': typeof import('./components/HomepageComponent/Sidebar(Deprecated).vue')['default']
-    Sidebar3: typeof import('./components/HomepageComponent/Sidebar.vue')['default']
     Stage23: typeof import('./components/MyTasksComponent/Stage2-3.vue')['default']
     Stage31: typeof import('./components/MyTasksComponent/Stage3-1.vue')['default']
     TaskCard23: typeof import('./components/MyTasksComponent/TaskCard2-3.vue')['default']
     TaskDetail: typeof import('./components/MyTasksComponent/TaskDetail.vue')['default']
     TaskDraft: typeof import('./components/ManagerReviewComponent/TaskDraft.vue')['default']
-    'TaskDraft(Deprecated)': typeof import('./components/ManagerReviewComponent/TaskDraft(Deprecated).vue')['default']
     TaskDraftApproveOneTaskButton: typeof import('./components/ManagerReviewComponent/TaskDraftApproveOneTaskButton.vue')['default']
     TaskDraftDeleteOneTaskButton: typeof import('./components/ManagerReviewComponent/TaskDraftDeleteOneTaskButton.vue')['default']
     TaskDraftEditOneTaskButton: typeof import('./components/ManagerReviewComponent/TaskDraftEditOneTaskButton.vue')['default']

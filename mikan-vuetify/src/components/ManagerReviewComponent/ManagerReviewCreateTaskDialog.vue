@@ -12,11 +12,13 @@
                         rounded="lg" type="date" class="mb-1" :rules="[(v) => !!v || 'Due date is required']"
                         :min="tomorrowDate"></v-text-field>
 
-                    <v-text-field clearable label="Assignee" variant="outlined" density="compact" v-model="assignee"
-                        rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Assignee is required']"></v-text-field>
+                    <v-select v-model="assignee" :items="assigneeOptions" item-title="name" item-value="id" label="Assignee" 
+                        clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                        :rules="[(v) => !!v || 'Assignee is required']" />
 
-                    <v-text-field clearable label="Project" variant="outlined" density="compact" v-model="project"
-                        rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']"></v-text-field>
+                    <v-select v-model="project" :items="projectOptions" item-title="title" item-value="id" label="Project" 
+                        clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                        :rules="[(v) => !!v || 'Project is required']" />
 
                     <v-textarea clearable label="Task Description" variant="outlined" density="compact"
                         v-model="description" rounded="lg" rows="3" class="mb-0"
@@ -36,14 +38,34 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from 'vue'
+import { useUserStore } from '@/stores/users'
+import { useProjectStore } from '@/stores/projects'
 import { useDraftStore } from "@/stores/drafts";
+
+// display assignee names on dropdown
+const userStore = useUserStore()
+onMounted(() => {
+  if (userStore.users.length === 0) {
+    userStore.fetchUsers()
+  }
+})
+const assignee = ref(null)
+const assigneeOptions = computed(() => userStore.users)
+
+// display project titles on dropdown
+const projectStore = useProjectStore()
+onMounted(() => {
+  if (projectStore.projects.length === 0) {
+    projectStore.fetchProjects()
+}
+})
+const project = ref(null)
+const projectOptions = computed(() => projectStore.projects)
 
 const draftStore = useDraftStore();
 const title = ref("");
 const dueDate = ref("");
-const assignee = ref("");
-const project = ref("");
 const description = ref("");
 
 const emit = defineEmits(["close-create-task-dialog", "pass-created-task"]);
@@ -71,7 +93,8 @@ function clearAllFields() {
     description.value = "";
 }
 
-function closeDialog() {
+// match FastAPI field 
+    function closeDialog() {
     emit("close-create-task-dialog");
     clearAllFields();
     // Reset validation state when closing the dialog
@@ -81,7 +104,6 @@ function closeDialog() {
 }
 
 async function createDraft() {
-    // Validate the form
     const { valid } = await taskForm.value.validate();
 
     if (valid) {
@@ -91,16 +113,22 @@ async function createDraft() {
             assignee: assignee.value,
             project: project.value,
             description: description.value,
+            approved: false
         };
 
-        draftStore.addDraft(newDraft);
-
-        emit("pass-created-task");
-        clearAllFields();
-        // Reset validation state after successful submission
-        if (taskForm.value) {
-            taskForm.value.resetValidation();
+        try {
+            await draftStore.addDraft(newDraft); // <-- make sure to await
+            emit("pass-created-task");
+            clearAllFields();
+            // Reset validation state after successful submission
+            if (taskForm.value) {
+                taskForm.value.resetValidation();
+            }
+        } catch (error) {
+            console.error("Failed to create draft from UI:", error);
         }
+        
     }
 }
+
 </script>
