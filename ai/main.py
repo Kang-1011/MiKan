@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # Import the core AI function from our other file
-from chatbot2 import get_ai_response
+from chatbot import get_ai_response
 
 # --- FastAPI App Setup ---
 

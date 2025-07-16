@@ -116,22 +116,19 @@
           <!-- Assignee -->
           <div class="input-label small-gap">Assignee</div>
           <v-combobox
-            v-model="localTask.assignee"
-            transition="scale-transition"
-            :items="assigneeOptions"
-
-            label="Select assignee"
-            clearable
-            dense
-            hide-details
-            single-line
-            variant="outlined"
-            density="compact"
-            class="rounded-xl border-sm small-gap"
-            :menu-props="{
-          contentClass: 'rounded-xl text-body-2',
-          }"
-          />
+			:model-value="localTask.assignee_id"
+			:items="assigneeOptions"
+			item-title="name"
+			item-value="id"
+			label="Select assignee"
+			clearable
+			dense
+			hide-details
+			variant="outlined"
+			density="compact"
+			class="rounded-xl border-sm small-gap"
+			@update:modelValue="onAssigneeSelect"
+			/>
 
           <!-- Priority -->
           <div class="input-label small-gap">Priority</div>
@@ -151,33 +148,33 @@
           }"
         />
 
-        <!-- Due Date -->
-<div class="input-label small-gap">Due Date</div>
-<v-menu
-  v-model="dateMenu"
-  :close-on-content-click="false"
-  transition="scale-transition"
->
-  <template #activator="{ props }">
-    <v-text-field
-      v-model="formattedDate"
-      variant="outlined"
-      density="compact"
-      hide-details
-      prepend-inner-icon="mdi-calendar"
-      class="rounded-xl border-md text-body-2"
-      placeholder="Due Date"
-      v-bind="props"
-    />
-  </template>
+        <!-- Due Date --><div class="input-label small-gap">Due Date</div>
+		<v-menu
+		v-model="dateMenu"
+		:close-on-content-click="false"
+		transition="scale-transition"
+		>
+		<template #activator="{ props }">
+			<v-text-field
+			:model-value="formattedDate"
+			readonly
+			variant="outlined"
+			density="compact"
+			hide-details
+			prepend-inner-icon="mdi-calendar"
+			class="rounded-xl border-md text-body-2"
+			placeholder="Due Date"
+			v-bind="props"
+			/>
+		</template>
 
-  <v-date-picker
-    v-model="localTask.dueDate"
-    @update:model-value="dateMenu = false"
-    class="rounded-xl border-md text-body-2"
-    no-title
-  />
-</v-menu>
+		<v-date-picker
+			v-model="localTask.dueDate"
+			@update:model-value="dateMenu = false"
+			class="rounded-xl border-md text-body-2"
+			no-title
+		/>
+		</v-menu>
 
           <!-- Comments input -->
           <div class="input-label small-gap">Add Comment</div>
@@ -242,13 +239,19 @@ const newComment = ref('')
 // derive assignee list dynamically from your boards store
 
 const assigneeOptions = computed(() => {
-  const set = new Set<string>()
+  const map = new Map<number, string>()
+
   boards.value.forEach(b =>
     b.stages.forEach(sg =>
-      sg.tasks.forEach(t => t.assignee && set.add(t.assignee))
+      sg.tasks.forEach(t => {
+        if (t.assignee_id && t.assignee) {
+          map.set(t.assignee_id, t.assignee)
+        }
+      })
     )
   )
-  return Array.from(set)
+
+  return Array.from(map.entries()).map(([id, name]) => ({ id, name }))
 })
 
 const descRef = ref<HTMLTextAreaElement | null>(null)
@@ -269,43 +272,48 @@ onMounted(() => {
 
 // Auto-grow each time dialog opens
 watch(internalDialogOpen, open => {
-   if (!open) return
-   // 1) Reset the localTask snapshot to the latest props.task
-   if (props.task) {
-    // shallow‐clone so File instances aren’t lost
+  if (!open) return
+  if (props.task) {
     const t = props.task
     const copy: any = {
       ...t,
-      subtasks:       [...(t.subtasks       || [])],
-      attachments:    [...(t.attachments    || [])],
-      autostart:      [...(t.autostart      || [])],
+      subtasks: [...(t.subtasks || [])],
+      attachments: [...(t.attachments || [])],
+      autostarts: [...(t.autostarts || [])],
       ai_attachments: [...(t.ai_attachments || [])],
-      comments:       (t.comments || []).map(x =>
+      comments: (t.comments || []).map(x =>
         typeof x === 'string' ? { text: x, date: new Date() } : { ...x }
       ),
+      assignee_id: t.assignee_id
     }
     localTask.value = copy
   } else {
-     // If no task, clear out any previous edits
-     localTask.value = {
-       title:       '',
-       description: '',
-       subtasks:    [],
-       attachments: [],
-       autostart:   [],
-       ai_attachments: [],
-       comments:    [],
-       assignee:    '',
-       priority:    '',
-       dueDate:     '',
-     }
-   }
-   // 2) Then auto-grow the textarea as before
-   nextTick(() => {
-     if (descRef.value) autoGrowDesc({ target: descRef.value } as any)
-   })
- })
+    localTask.value = {
+      title: '',
+      description: '',
+      subtasks: [],
+      attachments: [],
+      autostarts: [],
+      ai_attachments: [],
+      comments: [],
+      assignee_id: null,
+      priority: '',
+      dueDate: '',
+      status: 'to-do'
+    }
+  }
+})
 
+function onAssigneeSelect(selected: number | { id: number; name: string }) {
+  if (typeof selected === 'object' && selected !== null) {
+    localTask.value.assignee_id = selected.id
+    localTask.value.assignee = selected.name
+  } else {
+    const assignee = assigneeOptions.value.find(a => a.id === selected)
+    localTask.value.assignee_id = selected
+    localTask.value.assignee = assignee ? assignee.name : ''
+  }
+}
 
 const formattedDate = computed({
   get() {
@@ -323,11 +331,21 @@ const formattedDate = computed({
 function closeDialog() {
   emit('update:modelValue', false)
 }
-function save() {
-  if (localTask.value) {
-    emit('save-task', localTask.value)
-    closeDialog()
-  }
+async function save() {
+  if (!localTask.value) return;
+
+  const payload = {
+    assignee_id: localTask.value.assignee_id,
+    title: localTask.value.title,
+    description: localTask.value.description,
+    due_date: localTask.value.dueDate 
+      ? new Date(localTask.value.dueDate).toISOString().slice(0, 10) 
+      : null,
+    priority: localTask.value.priority,
+	status: localTask.value.status};
+
+  console.log(payload.due_date);
+  emit('save-task', localTask.value.id, payload)
 }
 function addSubtask() {
   localTask.value.subtasks.push('')
