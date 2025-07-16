@@ -61,7 +61,7 @@ export const useChatbotStore = defineStore('chatbot', {
         };
 
         // ✨ Use the Fetch API to handle the stream
-        const response = await fetch(`${backendUrl}/stream-answer/`, {
+        const response = await fetch(`${backendUrl}/chatbot/stream-answer/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -83,7 +83,7 @@ export const useChatbotStore = defineStore('chatbot', {
         }
 
       // Now that the full answer is received, find the citation
-      const citationResponse = await axios.post(`${backendUrl}/find-citation/`, {
+      const citationResponse = await axios.post(`${backendUrl}/chatbot/find-citation/`, {
           answer: lastMessage.content,
           context: payload.context,
       });
