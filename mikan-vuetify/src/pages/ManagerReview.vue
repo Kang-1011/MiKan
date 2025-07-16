@@ -46,7 +46,7 @@
                     <v-row>
                         <v-col cols="12" sm="6" md="4" v-for="draft in draftStore.drafts" :key="draft.id">
                             <TaskDraft :taskIndex="draft.id" :title="draft.title" :dueDate="draft.dueDate"
-                                :assignee="draft.assignee" :project="draft.project" :description="draft.description"
+                                :assignee="draft.assignee.name" :project="draft.project.title" :description="draft.description"
                                 @task-approved="oneTaskApproved($event)" @task-deleted="oneTaskDeleted($event)"
                                 @task-edited="oneTaskEdited($event)"></TaskDraft>
                         </v-col>
@@ -71,7 +71,6 @@
 
 <script setup>
 import { ref } from "vue";
-import { useDraftStore } from "@/stores/drafts";
 import ApproveAllDialog from "@/components/ManagerReviewComponent/ManagerReviewApproveAllDialog.vue";
 import CreateTaskDialog from "@/components/ManagerReviewComponent/ManagerReviewCreateTaskDialog.vue";
 import TaskDraft from "@/components/ManagerReviewComponent/TaskDraft.vue";
@@ -79,6 +78,12 @@ const newTaskDialogFlag = ref(false);
 const approveAllDialogFlag = ref(false);
 import { useChatbotStore } from '@/stores/chatbotStore'; // 1. Import the chatbot store 
 const chatbotStore = useChatbotStore(); // 2. Create an instance of the chatbot store
+
+import { useDraftStore } from "@/stores/drafts";
+const draftStore = useDraftStore();
+onMounted(async () => {
+  await draftStore.fetchFromAPI();
+});
 
 import Toast from 'primevue/toast';
 import { useToast } from "primevue/usetoast";
@@ -92,8 +97,6 @@ const showBottomRight = (paramSeverity, paramSummary) => {
 const snackbar = ref(false);
 const snackbarMessage = ref("");
 const snackbarColor = ref("");
-
-const draftStore = useDraftStore();
 
 function openCreateTaskDialog() {
     newTaskDialogFlag.value = true;
@@ -192,8 +195,6 @@ onUnmounted(() => {
   chatbotStore.clearPageContext();
   console.log("Chatbot context CLEARED.");
 });
-
-
 
 </script>
 
