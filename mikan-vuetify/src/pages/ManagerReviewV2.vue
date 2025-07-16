@@ -84,10 +84,6 @@ const draftStore = useDraftStore();
 onMounted(async () => {
   await draftStore.fetchFromAPI();
 });
-// import { drafts, fetchDrafts } from '@/stores/dummy';
-// onMounted(() => {
-//     fetchDrafts();
-// });
 
 import Toast from 'primevue/toast';
 import { useToast } from "primevue/usetoast";
