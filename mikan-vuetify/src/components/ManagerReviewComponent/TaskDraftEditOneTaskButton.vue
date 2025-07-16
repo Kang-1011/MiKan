@@ -14,14 +14,10 @@
                             rounded="lg" type="date" class="mb-1" :rules="[(v) => !!v || 'Due date is required']"
                             :min="tomorrowDate"></v-text-field>
 
-                        <!-- <v-text-field clearable label="Assignee" variant="outlined" density="compact" v-model="assignee"
-                            rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Assignee is required']"></v-text-field> -->
                         <v-select v-model="assignee" :items="assigneeOptions" item-title="name" item-value="id" label="Assignee" 
                             clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
                             :rules="[(v) => !!v || 'Assignee is required']" />
-<!-- 
-                        <v-text-field clearable label="Project" variant="outlined" density="compact" v-model="project"
-                            rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']"></v-text-field> -->
+
                         <v-select v-model="project" :items="projectOptions" item-title="title" item-value="id" label="Project" 
                             clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
                             :rules="[(v) => !!v || 'Project is required']" />
@@ -57,11 +53,6 @@ const draftStore = useDraftStore()
 // display assignee names on dropdown
 import { useUserStore } from '@/stores/users'
 const userStore = useUserStore()
-// onMounted(() => {
-//   if (userStore.users.length === 0) {
-//     userStore.fetchUsers()
-//   }
-// })
 onMounted(() => {
         userStore.fetchUsers()
 })
@@ -71,11 +62,6 @@ const assigneeOptions = computed(() => userStore.users)
 // display project titles on dropdown
 import { useProjectStore } from '@/stores/projects'
 const projectStore = useProjectStore()
-// onMounted(() => {
-//   if (projectStore.projects.length === 0) {
-//     projectStore.fetchProjects()
-// }
-// })
 onMounted(() => {
     projectStore.fetchProjects()
 })
@@ -127,31 +113,6 @@ function cancel() {
     dialog.value = false;
 }
 
-// async function save() {
-//     // Validate the form
-//     const { valid } = await taskForm.value.validate();
-
-//     if (valid) {
-//         dialog.value = false;
-//         // emit("task-edited");
-//         emit("task-edited", editedDraft);
-
-
-//         const editedDraft = {
-//             title: taskTitle.value,
-//             dueDate: dueDate.value,
-//             assignee: assignee.value,
-//             project: project.value,
-//             description: taskDescription.value,
-//         }
-//         draftStore.editDraft(taskIndex, editedDraft);
-
-//         // Reset validation state after successful submission
-//         if (taskForm.value) {
-//             taskForm.value.resetValidation();
-//         }
-//     }
-// }
 async function save() {
     const { valid } = await taskForm.value.validate();
 
