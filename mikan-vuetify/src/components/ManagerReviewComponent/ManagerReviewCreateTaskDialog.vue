@@ -123,9 +123,11 @@ async function createDraft() {
             // Reset validation state after successful submission
             if (taskForm.value) {
                 taskForm.value.resetValidation();
+            }
         } catch (error) {
             console.error("Failed to create draft from UI:", error);
         }
+        
     }
 }
 
