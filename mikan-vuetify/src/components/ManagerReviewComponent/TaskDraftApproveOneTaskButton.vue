@@ -45,12 +45,6 @@ defineExpose({ openDialog })
 const taskIndex = inject("taskIndex");
 const emit = defineEmits(["task-approved"])
 
-// function approveDraft() {
-//     console.log("Approve One Task - API calls to save into database");
-//     emit("task-approved")
-//     draftStore.deleteDraft(taskIndex);
-// }
-
 async function approveDraft() {
   console.log("Approve One Task - API call to approve this draft");
 
