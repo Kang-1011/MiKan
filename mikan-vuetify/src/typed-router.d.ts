@@ -20,7 +20,6 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     '/AudioInput': RouteRecordInfo<'/AudioInput', '/AudioInput', Record<never, never>, Record<never, never>>,
     '/ComponentForKanban': RouteRecordInfo<'/ComponentForKanban', '/ComponentForKanban', Record<never, never>, Record<never, never>>,
-    '/dummypage': RouteRecordInfo<'/dummypage', '/dummypage', Record<never, never>, Record<never, never>>,
     '/Homepage': RouteRecordInfo<'/Homepage', '/Homepage', Record<never, never>, Record<never, never>>,
     '/Kanban-2': RouteRecordInfo<'/Kanban-2', '/Kanban-2', Record<never, never>, Record<never, never>>,
     '/Kanban-3': RouteRecordInfo<'/Kanban-3', '/Kanban-3', Record<never, never>, Record<never, never>>,
