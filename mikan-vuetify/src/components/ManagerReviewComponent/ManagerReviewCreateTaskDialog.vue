@@ -120,7 +120,9 @@ async function createDraft() {
             await draftStore.addDraft(newDraft); // <-- make sure to await
             emit("pass-created-task");
             clearAllFields();
-            taskForm.value?.resetValidation();
+            // Reset validation state after successful submission
+            if (taskForm.value) {
+                taskForm.value.resetValidation();
         } catch (error) {
             console.error("Failed to create draft from UI:", error);
         }
