@@ -138,12 +138,42 @@ export const useDraftStore = defineStore("draft", {
       }
     },
 
+    // async approveAllDrafts() {
+    //   try {
+    //     const response = await axios.put('http://127.0.0.1:8000/drafts/approve_all_drafts', {
+    //       approved: true,
+    //     });
+    //     this.drafts = this.drafts.map(draft => ({
+    //       ...draft,
+    //       approved: true,
+    //     }));
+    //     console.log("All drafts approved:", response.data);
+    //     await this.fetchFromAPI();
+    //   } catch (error) {
+    //     console.error("Failed to approve drafts:", error);
+    //   }
+    // },
+
     async approveAllDrafts() {
       try {
         const response = await axios.put('http://127.0.0.1:8000/drafts/approve_all_drafts', {
           approved: true,
         });
-    
+        const taskData = response.data
+        for (const task of taskData) {
+          const taskResponse = await axios.post('http://127.0.0.1:8000/tasks/add_task', {
+            assignee_id: task.assignee?.id || null,
+            project_id: task.project?.id || null,
+            title: task.title,
+            description: task.description,
+            due_date: task.due_date,
+            priority: "medium",               // Add required priority field
+            status: "to-do" 
+          });
+          
+          console.log(`Task created for draft ${task.id}:`, taskResponse.data);
+        }
+        
         this.drafts = this.drafts.map(draft => ({
           ...draft,
           approved: true,
@@ -153,8 +183,8 @@ export const useDraftStore = defineStore("draft", {
       } catch (error) {
         console.error("Failed to approve drafts:", error);
       }
-    },    
-
+    },
+ 
     // getDraftById(id: number): DraftCreate | undefined {
     //   return this.drafts.find(draft => draft.id === id);
     // },
