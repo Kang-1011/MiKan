@@ -15,7 +15,9 @@ interface Draft {
 export const useDraftStore = defineStore("draft", {
   state: () => ({
     drafts: [] as Draft[],
+    
   }),
+  
 
   getters: {},
 
@@ -33,11 +35,14 @@ export const useDraftStore = defineStore("draft", {
           project: draft.project,
           approved: draft.approved,
         })).sort((a, b) => a.id - b.id);
-        console.log(this.drafts);
+        console.log("fetched drafts from db: " , this.drafts);
+        return this.drafts
       } catch (error) {
         console.error("Error fetching drafts:", error);
-      }
+      } 
     },
+
+    
 
     async addDraft(draftData: {
       title: string;
@@ -97,7 +102,7 @@ export const useDraftStore = defineStore("draft", {
         if (index !== -1) {
           this.drafts[index] = {
             ...response.data,
-            dueDate: response.data.due_date // ✅ Transform due_date back to dueDate
+            dueDate: response.data.due_date
           };
         }
       } catch (error) {
@@ -105,32 +110,28 @@ export const useDraftStore = defineStore("draft", {
       }
     },
 
-    // async approveOneDraft(draftId: number) {
-    //   try {
-    //     const response = await axios.put(`http://127.0.0.1:8000/drafts/approve_draft/${draftId}`, {
-    //       approved: true,
-    //     });
-    //     const index = this.drafts.findIndex(d => d.id === draftId);
-    //     if (index !== -1) {
-    //       this.drafts[index] = response.data;
-    //     }
-    //   } catch (error) {
-    //     console.error(`Failed to approve draft ${draftId}:`, error);
-    //   }
-    // },
-
     async approveOneDraft(draftId: number) {
       try {
         const response = await axios.put(`http://127.0.0.1:8000/drafts/approve_draft/${draftId}`, {
           approved: true,
         });
-                
+        console.log("approved draft: " , response.data)
         const index = this.drafts.findIndex(d => d.id === draftId);
         if (index !== -1) {
           this.drafts[index] = {
             ...this.drafts[index],
             approved: true
           };
+          const taskResponse = await axios.post('http://127.0.0.1:8000/tasks/add_task', {
+            assignee_id: this.drafts[index].assignee?.id || null,
+            project_id: this.drafts[index].project?.id || null,
+            title: this.drafts[index].title,
+            description: this.drafts[index].description,
+            due_date: this.drafts[index].dueDate,
+            priority: "low",               
+            status: "to-do",
+          });
+          console.log("draft passed to tasks table: " , taskResponse.data)
           await this.fetchFromAPI();
       }
     } catch (error) {
@@ -143,7 +144,21 @@ export const useDraftStore = defineStore("draft", {
         const response = await axios.put('http://127.0.0.1:8000/drafts/approve_all_drafts', {
           approved: true,
         });
-    
+        const taskData = response.data
+        for (const task of taskData) {
+          const taskResponse = await axios.post('http://127.0.0.1:8000/tasks/add_task', {
+            assignee_id: task.assignee?.id || null,
+            project_id: task.project?.id || null,
+            title: task.title,
+            description: task.description,
+            due_date: task.due_date,
+            priority: "low",               
+            status: "to-do" 
+          });
+          
+          console.log(`Task created for draft ${task.id}:`, taskResponse.data);
+        }
+        
         this.drafts = this.drafts.map(draft => ({
           ...draft,
           approved: true,
@@ -153,12 +168,9 @@ export const useDraftStore = defineStore("draft", {
       } catch (error) {
         console.error("Failed to approve drafts:", error);
       }
-    },    
+    },
 
-    // getDraftById(id: number): DraftCreate | undefined {
-    //   return this.drafts.find(draft => draft.id === id);
-    // },
-    getDraftById(id: number): Draft | undefined { // ✅ Use Draft instead of DraftCreate
+    getDraftById(id: number): Draft | undefined { 
       return this.drafts.find(draft => draft.id === id);
     },
   },
