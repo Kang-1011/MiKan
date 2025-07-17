@@ -1,5 +1,5 @@
 <template style="background:#fcfcfc;">
-    <Sidebar3></Sidebar3>
+    <Sidebar></Sidebar>
 <v-app class="grey lighten-4">
     <!--DEVELOPER MODE -->
         <v-app-bar v-if="showDevBar"  app fixed color="white" elevation="2">

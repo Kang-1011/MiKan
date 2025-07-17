@@ -23,16 +23,28 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+
 const projectName = ref("");
 
-const emit = defineEmits(["close-create-project-dialog"]);
+const emit = defineEmits(["close-create-project-dialog", "project-created"]);
+
 const closeDialog = () => {
     projectName.value = "";
     emit("close-create-project-dialog");
 }
 
-const createNewProject = () => {
-    console.log("Create New Project - API calls to save into database");
-    closeDialog();
+const createNewProject = async () => {
+    if (!projectName.value) return;
+
+    try {
+        const response = await axios.post("http://localhost:8000/projects/add_project", {
+            title: projectName.value,
+        });
+        emit("project-created", response.data);
+        closeDialog();
+    } catch (error) {
+        console.error("Error creating project:", error);
+    }
 }
 </script>

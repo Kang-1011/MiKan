@@ -21,6 +21,7 @@ def get_project_boards(db: db_dependency):
 				Task.due_date,
 				Task.priority,
                 
+				User.id.label("assignee_id"),
 				User.name.label("assignee_name"),
 				User.username.label("assignee_username"),
                 
@@ -28,13 +29,13 @@ def get_project_boards(db: db_dependency):
 				Comment.date.label("comment_date"),
 
 				Attachment.id.label("attachment_id"),
-				Attachment.name.label("attachment_name"),
+				Attachment.title.label("attachment_name"),
 				Attachment.type.label("attachment_type"),
 
-				AIAttachment.name.label("ai_attachment_name"),
+				AIAttachment.title.label("ai_attachment_name"),
 				AIAttachment.url.label("ai_attachment_url"),
                 
-				Autostart.name.label("autostart_name"),
+				Autostart.title.label("autostart_name"),
 				Autostart.url.label("autostart_url")
             )
             .outerjoin(Task, Task.project_id == Project.id)
@@ -81,6 +82,7 @@ def get_project_boards(db: db_dependency):
                 task_tracker[task_id] = {
                     "id": task_id,
                     "title": row["task_title"],
+                    "assignee_id": row["assignee_id"],
                     "assignee": row["assignee_name"] or "Unassigned",
                     "dueDate": row["due_date"],
                     "priority": row["priority"],
