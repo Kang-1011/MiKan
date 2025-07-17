@@ -212,7 +212,7 @@ async function transcribeRecordedAudio() {
     formData.append('file', audioBlob.value, 'recording.webm');
 
     try {
-        const response = await axios.post('http://127.0.0.1:8000/transcribe', formData, {
+        const response = await axios.post('http://127.0.0.1:8000/llm_speech_json/transcribe', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

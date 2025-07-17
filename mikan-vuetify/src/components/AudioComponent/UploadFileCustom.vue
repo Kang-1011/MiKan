@@ -20,7 +20,7 @@
         }}</v-list-item-subtitle>
 
         <template v-slot:append>
-          <v-btn icon variant="flat border-md">
+          <v-btn icon variant="flat" class="border-md">
             <v-icon size="24" @click="$emit('removeFile', index)"
               >mdi-delete</v-icon
             >
