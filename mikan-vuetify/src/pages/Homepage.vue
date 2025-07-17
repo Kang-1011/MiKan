@@ -1,7 +1,6 @@
 <template>
-  <Sidebar>
-    <AudioConverter />
-  </Sidebar>
+  <Sidebar/>
+  <AudioConverter />
   <Topbar title="Homepage" />
   
 </template>

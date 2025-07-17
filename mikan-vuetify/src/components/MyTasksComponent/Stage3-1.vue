@@ -49,6 +49,7 @@
       
       style="min-height:75vh; max-height: 75vh; overflow-y:auto" 
       :disabled="visitorMode"
+	  @change="onTaskDrop"
 
     >
       <template #item="{ element: task, index: tIndex }">
@@ -95,7 +96,7 @@ const props = defineProps({
   visitorMode: Boolean,
   selectedAssignee: String
 })
-const emit = defineEmits(['add-task','delete-stage','open-task-dialog','rename-stage'])
+const emit = defineEmits(['add-task','delete-stage','open-task-dialog','rename-stage', 'task-dropped'])
 
 const isEditing = ref(false)
 const localTitle = ref(props.stage.title)
@@ -106,6 +107,37 @@ function saveRename() {
   isEditing.value = false
 }
 function onConfirmDelete() { emit('delete-stage', props.stageIndex) }
+
+function onTaskDrop(evt) {
+  const { added } = evt;
+  if (added && added.element) {
+    const task = added.element;
+
+    const reverseStageMap = {
+      "To Do": "to-do",
+      "In Progress": "in-progress",
+      "Done": "done"
+    };
+    const newStatus = reverseStageMap[props.stage.title] || "to-do";
+
+    // Only send update if status actually changed
+    if (task.status !== newStatus) {
+      const payload = {
+        assignee_id: task.assignee_id || 0,
+        project_id: props.boardIndex + 1,
+        title: task.title || "",
+        description: task.description || "",
+        due_date: task.dueDate || "",
+        priority: task.priority || "",
+        status: newStatus
+      };
+
+      console.log(`Updating task ${task.id}:`, payload);
+      task.status = newStatus;
+      emit("task-dropped", task.id, payload);
+    }
+  }
+}
 
 </script>
 

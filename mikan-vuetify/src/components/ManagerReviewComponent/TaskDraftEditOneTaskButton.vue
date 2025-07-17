@@ -14,11 +14,13 @@
                             rounded="lg" type="date" class="mb-1" :rules="[(v) => !!v || 'Due date is required']"
                             :min="tomorrowDate"></v-text-field>
 
-                        <v-text-field clearable label="Assignee" variant="outlined" density="compact" v-model="assignee"
-                            rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Assignee is required']"></v-text-field>
+                        <v-select v-model="assignee" :items="assigneeOptions" item-title="name" item-value="id" label="Assignee" 
+                            clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                            :rules="[(v) => !!v || 'Assignee is required']" />
 
-                        <v-text-field clearable label="Project" variant="outlined" density="compact" v-model="project"
-                            rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']"></v-text-field>
+                        <v-select v-model="project" :items="projectOptions" item-title="title" item-value="id" label="Project" 
+                            clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                            :rules="[(v) => !!v || 'Project is required']" />
 
                         <v-textarea clearable label="Task Description" variant="outlined" density="compact"
                             v-model="taskDescription" rounded="lg" rows="3" class="mb-0"
@@ -39,28 +41,53 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted } from 'vue'
+
+// load drafts data
 import { useDraftStore } from '@/stores/drafts';
 const draftStore = useDraftStore()
+// onMounted(async () => {
+//   await draftStore.getDraftById();
+// });
+    
+// display assignee names on dropdown
+import { useUserStore } from '@/stores/users'
+const userStore = useUserStore()
+onMounted(() => {
+        userStore.fetchUsers()
+})
+const assignee = ref(null)
+const assigneeOptions = computed(() => userStore.users)
+
+// display project titles on dropdown
+import { useProjectStore } from '@/stores/projects'
+const projectStore = useProjectStore()
+onMounted(() => {
+    projectStore.fetchProjects()
+})
+const project = ref(null)
+const projectOptions = computed(() => projectStore.projects)
+
 
 const taskIndex = inject("taskIndex");
 let retrievedDraft = draftStore.getDraftById(taskIndex)
 
 const taskTitle = ref("");
 const dueDate = ref("");
-const assignee = ref("");
-const project = ref("");
+// const assignee = ref("");
+// const project = ref("");
 const taskDescription = ref("");
 
 const dialog = ref(false);
 const openDialog = () => {
-    dialog.value = true
+    dialog.value = true;
 
-    retrievedDraft = draftStore.getDraftById(taskIndex)
+    retrievedDraft = draftStore.getDraftById(taskIndex);
+
     taskTitle.value = retrievedDraft.title;
     dueDate.value = retrievedDraft.dueDate;
-    assignee.value = retrievedDraft.assignee;
-    project.value = retrievedDraft.project;
+    assignee.value = retrievedDraft.assignee?.id ?? null;  // <--- here
+    project.value = retrievedDraft.project?.id ?? null;    // <--- here
     taskDescription.value = retrievedDraft.description;
 }
 defineExpose({ openDialog })
@@ -87,12 +114,10 @@ function cancel() {
 }
 
 async function save() {
-    // Validate the form
     const { valid } = await taskForm.value.validate();
 
     if (valid) {
         dialog.value = false;
-        emit("task-edited");
 
         const editedDraft = {
             title: taskTitle.value,
@@ -100,13 +125,14 @@ async function save() {
             assignee: assignee.value,
             project: project.value,
             description: taskDescription.value,
-        }
+        };
         draftStore.editDraft(taskIndex, editedDraft);
+        emit("task-edited", editedDraft);  // emit with payload
 
-        // Reset validation state after successful submission
         if (taskForm.value) {
             taskForm.value.resetValidation();
         }
     }
 }
+
 </script>

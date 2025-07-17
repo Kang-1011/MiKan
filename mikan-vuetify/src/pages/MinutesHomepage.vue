@@ -1,5 +1,5 @@
 <template>
-    <Sidebar3></Sidebar3>
+    <Sidebar></Sidebar>
 
     <v-main style="height: 100vh" class="pa-3 bg-grey-lighten-4">
         <v-card class="fill-height rounded-lg card-1" flat>
