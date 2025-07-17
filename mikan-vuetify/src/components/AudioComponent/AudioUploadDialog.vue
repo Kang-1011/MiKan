@@ -53,6 +53,9 @@ import { ref } from "vue";
 import axios from "axios";
 import UploadfileCustom from "../AudioComponent/UploadfileCustom.vue";
 
+import { useTranscriptStore } from "@/stores/transcriptstore";
+const transcriptStore = useTranscriptStore();
+
 const isDragging = ref(false);
 const hasUploaded = ref(false);
 const uploadedFiles = ref([]);
@@ -60,6 +63,8 @@ const fileInput = ref(null);
 
 const audioFile = ref(null);
 const isTranscribing = ref(false);
+
+const router = useRouter();
 
 defineEmits(["close-dialog"]);
 
@@ -115,13 +120,9 @@ async function transcribeUploadedAudio() {
 		});
 
 		console.log("Transcription successful:", response.data);
+		transcriptStore.loadFromLLMJSON(response.data);
 
-		// Navigate to the transcripts page, passing the result as state
-		// Note: 'state' is not persisted on page refresh. For persistence, use query params or localStorage.
-		// router.push({ 
-		//     name: 'TranscriptsHomepage', // Ensure this route name is correct
-		//     state: { transcript: response.data } 
-		// });
+		router.push('/TranscriptsHomepage');
 
 	} catch (error) {
 		console.error("Error during transcription:", error);

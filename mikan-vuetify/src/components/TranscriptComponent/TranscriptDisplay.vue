@@ -645,7 +645,6 @@ watch(
 );
 
 onMounted(() => {
-  transcriptStore.loadFromJson();
   updateChatContext();
 });
 
