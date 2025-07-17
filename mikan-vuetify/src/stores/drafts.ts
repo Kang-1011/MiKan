@@ -119,12 +119,29 @@ export const useDraftStore = defineStore("draft", {
     //   }
     // },
 
+    // async approveOneDraft(draftId: number) {
+    //   try {
+    //     const response = await axios.put(`http://127.0.0.1:8000/drafts/approve_draft/${draftId}`, {
+    //       approved: true,
+    //     });
+                
+    //     const index = this.drafts.findIndex(d => d.id === draftId);
+    //     if (index !== -1) {
+    //       this.drafts[index] = {
+    //         ...this.drafts[index],
+    //         approved: true
+    //       };
+    //       await this.fetchFromAPI();
+    //   }
+    // } catch (error) {
+    //     console.error(`Failed to approve draft ${draftId}:`, error);
+    //   }
+    // },
     async approveOneDraft(draftId: number) {
       try {
         const response = await axios.put(`http://127.0.0.1:8000/drafts/approve_draft/${draftId}`, {
           approved: true,
         });
-                
         const index = this.drafts.findIndex(d => d.id === draftId);
         if (index !== -1) {
           this.drafts[index] = {
