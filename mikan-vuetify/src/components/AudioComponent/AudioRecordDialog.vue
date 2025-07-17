@@ -65,6 +65,8 @@ import { AVMedia } from 'vue-audio-visual'
 import { useUserMedia } from '@vueuse/core'
 import axios from 'axios'
 
+import { useTranscriptStore } from "@/stores/transcriptstore";
+const transcriptStore = useTranscriptStore();
 const router = useRouter()
 
 // For vue-audio-visual
@@ -219,13 +221,9 @@ async function transcribeRecordedAudio() {
         });
 
         console.log("Transcription successful:", response.data);
+        transcriptStore.loadFromLLMJSON(response.data);
 
-        // Navigate to the transcripts page, passing the result as state
-        // Note: 'state' is not persisted on page refresh. For persistence, use query params or localStorage.
-        // router.push({ 
-        //     name: 'TranscriptsHomepage', // Ensure this route name is correct
-        //     state: { transcript: response.data } 
-        // });
+		router.push('/TranscriptsHomepage');
 
     } catch (error) {
         console.error("Error during transcription:", error);
