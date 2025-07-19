@@ -16,44 +16,55 @@ def get_attachment(attachment_id: int, db: db_dependency):
     media_type = f"application/{attachment.type}" if attachment.type in ['pdf', 'txt'] else f"image/{attachment.type}"
     return StreamingResponse(io.BytesIO(attachment.data), media_type=media_type)
 
-@router.post("/upload_file")
+@router.post("/upload_attachment")
 async def upload_attachment(
     db: Annotated[Session, Depends(get_db)],
     task_id: Annotated[int, Form()],
-    title: Annotated[str, Form()],
-    file: UploadFile = File(...)    
+    attachment_id: Annotated[Optional[int], Form()] = 0,
+    file: Optional[UploadFile] = None
 ):
+    # Check if task exists
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
-        raise HTTPException(status_code=404, detail="Task ID not found")
+        raise HTTPException(status_code=404, detail="Task not found")
 
-    try:
-        file_data = await file.read()
-        attachment_db = Attachment(
-            task_id=task_id,
-            title=title,
-            type=file.content_type,
-            data=file_data
-        )
-        db.add(attachment_db)
+    if not file:
+        raise HTTPException(status_code=400, detail="No file uploaded")
+    title = file.filename
+
+    if not attachment_id or attachment_id <= 0:
+        attachment = Attachment(task_id=task_id, title=title)
+        db.add(attachment)
         db.commit()
-        db.refresh(attachment_db)
-        return attachment_db
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        db.refresh(attachment)
+    else:
+        attachment = db.query(Attachment).filter(Attachment.id == attachment_id).first()
+        if not attachment:
+            raise HTTPException(status_code=404, detail="Attachment not found")
+        attachment.title = title
+
+    if file.content_type not in ["application/pdf", "text/plain", "image/png", "image/jpeg"]:
+        raise HTTPException(status_code=400, detail="Invalid file type")
+    attachment.data = await file.read()
+    attachment.type = file.content_type.split("/")[-1]
+
+    db.commit()
+    db.refresh(attachment)
+
+    return {
+        "message": "Attachment saved successfully",
+        "attachment_id": attachment.id,
+        "attachment_task_id": attachment.task_id,
+        "attachment_title": attachment.title,
+        "attachment_type": attachment.type,
+    }
+
+@router.delete("/delete_attachment/{attachment_id}")
+def delete_attachment(attachment_id: int, db: db_dependency):
+    attachment = db.query(Attachment).filter(Attachment.id == attachment_id).first()
+    if not attachment:
+        raise HTTPException(status_code=404, detail="Attachment not found")
     
-# @router.post("/upload_file/{attachment_id}")
-# async def upload_attachment_file(attachment_id: int, db: db_dependency, file: Optional[UploadFile] = None):
-#     if not file:
-#         return {"message": "No file provided"}
-#     attachment = db.query(Attachment).filter(Attachment.id == attachment_id).first()
-#     if not attachment:
-#         raise HTTPException(status_code=404, detail="Attachment id not found")
-#     if file:
-#         if file.content_type not in ["application/pdf", "text/plain", "image/png", "image/jpeg"]:
-#             raise HTTPException(status_code=400, detail="Invalid file type")
-#         attachment.data = await file.read()
-#         attachment.type = file.content_type.split("/")[-1]
-#     db.commit()
-#     return {"message": "Attachment saved successfully"}
+    db.delete(attachment)
+    db.commit()
+    return {"message": f"Attachment {attachment_id} deleted successfully"}
