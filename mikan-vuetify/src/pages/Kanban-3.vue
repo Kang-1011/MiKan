@@ -161,13 +161,17 @@ const boardOptions = computed(() => boards.value.map(b => b.title))
 
 // Unique assignees across all tasks
 const assigneeOptions = computed(() => {
-const s = new Set<string>()
-boards.value.forEach(b =>
-  b.stages.forEach(sg =>
-    sg.tasks.forEach(t => t.assignee && s.add(t.assignee))
+  const map = new Map<number, string>()
+  boards.value.forEach(b =>
+    b.stages.forEach(sg =>
+      sg.tasks.forEach(t => {
+        if (t.assignee_id && t.assignee) {
+          map.set(t.assignee_id, t.assignee)
+        }
+      })
+    )
   )
-)
-return Array.from(s)
+  return Array.from(map.entries()).map(([id, name]) => ({ id, name }))
 })
 
 // ——— 4) COMPUTE FILTERED BOARDS ———
@@ -219,19 +223,27 @@ return null
 
 function handleTaskSave(taskId, updatedTask) {
   const { boardIndex, stageIndex, taskIndex } = editingInfo.value;
+
   if (boardIndex !== null && stageIndex !== null && taskIndex !== null) {
-    boards.value[boardIndex].stages[stageIndex].tasks[taskIndex] = updatedTask;
-    
-	const project_id = boards.value[boardIndex].id;
+    const existingTask = boards.value[boardIndex].stages[stageIndex].tasks[taskIndex];
+
+    boards.value[boardIndex].stages[stageIndex].tasks[taskIndex] = {
+        ...existingTask,
+        ...updatedTask,
+        dueDate: updatedTask.due_date,
+        assignee: assigneeOptions.value.find(a => a.id === updatedTask.assignee_id)?.name || existingTask.assignee
+    };
+
+    const project_id = boards.value[boardIndex].id;
     const payload = {
       ...updatedTask,
       project_id: project_id,
     };
-	console.log(payload)
+
     axios.put(`http://localhost:8000/tasks/update_task/${taskId}`, payload)
       .then(() => {
-        console.log(`✅ Task updated from dialog with Project ID : ${project_id}`);
-		isTaskDialogOpen.value = false;
+        console.log(`✅ Task updated from dialog with Task ID : ${taskId}`, payload);
+        isTaskDialogOpen.value = false;
       })
       .catch(err => {
         console.error("❌ Failed to update task from dialog:", err);
