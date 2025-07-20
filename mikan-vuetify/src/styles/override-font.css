@@ -51,3 +51,12 @@
 .v-application button {
   font-family: inherit !important;
 }
+
+/* custom rounded-v1 utility */
+.rounded-v1 {
+  border-radius: 16px !important;
+}
+
+.rounded-v2 {
+  border-radius: 12px !important;
+}

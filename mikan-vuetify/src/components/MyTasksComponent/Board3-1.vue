@@ -31,7 +31,7 @@
           :menu-props="{
           contentClass: 'rounded-xl text-body-2',
           }"
-          style="background: #f5f5f5 ;max-width:180px"
+          style="background: #dddddd ;max-width:180px"
         />
 
         <!-- Inline Priority Filter -->
@@ -48,7 +48,7 @@
           :menu-props="{
           contentClass: 'rounded-xl text-body-2 ',
       }"
-          style="background: #f5f5f5; max-width:180px; margin-left:8px; margin-right:8px"
+          style="background: #dddddd; max-width:180px; margin-left:8px; margin-right:8px"
         />
 
         <!-- Inline Due Date Filter -->
@@ -69,7 +69,7 @@
               single-line
               hide-details clearable
               v-bind="menuProps"
-              style="background: #f5f5f5; max-width:200px; margin-right:8px"
+              style="background: #dddddd; max-width:200px; margin-right:8px"
             />
           </template>
           <v-date-picker 
@@ -254,4 +254,11 @@ function taskDropped(taskId, payload) {
 ::v-deep .v-field__bottom {
   display: none !important;
 }
+
+.fill-height {
+    height: 100%;
+    /* Make sure it fills the full screen */
+}
+
+
 </style>

@@ -3,8 +3,8 @@
 // ======================== -->
 <template>
   
-  <v-sheet elevation="0" class="border-sm rounded-xl ma-2 hover:black" style="min-width: 340px; max-width: 340px; display:flex; flex-direction:column; background:#fcfcfc; ">
-    <v-toolbar density="compact" class="rounded-xl" color="#fcfcfc">
+  <v-sheet elevation="0" class="border-sm rounded-xl ma-2 hover:black" style="min-width: 340px; max-width: 340px; display:flex; flex-direction:column; background:#dddddd; ">
+    <v-toolbar density="compact" class="rounded-xl" color="#dddddd">
       <template v-if="!isEditing">
         <v-toolbar-title  class="text-subtitle-1 my-0 py-0">{{ stage.title }}</v-toolbar-title>
         <v-spacer />
@@ -47,7 +47,7 @@
       :group="{ name: `tasks-board-${boardIndex}`, pull: true, put: [`tasks-board-${boardIndex}`] }"
       class="pa-2"
       
-      style="min-height:75vh; max-height: 75vh; overflow-y:auto" 
+      style="min-height:70vh; max-height: 70vh; overflow-y:auto" 
       :disabled="visitorMode"
 	  @change="onTaskDrop"
 
@@ -151,5 +151,9 @@ function onTaskDrop(evt) {
     0 4px 12px rgba(0, 0, 0, 0.06);  /* Stronger shadow for depth */
   transition: box-shadow 0.2s ease, transform 0.1s ease;
   border: 1px solid #f1f1f1;         /* Subtle border to separate on white bg */
+}
+.fill-height {
+    height: 100%;
+    /* Make sure it fills the full screen */
 }
 </style>

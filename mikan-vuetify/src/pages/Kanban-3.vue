@@ -45,8 +45,8 @@
 
 
  <!-- SUGGESTION: Replace the fixed container+row with Vuetify App Bar -->
- <v-main style="height: 100vh" class="pa-0 bg-grey-lighten-4" >
-    <v-container fluid class="pa-0 pr-6">
+ <v-main class="fill-height pa-0 bg-grey-lighten-1" >
+    <v-container fluid class="pa-0 pr-6 ">
       <!-- No boards at all -->
       <div v-if="boards.length === 0" class="text-center grey--text pa-4">
         No boards defined
@@ -418,4 +418,11 @@ box-shadow:
   background-color: #e0e0e0; /* or any grey hex/RGB */
 }
 
+/* src/assets/styles/custom.css */
+.rounded-v1 {
+  border-radius: 16px !important;
+}
+.rounded-v2 {
+  border-radius: 12px !important;
+}
 </style>
