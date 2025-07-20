@@ -45,8 +45,8 @@
 
 
  <!-- SUGGESTION: Replace the fixed container+row with Vuetify App Bar -->
- <v-main class="fill-height pa-0 bg-grey-lighten-1" >
-    <v-container fluid class="pa-0 pr-6 ">
+ <v-main class="pa-0 bg-grey-lighten-1 " style="display:flex; flex-direction:column; height:100vh; min-height:0; overflow:hidden;">
+    <v-container fluid class="pa-0 pr-6 fill-height" style="width:100%;">
       <!-- No boards at all -->
       <div v-if="boards.length === 0" class="text-center grey--text pa-4">
         No boards defined
@@ -64,14 +64,14 @@
         item-key="id"
         :animation="150"
         
-        class="d-flex flex-column"
-        
+        class="d-flex flex-column fill-height"
+        style="width:100%; flex:1 1 auto;"
         :disabled="visitorMode || !allowBoardReordering"
       >
         <template #item="{ element: board, index: bIndex }">
 
           <Board 
-            v-show="!selectedBoard || board.title === selectedBoard"
+            v-if="!selectedBoard || board.title === selectedBoard"
            :board="selectedAssignee
              ? {
                  ...board,

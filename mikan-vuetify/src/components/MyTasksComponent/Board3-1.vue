@@ -1,5 +1,10 @@
 <template>
-  <v-card class="border-sm rounded-xl ma-3" elevation="0" style="width:100%" color="white">
+  <v-card 
+  class="border-sm rounded-v1 ma-3 d-flex flex-column" 
+  elevation="0" 
+  style="width:100%; height:100%;" 
+  color="white"
+  >
     <!-- Board Header -->
     <v-toolbar color="white">
       <template v-if="!isEditing">
@@ -102,7 +107,7 @@
    </div>
    <div
      v-else
-     class="d-flex flex-row pa-2"
+     class="d-flex flex-row pa-2 flex-grow-1"
      style="overflow-x: auto;"
    >
      <draggable
@@ -136,7 +141,7 @@
      </draggable>
      <!-- Add Stage Button now scrolls with stages -->
      <v-btn
-       class="rounded-xl border-md ml-4 flex-shrink-0 align-self-center"
+       class="rounded-v1 border-md ml-4 flex-shrink-0 align-self-center"
        icon
        tile
        style="height: 120px; width: 80px;"

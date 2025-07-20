@@ -46,10 +46,10 @@
         </v-btn>
       </v-app-bar>
       
-      <v-main  class="pa-0 bg-grey-lighten-4" >
+      <v-main  class="pa-0 bg-grey-lighten-1">
       <!-- Top pill bar -->
   <div
-    class="pa-3 rounded-xl border-sm d-flex align-center ma-3"
+    class="pa-3 rounded-v1 border-sm d-flex align-center ma-3"
     style="background: white;" 
   >
     <span class="text-h5 pl-1 me-4">My Tasks</span>

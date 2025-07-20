@@ -3,7 +3,7 @@
 // ======================== -->
 <!--  -->
 <template>
-  <v-card class="pa-3 rounded-xl border-sm mb-3 bg-grey-lighten-4" elevation="0">
+  <v-card class="pa-3 rounded-v2 border-sm mb-3 \" elevation="0">
     <!-- Title + Priority -->
     <div class="d-flex justify-space-between align-center mb-2">
       <div class="font-weight-medium text-truncate">{{ task.title }}</div>

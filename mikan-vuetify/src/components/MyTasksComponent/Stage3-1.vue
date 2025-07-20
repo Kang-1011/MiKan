@@ -3,8 +3,16 @@
 // ======================== -->
 <template>
   
-  <v-sheet elevation="0" class="border-sm rounded-xl ma-2 hover:black" style="min-width: 340px; max-width: 340px; display:flex; flex-direction:column; background:#dddddd; ">
-    <v-toolbar density="compact" class="rounded-xl" color="#dddddd">
+  <v-sheet 
+  elevation="0" 
+  class="border-sm rounded-v2 ma-2 hover:black d-flex flex-column" 
+  style="
+  min-width: 340px; 
+  max-width: 340px; 
+  display:flex; 
+  flex-direction:column; 
+  background:#dddddd; ">
+    <v-toolbar density="compact" class="rounded-v2" color="#dddddd">
       <template v-if="!isEditing">
         <v-toolbar-title  class="text-subtitle-1 my-0 py-0">{{ stage.title }}</v-toolbar-title>
         <v-spacer />
@@ -45,9 +53,8 @@
       :item-key="'id'"
       :animation="150"
       :group="{ name: `tasks-board-${boardIndex}`, pull: true, put: [`tasks-board-${boardIndex}`] }"
-      class="pa-2"
-      
-      style="min-height:70vh; max-height: 70vh; overflow-y:auto" 
+      class="pa-2 flex-grow-1 overflow-y-auto"
+       
       :disabled="visitorMode"
 	  @change="onTaskDrop"
 
@@ -75,7 +82,7 @@
     </draggable>
     <!-- <v-divider></v-divider> -->
     <v-card-actions class="pa-0 pt-0 justify-center">
-      <v-btn density="compact" class="rounded-xl border-md ma-auto" @click="$emit('add-task')" :disabled="visitorMode">
+      <v-btn density="compact" class="rounded-xl border-md ma-auto bg-grey-lighten-4" @click="$emit('add-task')" :disabled="visitorMode">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-card-actions>
@@ -156,4 +163,6 @@ function onTaskDrop(evt) {
     height: 100%;
     /* Make sure it fills the full screen */
 }
+
+
 </style>
