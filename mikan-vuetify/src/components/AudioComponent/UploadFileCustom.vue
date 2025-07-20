@@ -20,7 +20,7 @@
         }}</v-list-item-subtitle>
 
         <template v-slot:append>
-          <v-btn icon variant="flat border-md">
+          <v-btn icon variant="flat" class="border-md">
             <v-icon size="24" @click="$emit('removeFile', index)"
               >mdi-delete</v-icon
             >
@@ -40,7 +40,7 @@ defineProps({
   },
 });
 
-defineEmits(["addMore", "removeFile", "convert"]);
+defineEmits(["removeFile"]);
 
 const openFile = (file) => {
   const fileURL = URL.createObjectURL(file);
@@ -57,10 +57,6 @@ const openFile = (file) => {
         </audio>
       </body></html>
     `);
-  } else if (file.type === "application/pdf" || file.name.endsWith(".pdf")) {
-    window.open(fileURL, "_blank");
-  } else if (file.type === "text/plain" || file.name.endsWith(".txt")) {
-    window.open(fileURL, "_blank");
   } else {
     alert("Unsupported file type.");
   }
@@ -68,15 +64,6 @@ const openFile = (file) => {
 </script>
 
 <style scoped>
-.start-recording-button {
-  background-color: #ff3d00 !important;
-  color: white !important; /* Added to
-  text-transform: none; /* Prevent default button uppercase */
-  letter-spacing: 0.015em; /* Corresponds to tracking-[0.015em] */
-  font-weight: bold; /* Corresponds to font-bold */
-  font-size: 1.1rem;
-}
-
 .clickable {
   color: #1976d2;
   cursor: pointer;

@@ -1,149 +1,239 @@
 <template>
-  <v-navigation-drawer color="#1E1E1E" class="sidebar" model-value app>
-    <!-- Avatar Section -->
-    <div class="pt-11 pa-4 text-center">
-      <label for="avatar-upload" class="avatar-container">
-        <v-sheet
-          color="#FF3D00"
-          class="rounded-lg d-flex align-center justify-center mx-auto"
-          width="160"
-          height="160"
-          style="cursor: pointer; overflow: hidden; position: relative"
-        >
-          <img
-            v-if="avatarUrl"
-            :src="avatarUrl"
-            alt="User Avatar"
-            class="avatar-image"
-          />
-          <v-icon v-else color="white" size="36">mdi-plus</v-icon>
+  <v-navigation-drawer
+    v-model="drawer"
+    :rail="rail"
+    permanent
+    rail-width="90"
+    border="0"
+    @click="rail = false"
+  >
+    <v-card class="pa-3 fill-height bg-grey-lighten-4">
+      <v-card class="fill-height d-flex flex-column rounded-xl card-1" flat>
+        <div class="sidebar-content align-center">
+          <v-list density="compact" nav>
+            <v-list-item
+              value="toggle"
+              class="cursor-pointer rounded-xl"
+              @click.stop="rail = !rail"
+              :active="false"
+            >
+              <template #prepend>
+                <v-icon size="24" class="icon-left-padding">
+                  {{ rail ? "mdi-menu" : "mdi-menu-open" }}
+                </v-icon>
+              </template>
+              <v-list-item-title class="text-h6 font-weight-bold">
+                MIKAN.AI
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
 
-          <!-- Hover Remove Button -->
-          <v-btn
-            icon
-            x-small
-            class="remove-btn"
-            v-if="avatarUrl"
-            @click.stop.prevent="removeAvatar"
-          >
-            <v-icon color="grey lighten-1">mdi-close</v-icon>
-          </v-btn>
-        </v-sheet>
-      </label>
+          <v-divider />
 
-      <!-- Hidden File Input -->
-      <input
-        id="avatar-upload"
-        type="file"
-        accept="image/*"
-        @change="handleAvatarUpload"
-        style="display: none"
-      />
+          <v-list density="compact" nav>
+            <v-list-item
+              class="rounded-xl"
+              :to="{ path: '/AudioInput' }"
+              exact
+              :active="false"
+            >
+              <template #prepend>
+                <v-icon size="24" class="icon-left-padding"
+                  >mdi-plus-circle-outline</v-icon
+                >
+              </template>
+              <v-list-item-title>New Meeting</v-list-item-title>
+            </v-list-item>
 
-      <div class="white--text text-h5 font-weight-bold mt-4">Hello, User!</div>
-      <div class="grey--text text-body-1">Employee</div>
-      <v-divider
-        class="my-4"
-        color="white lighten-5"
-        style="border-width: 2px"
-      />
-    </div>
+            <v-list-item
+              class="rounded-xl"
+              :to="{ path: '/ManagerReview' }"
+              exact
+              :active="false"
+            >
+              <template #prepend>
+                <v-icon size="24" class="icon-left-padding"
+                  >mdi-file-sign</v-icon
+                >
+              </template>
+              <v-list-item-title>Manager Review</v-list-item-title>
+            </v-list-item>
 
-    <!-- Navigation Links -->
-    <v-list nav dense color="transparent">
-      <v-list-item
-        v-for="item in menuItems"
-        :key="item.title"
-        @click="sidebarNavigation(item.routePath)"
-        link
-        class="px-5 text-h6 mb-5"
-      >
-        <div class="d-flex align-center">
-          <v-icon color="grey darken-1" class="mr-3">{{ item.icon }}</v-icon>
-          <span class="grey--text text--lighten-1">{{ item.title }}</span>
+            <v-list-item
+              class="rounded-xl"
+              :to="{ path: '/Kanban-2' }"
+              exact
+              :active="false"
+            >
+              <template #prepend>
+                <v-icon size="24" class="icon-left-padding"
+                  >mdi-format-list-checkbox</v-icon
+                >
+              </template>
+              <v-list-item-title>My Tasks</v-list-item-title>
+            </v-list-item>
+          </v-list>
+
+          <v-divider class="mx-2" />
+
+          <v-list density="compact" nav>
+            <!-- Projects Header -->
+            <v-list-item
+              class="cursor-pointer rounded-xl"
+              style="align-items: center; min-height: 48px"
+              @click="isOpen = !isOpen"
+            >
+              <template #prepend>
+                <v-icon size="24" class="icon-left-padding"
+                  >mdi-folder-outline</v-icon
+                >
+              </template>
+
+              <v-list-item-title
+                style="font-weight: bold; font-size: 1.125rem; line-height: 1.6"
+              >
+                Projects
+              </v-list-item-title>
+
+              <template #append>
+                <v-btn
+                  icon="mdi-plus"
+                  color="grey"
+                  variant="text"
+                  density="compact"
+                  @click.stop="createNewProject"
+                />
+              </template>
+            </v-list-item>
+            <!-- Project Items List (no transition) -->
+            <div v-if="isOpen" class="px-2">
+              <v-list-item
+                v-for="proj in projectItems"
+                :key="proj"
+                class="rounded-xl"
+                @click="handleClick(proj)"
+                density="compact"
+              >
+                <div class="d-flex align-center" style="gap: 20px">
+                  <v-icon color="grey" size="20" class="pl-5"
+                    >mdi-circle-medium</v-icon
+                  >
+                  <v-list-item-title v-if="!rail">{{ proj }}</v-list-item-title>
+                </div>
+              </v-list-item>
+            </div>
+          </v-list>
         </div>
-      </v-list-item>
-    </v-list>
+
+        <div class="sidebar-footer">
+          <v-divider />
+          <v-list>
+            <v-list-item class="rounded-xl">
+              <template #prepend>
+                <v-icon size="24" class="icon-footer-padding"
+                  >mdi-account</v-icon
+                >
+              </template>
+
+              <v-list-item-title>John Leider</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </div>
+      </v-card>
+    </v-card>
   </v-navigation-drawer>
+  <CreateNewProjectDialog v-model="createNewProjectDialogFlag" @close-create-project-dialog="createNewProjectDialogFlag = false;" @project-created="handleNewProject"/>
 </template>
 
-<script setup>
-import { ref, onMounted } from "vue";
+<!-------------------------------------------SCRIPT---------------------------------------->
+
+<script setup lang="ts">
+import { ref, computed, defineEmits, watch } from "vue";
 import { useRouter } from "vue-router";
+import { boards } from "@/stores/boards";
+import CreateNewProjectDialog from "@/components/HomepageComponent/CreateNewProjectDialog.vue";
 
+const drawer = ref(true);
+const rail = ref(true);
+const isOpen = ref(false);
+const emit = defineEmits<{
+  (e: "select-project", name: string): void;
+}>();
+const projectItems = computed(() => boards.value.map((b) => b.title));
 const router = useRouter();
-const avatarUrl = ref(null);
+const createNewProjectDialogFlag = ref(false);
 
-// Load from localStorage on component mount
-onMounted(() => {
-  const savedImage = localStorage.getItem("user-avatar");
-  if (savedImage) {
-    avatarUrl.value = savedImage;
+function handleClick(name: string) {
+  router.push({
+    path: "/Kanban-3",
+    query: { board: name },
+  });
+}
+
+watch(rail, (newVal) => {
+  if (newVal) {
+    // Sidebar collapsed
+    isOpen.value = false;
+  } else {
+    // Sidebar expanded
+    isOpen.value = true;
   }
 });
 
-const handleAvatarUpload = (event) => {
-  const file = event.target.files[0];
-  if (file && file.type.startsWith("image/")) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      avatarUrl.value = reader.result;
-      localStorage.setItem("user-avatar", reader.result);
-      event.target.value = null; // ✅ Reset input so same file can be selected again
-    };
-    reader.readAsDataURL(file);
-  } else {
-    event.target.value = null; // ✅ Also reset if invalid file
-  }
-};
-const menuItems = ref([
-  { title: "New Meeting", icon: "mdi-plus-circle", routePath: "/Homepage" },
-  {
-    title: "Kanban Board",
-    icon: "mdi-view-dashboard",
-    routePath: "/MyTasksPage2-2",
-  },
-  { title: "My Tasks", icon: "mdi-checkbox-marked", routePath: "/MyTasksPage2-2" },
-  { title: "Manager Review", icon: "mdi-file", routePath: "/ManagerReview" },
-]);
+function createNewProject() {
+  createNewProjectDialogFlag.value = true;
+  console.log("Trigger create new project dialog/modal");
+}
 
-const sidebarNavigation = (routePath) => {
-  console.log("Navigation to:", routePath);
-  router.push(routePath);
-};
-
-const removeAvatar = () => {
-  avatarUrl.value = null;
-  localStorage.removeItem("user-avatar");
-};
+function handleNewProject(project: { id: number; title: string }) {
+  boards.value.push({
+    id: project.id,
+    title: project.title,
+    stages: [],
+  });
+}
 </script>
 
+<!-------------------------------------------STYLE---------------------------------------->
+
 <style scoped>
-.sidebar {
-  width: 280px;
-}
-
-.rounded-lg {
-  border-radius: 8px !important;
-}
-
-.avatar-container:hover .remove-btn {
-  opacity: 1;
-}
-
-.avatar-image {
-  width: 100%;
+.fill-height {
   height: 100%;
-  object-fit: cover;
 }
 
-.remove-btn {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
+.card-1 {
+  border: thin solid lightgray;
+  box-shadow: none;
+}
+
+.sidebar-content {
+  flex: 1;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  background-color: rgb(255, 255, 255); /* or whatever background you want */
+}
+
+.icon-left-padding {
+  padding-left: 8px;
+}
+
+.icon-bullet-padding {
+  padding-left: 8px;
+}
+
+.icon-footer-padding {
+  padding-left: 8px;
+}
+
+.mikan-title {
+  font-weight: bold;
+  font-size: 1.125rem; /* ~18px, adjust as needed */
+}
+
+.project-item {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 </style>

@@ -3,4 +3,8 @@ uvicorn
 sqlalchemy
 databases[postgresql]
 asyncpg
-python-dotenv
+python-dotenv 
+langchain
+langchain-google-genai
+scikit-learn
+numpy 
