@@ -1,5 +1,5 @@
 <template  >
-      <Sidebar3 @select-project="selectedBoard = $event" />
+      <Sidebar @select-project="selectedBoard = $event" />
 
       <v-app-bar  v-if="showDevBar" app fixed color="white" elevation="2">
       <v-toolbar-title>Developer Mode!!!</v-toolbar-title>
@@ -95,6 +95,7 @@
             @rename-stage="renameStage"
             @delete-stage="deleteStage"
             @open-task-dialog="openTaskDialog"
+			@task-updated="taskDropped"
           />
 
         </template>
@@ -128,6 +129,7 @@
 </template>
 <script setup lang="ts">
 import { ref,computed, watch } from 'vue'
+import axios from 'axios'
 import { boards } from '@/stores/boards'
 import { useRoute } from "vue-router";
 import draggable from 'vuedraggable'
@@ -159,13 +161,17 @@ const boardOptions = computed(() => boards.value.map(b => b.title))
 
 // Unique assignees across all tasks
 const assigneeOptions = computed(() => {
-const s = new Set<string>()
-boards.value.forEach(b =>
-  b.stages.forEach(sg =>
-    sg.tasks.forEach(t => t.assignee && s.add(t.assignee))
+  const map = new Map<number, string>()
+  boards.value.forEach(b =>
+    b.stages.forEach(sg =>
+      sg.tasks.forEach(t => {
+        if (t.assignee_id && t.assignee) {
+          map.set(t.assignee_id, t.assignee)
+        }
+      })
+    )
   )
-)
-return Array.from(s)
+  return Array.from(map.entries()).map(([id, name]) => ({ id, name }))
 })
 
 // ——— 4) COMPUTE FILTERED BOARDS ———
@@ -215,12 +221,45 @@ if (boardIndex!==null && stageIndex!==null && taskIndex!==null) {
 return null
 })
 
-function handleTaskSave(updatedTask) {
-const { boardIndex, stageIndex, taskIndex } = editingInfo.value
-if (boardIndex!==null && stageIndex!==null && taskIndex!==null) {
-  boards.value[boardIndex].stages[stageIndex].tasks[taskIndex] = updatedTask
+function handleTaskSave(taskId, updatedTask) {
+  const { boardIndex, stageIndex, taskIndex } = editingInfo.value;
+
+  if (boardIndex !== null && stageIndex !== null && taskIndex !== null) {
+    const existingTask = boards.value[boardIndex].stages[stageIndex].tasks[taskIndex];
+
+    boards.value[boardIndex].stages[stageIndex].tasks[taskIndex] = {
+        ...existingTask,
+        ...updatedTask,
+        dueDate: updatedTask.due_date,
+        assignee: assigneeOptions.value.find(a => a.id === updatedTask.assignee_id)?.name || existingTask.assignee
+    };
+
+    const project_id = boards.value[boardIndex].id;
+    const payload = {
+      ...updatedTask,
+      project_id: project_id,
+    };
+
+    axios.put(`http://localhost:8000/tasks/update_task/${taskId}`, payload)
+      .then(() => {
+        console.log(`✅ Task updated from dialog with Task ID : ${taskId}`, payload);
+        isTaskDialogOpen.value = false;
+      })
+      .catch(err => {
+        console.error("❌ Failed to update task from dialog:", err);
+      });
+  }
 }
+
+async function taskDropped(taskId, payload) {
+  try {
+    await axios.put(`http://localhost:8000/tasks/update_task/${taskId}`, payload)
+    console.log("Task updated successfully")
+  } catch (err) {
+    console.error("❌ Failed to update task:", err.response?.data || err.message)
+  }
 }
+
 
 watch(selectedAssignee, assignee => {
 // whenever you pick someone, lock down the UI

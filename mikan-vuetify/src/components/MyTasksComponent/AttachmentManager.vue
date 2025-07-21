@@ -123,6 +123,7 @@
 
 <script setup lang="ts">
 import { ref, watch, defineProps, defineEmits } from 'vue'
+import axios from 'axios'
 
 // Props: modelValue array, mode, and visitorMode boolean
 const props = defineProps<{
@@ -135,6 +136,7 @@ const emit = defineEmits(['update:modelValue'])
 const isRecording = ref(false)
 const isDragging = ref(false)
 const uploadedFiles = ref<any[]>([])
+const attachmentsToDelete = ref<any[]>([])
 
 // Initialize from parent and mode
 watch(
@@ -164,8 +166,15 @@ function handleDropAndReset(e: DragEvent) {
   addFiles(files)
 }
 
-function addFiles(files: any[]) {
-  uploadedFiles.value.push(...files)
+function addFiles(files: File[]) {
+  for (const file of files) {
+    const exists = uploadedFiles.value.some(
+      (f) => f.name === file.name && f.size === file.size
+    )
+    if (!exists) {
+      uploadedFiles.value.push(file)
+    }
+  }
   emit('update:modelValue', uploadedFiles.value)
 }
 

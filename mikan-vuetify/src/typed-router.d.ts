@@ -19,17 +19,14 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/AudioInput': RouteRecordInfo<'/AudioInput', '/AudioInput', Record<never, never>, Record<never, never>>,
-    '/ComponentForKanban': RouteRecordInfo<'/ComponentForKanban', '/ComponentForKanban', Record<never, never>, Record<never, never>>,
     '/Homepage': RouteRecordInfo<'/Homepage', '/Homepage', Record<never, never>, Record<never, never>>,
     '/Kanban-2': RouteRecordInfo<'/Kanban-2', '/Kanban-2', Record<never, never>, Record<never, never>>,
     '/Kanban-3': RouteRecordInfo<'/Kanban-3', '/Kanban-3', Record<never, never>, Record<never, never>>,
     '/Loginpage': RouteRecordInfo<'/Loginpage', '/Loginpage', Record<never, never>, Record<never, never>>,
     '/ManagerReview': RouteRecordInfo<'/ManagerReview', '/ManagerReview', Record<never, never>, Record<never, never>>,
-    '/ManagerReviewV2': RouteRecordInfo<'/ManagerReviewV2', '/ManagerReviewV2', Record<never, never>, Record<never, never>>,
     '/MinutesHomepage': RouteRecordInfo<'/MinutesHomepage', '/MinutesHomepage', Record<never, never>, Record<never, never>>,
     '/MyTasksPage2': RouteRecordInfo<'/MyTasksPage2', '/MyTasksPage2', Record<never, never>, Record<never, never>>,
     '/MyTasksPage2-2': RouteRecordInfo<'/MyTasksPage2-2', '/MyTasksPage2-2', Record<never, never>, Record<never, never>>,
-    '/TestPage': RouteRecordInfo<'/TestPage', '/TestPage', Record<never, never>, Record<never, never>>,
     '/TranscriptsHomepage': RouteRecordInfo<'/TranscriptsHomepage', '/TranscriptsHomepage', Record<never, never>, Record<never, never>>,
   }
 }
