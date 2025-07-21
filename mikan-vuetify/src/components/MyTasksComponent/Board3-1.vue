@@ -1,5 +1,10 @@
 <template>
-  <v-card class="border-sm rounded-xl ma-3" elevation="0" style="width:100%" color="white">
+  <v-card 
+  class="border-sm border-1 rounded-v1 ma-3 d-flex flex-column" 
+  elevation="0" 
+  style="width:100%; height:100%;" 
+  color="white"
+  >
     <!-- Board Header -->
     <v-toolbar color="white">
       <template v-if="!isEditing">
@@ -26,12 +31,12 @@
           single-line
           variant="outlined"
           density="compact"
-          class="border-sm rounded-xl"
+          class="border-sm rounded-xl border-2"
           dense hide-details clearable
           :menu-props="{
           contentClass: 'rounded-xl text-body-2',
           }"
-          style="background: #f5f5f5 ;max-width:180px"
+          style="background: #dddddd ;max-width:180px"
         />
 
         <!-- Inline Priority Filter -->
@@ -43,12 +48,12 @@
           variant="outlined"
           density="compact"
     
-          class="border-sm rounded-xl"
+          class="border-sm rounded-xl border-2"
           hide-details clearable
           :menu-props="{
           contentClass: 'rounded-xl text-body-2 ',
       }"
-          style="background: #f5f5f5; max-width:180px; margin-left:8px; margin-right:8px"
+          style="background: #dddddd; max-width:180px; margin-left:8px; margin-right:8px"
         />
 
         <!-- Inline Due Date Filter -->
@@ -64,12 +69,12 @@
               v-model="formattedDate"
               label="Due Before"
               variant="outlined"
-              class="border-sm rounded-xl mr-4"
+              class="border-sm rounded-xl border-2 mr-4"
               density="compact"
               single-line
               hide-details clearable
               v-bind="menuProps"
-              style="background: #f5f5f5; max-width:200px; margin-right:8px"
+              style="background: #dddddd; max-width:200px; margin-right:8px"
             />
           </template>
           <v-date-picker 
@@ -102,7 +107,7 @@
    </div>
    <div
      v-else
-     class="d-flex flex-row pa-2"
+     class="d-flex flex-row pa-2 flex-grow-1"
      style="overflow-x: auto;"
    >
      <draggable
@@ -136,7 +141,7 @@
      </draggable>
      <!-- Add Stage Button now scrolls with stages -->
      <v-btn
-       class="rounded-xl border-md ml-4 flex-shrink-0 align-self-center"
+       class="rounded-v1 border-md ml-4 flex-shrink-0 align-self-center"
        icon
        tile
        style="height: 120px; width: 80px;"
@@ -254,4 +259,11 @@ function taskDropped(taskId, payload) {
 ::v-deep .v-field__bottom {
   display: none !important;
 }
+
+.fill-height {
+    height: 100%;
+    /* Make sure it fills the full screen */
+}
+
+
 </style>

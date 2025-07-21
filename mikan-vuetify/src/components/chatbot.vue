@@ -112,7 +112,7 @@ watch(() => chatbotStore.isOpen, async (newValue) => {
 <style scoped>
 /* --- Launcher Button Styling --- */
 .mikan-launcher-button {
-  background-color: #c62828; /* Vuetify red-darken-4 */
+  background-color: #2e2e2e; /* Vuetify red-darken-4 */
   border: none;
   border-radius: 50%;
   height: 60px;
@@ -130,7 +130,7 @@ watch(() => chatbotStore.isOpen, async (newValue) => {
 }
 .mikan-launcher-button:hover {
   transform: scale(1.1);
-  background-color: #c62828; /* red-darken-3 */
+  background-color: #868686; /* red-darken-3 */
 }
 
 /* --- Chat Window Styling --- */

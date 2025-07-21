@@ -45,8 +45,8 @@
 
 
  <!-- SUGGESTION: Replace the fixed container+row with Vuetify App Bar -->
- <v-main style="height: 100vh" class="pa-0 bg-grey-lighten-4" >
-    <v-container fluid class="pa-0 pr-6">
+ <v-main class="pa-0 bg-grey-lighten-1 " style="display:flex; flex-direction:column; height:100vh; min-height:0; overflow:hidden;">
+    <v-container fluid class="pa-0 pr-6 fill-height" style="width:100%;">
       <!-- No boards at all -->
       <div v-if="boards.length === 0" class="text-center grey--text pa-4">
         No boards defined
@@ -64,14 +64,14 @@
         item-key="id"
         :animation="150"
         
-        class="d-flex flex-column"
-        
+        class="d-flex flex-column fill-height"
+        style="width:100%; flex:1 1 auto;"
         :disabled="visitorMode || !allowBoardReordering"
       >
         <template #item="{ element: board, index: bIndex }">
 
           <Board 
-            v-show="!selectedBoard || board.title === selectedBoard"
+            v-if="!selectedBoard || board.title === selectedBoard"
            :board="selectedAssignee
              ? {
                  ...board,
@@ -177,7 +177,7 @@ const assigneeOptions = computed(() => {
 // ——— 4) COMPUTE FILTERED BOARDS ———
 /**
 * We flatten all boards from all (or the selected) projects,
-* then within each board we only keep tasks matching the
+* then within each board we only keep tasks matching bothe
 * selectedAssignee (if any).
 */
 const filteredBoards = computed(() => {
@@ -426,8 +426,25 @@ box-shadow:
   border: thin solid lightgray;
   box-shadow: none;
 }
+
+.border-1 {
+  border: 2px solid #abcdef;
+  box-shadow: none;
+}
+
 .custom-background {
   background-color: #e0e0e0; /* or any grey hex/RGB */
 }
 
+/* src/assets/styles/custom.css */
+.rounded-v1 {
+  border-radius: 16px !important;
+}
+.rounded-v2 {
+  border-radius: 12px !important;
+}
+
+/* reusable utilities
+.border-1   { --v-border-color: 255, 0, 0;   --v-border-opacity: 1; }
+.border-2  { --v-border-color: 0, 0, 255;   --v-border-opacity: 1; } */
 </style>
