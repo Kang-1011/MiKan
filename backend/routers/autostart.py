@@ -4,8 +4,61 @@ from database import *
 from model import *
 from typing import *
 
+# Import the AI functions from other modules
+from .autostart_task_ai import process_task_string
+
 router = APIRouter()
 db_dependency = Annotated[Session, Depends(get_db)]
+
+class AutostartStringRequest(BaseModel):
+    task_string: str
+    task_id: int
+
+@router.post("/generate-autostart/", response_model=AutostartOut)
+async def autostart_task_endpoint(request: AutostartStringRequest, db: db_dependency):
+    """
+    Receives a single task as a string, generates a document, saves it to the DB,
+    and returns the created autostart object.
+    """
+    print(f"Received autostart-task request for task ID: {request.task_id}")
+    try:
+        # Generate the document using the AI service
+        result = process_task_string(request.task_string)
+        if result.get("error"):
+            raise HTTPException(status_code=500, detail=result.get("error"))
+
+        # # Save to database
+        # autostart_db = Autostart(
+        #     task_id=request.task_id,
+        #     title=result.get("name"),
+        #     url=result.get("url")
+        # )
+        # db.add(autostart_db)
+        # db.commit()
+        # db.refresh(autostart_db)
+
+        # print(f"Autostart-task processing complete. Returning result for task {request.task_id}.")
+        # return autostart_db
+
+        # Create a temporary object to return to the frontend without saving to DB
+        import time
+        temp_id = int(time.time() * 1000) # temporary unique ID
+
+        autostart_response = {
+            "id": temp_id,
+            "task_id": request.task_id,
+            "title": result.get("name"),
+            "url": result.get("url")
+        }
+
+        print(f"Autostart-task processing complete. Returning result for task {request.task_id} without DB write.")
+        # The response_model=AutostartOut will validate this dictionary
+        return autostart_response
+    except Exception as e:
+        # db.rollback()
+        print(f"An error occurred during autostart-task processing: {e}")
+        # Re-raise as HTTPException to be handled by FastAPI
+        raise HTTPException(status_code=500, detail=f"An error occurred during autostart-task processing: {e}")
 
 @router.get("/", response_model=List[AutostartOut])
 def get_autostart_url(db: db_dependency, autostart_id: Optional[int] = None):
@@ -46,3 +99,4 @@ def delete_autostart_url(autostart_id: int, db: db_dependency):
     db.delete(autostart)
     db.commit()
     return {"message": f"AI Attachment URL with id {autostart_id} has been deleted"}
+

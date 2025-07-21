@@ -3,7 +3,7 @@
 // ======================== -->
 <template>
   
-  <v-card class="border-sm rounded-xl ma-3" elevation="0" style="width:100%" color="white" >
+  <v-card class="border-sm rounded-v1 ma-3" elevation="0" style="width:100%" color="white" >
 
     <v-toolbar density="compact" color="white"  >
       <template v-if="!isEditing">

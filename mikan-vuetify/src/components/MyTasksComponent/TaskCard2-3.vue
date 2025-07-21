@@ -1,8 +1,9 @@
 <!-- // ========================
 // TaskCard.vue
 // ======================== -->
+<!--  -->
 <template>
-  <v-card class="pa-3 rounded-xl border-sm mb-3" elevation="0">
+  <v-card class="pa-3 rounded-v2 border-1 border-sm mb-3 \" elevation="0">
     <!-- Title + Priority -->
     <div class="d-flex justify-space-between align-center mb-2">
       <div class="font-weight-medium text-truncate">{{ task.title }}</div>
@@ -32,11 +33,21 @@
         {{ task.assignee }}
       </div>
     </div>
+    <v-btn
+        icon="mdi-auto-fix"
+        size="x-small"
+        variant="tonal"
+        class="mt-2"
+        @click.stop="runAutostart"
+        :loading="isAutostartRunning"
+      >
+      </v-btn>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import axios from 'axios'
 
 const props = defineProps({
   task: {
@@ -48,6 +59,9 @@ const props = defineProps({
     default: false
   }
 })
+
+const emit = defineEmits(['update-task'])
+const isAutostartRunning = ref(false)
 
 const priorityColor = computed(() => {
   switch (props.task.priority?.toLowerCase()) {
@@ -63,6 +77,40 @@ function formatDate(dateStr) {
   const d = new Date(dateStr)
   if (isNaN(d)) return 'No date'
   return d.toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) // e.g., "20 Jun"
+}
+
+async function runAutostart() {
+  isAutostartRunning.value = true
+  console.log(`Running autostart for task ${props.task.id}`)
+  try {
+    const taskString = `Task Title: ${props.task.title}\nDescription: ${props.task.description}\nAssignee: ${props.task.assignee}\nDue Date: ${props.task.dueDate}`
+    const response = await axios.post('http://127.0.0.1:8000/autostart/generate-autostart/', {
+      task_string: taskString,
+      task_id: props.task.id
+    })
+    const result = response.data
+    console.log(`Received autostart result for task ${props.task.id}:`, result)
+
+    if (result && !result.error) {
+      const updatedTask = { ...props.task }
+      if (!updatedTask.autostart) {
+        updatedTask.autostart = []
+      }
+      console.log(`Adding autostart entry for task ${props.task.id}:`, result)
+      updatedTask.autostart.push({
+        name: result.title,
+        url: result.url,
+        type: result.type
+      })
+      emit('update-task', updatedTask)
+    } else {
+      console.error(`Error processing task ${props.task.id}: ${result.error}`)
+    }
+  } catch (error) {
+    console.error(`An error occurred during autostart for task ${props.task.id}:`, error)
+  } finally {
+    isAutostartRunning.value = false
+  }
 }
 </script>
 

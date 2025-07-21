@@ -6,14 +6,14 @@
     rail-width="90"
     border="0"
     @click="rail = false"
-  >
-    <v-card class="pa-3 fill-height bg-grey-lighten-4">
-      <v-card class="fill-height d-flex flex-column rounded-xl card-1" flat>
+  > <!-- vuetify elements have a tiny rounded to it, so rounded-0 removes all of it. (makes it sharp) --->
+    <v-card class="pa-3 fill-height rounded-0 bg-grey-lighten-1">
+      <v-card class="fill-height d-flex flex-column rounded-v1 border-1 " flat>
         <div class="sidebar-content align-center">
           <v-list density="compact" nav>
             <v-list-item
               value="toggle"
-              class="cursor-pointer rounded-xl"
+              class="cursor-pointer rounded-v2"
               @click.stop="rail = !rail"
               :active="false"
             >
@@ -28,11 +28,11 @@
             </v-list-item>
           </v-list>
 
-          <v-divider />
+          <v-divider class=" border-1" />
 
           <v-list density="compact" nav>
             <v-list-item
-              class="rounded-xl"
+              class="rounded-v2"
               :to="{ path: '/AudioInput' }"
               exact
               :active="false"
@@ -46,7 +46,7 @@
             </v-list-item>
 
             <v-list-item
-              class="rounded-xl"
+              class="rounded-v2"
               :to="{ path: '/ManagerReview' }"
               exact
               :active="false"
@@ -60,7 +60,7 @@
             </v-list-item>
 
             <v-list-item
-              class="rounded-xl"
+              class="rounded-v2"
               :to="{ path: '/Kanban-2' }"
               exact
               :active="false"
@@ -74,12 +74,12 @@
             </v-list-item>
           </v-list>
 
-          <v-divider class="mx-2" />
+          <v-divider class="mx-2 border-1" />
 
           <v-list density="compact" nav>
             <!-- Projects Header -->
             <v-list-item
-              class="cursor-pointer rounded-xl"
+              class="cursor-pointer rounded-v2"
               style="align-items: center; min-height: 48px"
               @click="isOpen = !isOpen"
             >
@@ -110,7 +110,7 @@
               <v-list-item
                 v-for="proj in projectItems"
                 :key="proj"
-                class="rounded-xl"
+                class="rounded-v2"
                 @click="handleClick(proj)"
                 density="compact"
               >
@@ -126,9 +126,9 @@
         </div>
 
         <div class="sidebar-footer">
-          <v-divider />
+          <v-divider class="border-1"/>
           <v-list>
-            <v-list-item class="rounded-xl">
+            <v-list-item class="rounded-v2">
               <template #prepend>
                 <v-icon size="24" class="icon-footer-padding"
                   >mdi-account</v-icon
@@ -206,6 +206,8 @@ function handleNewProject(project: { id: number; title: string }) {
   box-shadow: none;
 }
 
+
+
 .sidebar-content {
   flex: 1;
 }
@@ -236,4 +238,6 @@ function handleNewProject(project: { id: number; title: string }) {
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
+
+
 </style>
