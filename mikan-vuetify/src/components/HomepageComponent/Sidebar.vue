@@ -8,7 +8,7 @@
     @click="rail = false"
   > <!-- vuetify elements have a tiny rounded to it, so rounded-0 removes all of it. (makes it sharp) --->
     <v-card class="pa-3 fill-height rounded-0 bg-grey-lighten-1">
-      <v-card class="fill-height d-flex flex-column rounded-v1 card-1 " flat>
+      <v-card class="fill-height d-flex flex-column rounded-v1 border-1 " flat>
         <div class="sidebar-content align-center">
           <v-list density="compact" nav>
             <v-list-item
@@ -28,7 +28,7 @@
             </v-list-item>
           </v-list>
 
-          <v-divider />
+          <v-divider class=" border-1" />
 
           <v-list density="compact" nav>
             <v-list-item
@@ -74,7 +74,7 @@
             </v-list-item>
           </v-list>
 
-          <v-divider class="mx-2" />
+          <v-divider class="mx-2 border-1" />
 
           <v-list density="compact" nav>
             <!-- Projects Header -->
@@ -126,7 +126,7 @@
         </div>
 
         <div class="sidebar-footer">
-          <v-divider />
+          <v-divider class="border-1"/>
           <v-list>
             <v-list-item class="rounded-v2">
               <template #prepend>
@@ -205,6 +205,8 @@ function handleNewProject(project: { id: number; title: string }) {
   border: thin solid lightgray;
   box-shadow: none;
 }
+
+
 
 .sidebar-content {
   flex: 1;

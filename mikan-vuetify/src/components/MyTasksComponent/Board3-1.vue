@@ -1,6 +1,6 @@
 <template>
   <v-card 
-  class="border-sm rounded-v1 ma-3 d-flex flex-column" 
+  class="border-sm border-1 rounded-v1 ma-3 d-flex flex-column" 
   elevation="0" 
   style="width:100%; height:100%;" 
   color="white"
@@ -31,7 +31,7 @@
           single-line
           variant="outlined"
           density="compact"
-          class="border-sm rounded-xl"
+          class="border-sm rounded-xl border-2"
           dense hide-details clearable
           :menu-props="{
           contentClass: 'rounded-xl text-body-2',
@@ -48,7 +48,7 @@
           variant="outlined"
           density="compact"
     
-          class="border-sm rounded-xl"
+          class="border-sm rounded-xl border-2"
           hide-details clearable
           :menu-props="{
           contentClass: 'rounded-xl text-body-2 ',
@@ -69,7 +69,7 @@
               v-model="formattedDate"
               label="Due Before"
               variant="outlined"
-              class="border-sm rounded-xl mr-4"
+              class="border-sm rounded-xl border-2 mr-4"
               density="compact"
               single-line
               hide-details clearable

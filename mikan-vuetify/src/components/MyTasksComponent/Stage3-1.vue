@@ -5,7 +5,7 @@
   
   <v-sheet 
   elevation="0" 
-  class="border-sm rounded-v2 ma-2 hover:black d-flex flex-column" 
+  class="border-sm border-2 rounded-v2 ma-2 hover:black d-flex flex-column" 
   style="
   min-width: 340px; 
   max-width: 340px; 
@@ -82,7 +82,7 @@
     </draggable>
     <!-- <v-divider></v-divider> -->
     <v-card-actions class="pa-0 pt-0 justify-center">
-      <v-btn density="compact" class="rounded-xl border-md ma-auto bg-grey-lighten-4" @click="$emit('add-task')" :disabled="visitorMode">
+      <v-btn density="compact" class="rounded-xl border-2 border-md ma-auto bg-grey-lighten-4" @click="$emit('add-task')" :disabled="visitorMode">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-card-actions>

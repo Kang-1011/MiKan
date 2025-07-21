@@ -173,7 +173,7 @@ return Array.from(s)
 // ——— 4) COMPUTE FILTERED BOARDS ———
 /**
 * We flatten all boards from all (or the selected) projects,
-* then within each board we only keep tasks matching the
+* then within each board we only keep tasks matching bothe
 * selectedAssignee (if any).
 */
 const filteredBoards = computed(() => {
@@ -414,6 +414,12 @@ box-shadow:
   border: thin solid lightgray;
   box-shadow: none;
 }
+
+.border-1 {
+  border: 2px solid #abcdef;
+  box-shadow: none;
+}
+
 .custom-background {
   background-color: #e0e0e0; /* or any grey hex/RGB */
 }
@@ -425,4 +431,8 @@ box-shadow:
 .rounded-v2 {
   border-radius: 12px !important;
 }
+
+/* reusable utilities
+.border-1   { --v-border-color: 255, 0, 0;   --v-border-opacity: 1; }
+.border-2  { --v-border-color: 0, 0, 255;   --v-border-opacity: 1; } */
 </style>
