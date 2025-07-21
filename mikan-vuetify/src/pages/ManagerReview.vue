@@ -1,75 +1,76 @@
 <template>
     <Sidebar></Sidebar>
+    <v-app>
+        <v-main style="height: 100vh" class="pa-3 unified-background">
+            <v-card class="fill-height rounded-v1 border-1" flat>
+                <v-card border="0" flat style="height: 100%; overflow-y: auto;" class="page-background">
+                    <div style="position: sticky; top: 0; z-index: 10;">
+                        <v-card-title class="d-flex align-center justify-space-between">
+                            <div>Manager Review</div>
 
-    <v-main style="height: 100vh" class="pa-3 bg-grey-lighten-4">
-        <v-card class="fill-height rounded-lg card-1" flat>
-            <v-card border="0" flat style="height: 100%; overflow-y: auto;">
-                <div style="position: sticky; top: 0; z-index: 10; background: white;">
-                    <v-card-title class="d-flex align-center justify-space-between">
-                        <div>Manager Review</div>
-
-                        <div>
-                            <v-btn variant="outlined" color="black" class="mr-2 text-body-2 rounded-lg"
+                            <div>
+                                <v-btn variant="outlined" class="mr-2 text-body-2 border-1 rounded-xl"
+                                    @click="openCreateTaskDialog()">
+                                    <v-icon left>mdi-plus</v-icon>
+                                    Create
+                                </v-btn>
+                                <v-btn :disabled="draftStore.drafts.length === 0" variant="flat" color="grey"
+                                    class="mr-2 text-body-2 rounded-xl" @click="openApproveAllDialog()">
+                                    <v-icon left>mdi-check-all</v-icon>
+                                    Approve All
+                                </v-btn>
+                            </div>
+                        </v-card-title>
+                        <!-- <v-card-text class="d-flex justify-end">
+                            <v-btn size="small" variant="outlined" color="black" class="mr-2 text-caption"
                                 @click="openCreateTaskDialog()">
                                 <v-icon left>mdi-plus</v-icon>
                                 Create
                             </v-btn>
-                            <v-btn :disabled="draftStore.drafts.length === 0" variant="flat" color="black"
-                                class="mr-2 text-body-2 rounded-lg" @click="openApproveAllDialog()">
+                            <v-btn :disabled="draftStore.drafts.length === 0" size="small" variant="flat" color="black"
+                                class="mr-2 text-caption" @click="openApproveAllDialog()">
                                 <v-icon left>mdi-check-all</v-icon>
                                 Approve All
                             </v-btn>
-                        </div>
-                    </v-card-title>
-                    <!-- <v-card-text class="d-flex justify-end">
-                        <v-btn size="small" variant="outlined" color="black" class="mr-2 text-caption"
-                            @click="openCreateTaskDialog()">
-                            <v-icon left>mdi-plus</v-icon>
-                            Create
-                        </v-btn>
-                        <v-btn :disabled="draftStore.drafts.length === 0" size="small" variant="flat" color="black"
-                            class="mr-2 text-caption" @click="openApproveAllDialog()">
-                            <v-icon left>mdi-check-all</v-icon>
-                            Approve All
-                        </v-btn>
-                    </v-card-text> -->
-                    <v-card-subtitle>
-                        <v-divider :thickness="1" :opacity="1"></v-divider>
-                    </v-card-subtitle>
-                </div>
+                        </v-card-text> -->
+                        <v-card-subtitle>
+                            <v-divider class="divider-1"></v-divider>
+                        </v-card-subtitle>
+                    </div>
 
-                <v-container v-if="draftStore.drafts.length === 0 && !snackbar" style="height: 90%;" fluid
-                    class="d-flex align-center justify-center">
-                    <h2 class="text-center text-black">No pending tasks</h2>
-                </v-container>
-                <v-container fluid>
-                    <v-row>
-                        <v-col cols="12" sm="6" md="4" v-for="draft in draftStore.drafts" :key="draft.id">
-                            <TaskDraft :taskIndex="draft.id" :title="draft.title" :dueDate="draft.dueDate"
-                                :assignee="draft.assignee.name" :project="draft.project.title" :description="draft.description"
-                                @task-approved="oneTaskApproved($event)" @task-deleted="oneTaskDeleted($event)"
-                                @task-edited="oneTaskEdited($event)"></TaskDraft>
-                        </v-col>
-                    </v-row>
-                    <CreateTaskDialog v-model="newTaskDialogFlag" @close-create-task-dialog="newTaskDialogFlag = false"
-                        @pass-created-task="createNewDraft()" />
-                    <ApproveAllDialog v-model="approveAllDialogFlag"
-                        @close-approve-dialog="approveAllDialogFlag = false"
-                        @approve-all-drafts="approveAllDrafts($event)" />
-                    <v-snackbar v-model="snackbar" :timeout="2000" :color="snackbarColor" variant="tonal"
-                        class="justify-center align center" location="center middle">
-                        <h1 class="text-center">{{ snackbarMessage }}</h1>
-                    </v-snackbar>
-                    <Toast position="top-right" group="tr" />
-                </v-container>
+                    <v-container v-if="draftStore.drafts.length === 0 && !snackbar" style="height: 90%;" fluid
+                        class="d-flex align-center justify-center">
+                        <h2 class="text-center text-grey-darken-2">No pending tasks</h2>
+                    </v-container>
+                    <v-container fluid>
+                        <v-row>
+                            <v-col cols="12" sm="6" md="4" v-for="draft in draftStore.drafts" :key="draft.id">
+                                <TaskDraft :taskIndex="draft.id" :title="draft.title" :dueDate="draft.dueDate"
+                                    :assignee="draft.assignee.name" :project="draft.project.title" :description="draft.description"
+                                    @task-approved="oneTaskApproved($event)" @task-deleted="oneTaskDeleted($event)"
+                                    @task-edited="oneTaskEdited($event)"></TaskDraft>
+                            </v-col>
+                        </v-row>
+                        <CreateTaskDialog v-model="newTaskDialogFlag" @close-create-task-dialog="newTaskDialogFlag = false"
+                            @pass-created-task="createNewDraft()" />
+                        <ApproveAllDialog v-model="approveAllDialogFlag"
+                            @close-approve-dialog="approveAllDialogFlag = false"
+                            @approve-all-drafts="approveAllDrafts($event)" />
+                        <v-snackbar v-model="snackbar" :timeout="2000" :color="snackbarColor" variant="tonal"
+                            class="justify-center align center" location="center middle">
+                            <h1 class="text-center">{{ snackbarMessage }}</h1>
+                        </v-snackbar>
+                        <Toast position="top-right" group="tr" />
+                    </v-container>
+                </v-card>
             </v-card>
-        </v-card>
-        
-    <Chatbot />
-    </v-main>
+            
+        <Chatbot />
+        </v-main>
+    </v-app>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import ApproveAllDialog from "@/components/ManagerReviewComponent/ManagerReviewApproveAllDialog.vue";
 import CreateTaskDialog from "@/components/ManagerReviewComponent/ManagerReviewCreateTaskDialog.vue";
