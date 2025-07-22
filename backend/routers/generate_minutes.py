@@ -1,10 +1,14 @@
+# Using JSON Output Parser from GAIA 7.2 Slides #
+
 import os
 import json
-import re
 import requests
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import JsonOutputParser
+from pydantic import BaseModel, Field
+from typing import List
 
 # === LOAD GEMINI API KEY ===
 load_dotenv()
@@ -15,6 +19,34 @@ if not GEMINI_API_KEY:
 # === CONFIGURATION ===
 BASE_URL = "http://localhost:8000"
 OUTPUT_JSON_PATH = os.path.join(os.path.dirname(__file__), "generated_minutes.json")
+
+# === PYDANTIC MODELS ===
+class MeetingHeader(BaseModel):
+    title: str = Field(description="Meeting title")
+    location: str = Field(description="Meeting location")
+    created_by: str = Field(description="Person who created the meeting")
+    date: str = Field(description="Meeting date in YYYY-MM-DD format")
+    project: str = Field(description="Project name")
+    purpose: str = Field(description="Purpose of the meeting")
+    attendees: str = Field(description="Comma-separated list of attendees")
+
+class Task(BaseModel):
+    task_no: str = Field(description="Task number (1, 1.1, 2, etc.)", alias="Task No.")
+    description: str = Field(description="Detailed task description", alias="Description")
+    action_by: str = Field(description="Person assigned to the task", alias="Action by")
+    due_date: str = Field(description="Due date in YYYY-MM-DD format", alias="Due date")
+
+class MeetingMinutes(BaseModel):
+    header: MeetingHeader = Field(description="Meeting header information")
+    tasks: List[Task] = Field(description="List of actionable tasks")
+
+# === INITIALIZE LLM AND PARSER ===
+llm = ChatGoogleGenerativeAI(
+    model="gemini-2.0-flash",
+    api_key=GEMINI_API_KEY
+)
+
+output_parser = JsonOutputParser(pydantic_object=MeetingMinutes)
 
 # === FETCH LATEST TRANSCRIPT ID ===
 def fetch_latest_transcript_id():
@@ -52,63 +84,39 @@ def fetch_transcript_text(transcript_id):
         return ""
 
 # === DEFINE PROMPT CHAIN ===
-def build_chain():
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", """
-You are a smart assistant that extracts meeting metadata and actionable tasks from meeting transcripts.
+chat_prompt = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        """You are a smart assistant that extracts meeting metadata and actionable tasks from meeting transcripts.
 
-Extract the following meeting headers:
+Extract the meeting headers and actionable tasks from the provided transcript in the specified JSON format.
+
+For meeting headers, extract:
 - title
-- location
+- location  
 - created_by
 - date (YYYY-MM-DD)
 - project
 - purpose
-- attendees
+- attendees (format as comma-separated list: "Name1, Name2, Name3")
 
-Then extract actionable tasks with these details for each task:
-- Assign a task number (1, 1.1, 2, etc.)
-- Include a detailed description
-- Assign to someone if possible ("Action by")
-- Include a due date in YYYY-MM-DD if available or infer from context
+For tasks, extract ALL actionable items with:
+- Task number (1, 2, 3, etc.)
+- Detailed description (use "Description" as the field name)
+- Person assigned ("Action by")
+- Due date in YYYY-MM-DD format (infer from context if not explicitly stated and use appropriate dates based on urgency )
 
-Format the output as a JSON object with two keys: "header" and "tasks"
+Make sure to extract ALL tasks mentioned in the transcript - don't miss any actionable items.
 
-Example output format:
+Provide the response in the specified JSON format."""
+    ),
+    (
+        "human",
+        "{input}\n{format_instructions}"
+    )
+])
 
-{{
-  "header": {{
-    "title": "Project Kickoff Meeting",
-    "location": "Conference Room A",
-    "created_by": "Alice",
-    "date": "2025-07-08",
-    "project": "New Website Launch",
-    "purpose": "Discuss project goals and assign tasks",
-    "attendees": "Alice, Bob, Charlie"
-  }},
-  "tasks": [
-    {{
-      "Task No.": "1",
-      "Description": "Write up the revised product launch plan.",
-      "Action by": "Charlie",
-      "Due date": "2025-07-15"
-    }},
-    {{
-      "Task No.": "2",
-      "Description": "Prepare marketing materials.",
-      "Action by": "Bob",
-      "Due date": "2025-07-20"
-    }}
-  ]
-}}
-
-Only return the JSON object.
-        """),
-        ("human", "{input}")
-    ])
-    return prompt | ChatGoogleGenerativeAI(model="gemini-2.0-flash", google_api_key=GEMINI_API_KEY)
-
-
+chain = chat_prompt | llm | output_parser
 
 # === ENTRYPOINT FUNCTION ===
 def generate_minutes():
@@ -121,24 +129,28 @@ def generate_minutes():
     if not transcript_text.strip():
         raise ValueError("Transcript is empty")
 
-    chain = build_chain()
-    result_raw = chain.invoke({ "input": transcript_text })
-    result_str = result_raw.content
-
-    json_text = result_str.strip()
-    fence_match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", json_text, re.IGNORECASE)
-    if fence_match:
-        json_text = fence_match.group(1).strip()
-
     try:
-        result_json = json.loads(json_text)
-    except json.JSONDecodeError as e:
-        print(f"[ERROR] JSON decoding failed: {e}")
+        result_json = chain.invoke({
+            "input": transcript_text,
+            "format_instructions": output_parser.get_format_instructions()
+        })
+        
+        # Save to file
         with open(OUTPUT_JSON_PATH, "w", encoding="utf-8") as f:
-            f.write(result_str)
-        raise ValueError("Failed to decode JSON. Raw result saved.")
+            json.dump(result_json, f, indent=4, ensure_ascii=False)
+        
+        print(f"[✅] Minutes generated successfully and saved to {OUTPUT_JSON_PATH}")
+        return result_json
+        
+    except Exception as e:
+        print(f"[ERROR] Failed to generate minutes: {e}")
+        raise
 
-    # Save to pinia
-    print(f"[✅] Minutes generated successfully.")
-    return result_json
-
+# === TEST FUNCTION ===
+if __name__ == "__main__":
+    try:
+        minutes = generate_minutes()
+        print("\nGenerated Minutes:")
+        print(json.dumps(minutes, indent=4))
+    except Exception as e:
+        print(f"Error: {e}")
