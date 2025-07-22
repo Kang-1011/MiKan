@@ -8,7 +8,7 @@
     @click="rail = false"
   > <!-- vuetify elements have a tiny rounded to it, so rounded-0 removes all of it. (makes it sharp) --->
     <v-card class="pa-3 fill-height rounded-0 unified-background">
-      <v-card class="fill-height d-flex flex-column rounded-v1 page-background border-1 " flat>
+      <v-card class="fill-height d-flex flex-column rounded-v1 sidebar page-background border-1 " flat>
         <div class="sidebar-content align-center">
           <v-list density="compact" nav>
             <v-list-item

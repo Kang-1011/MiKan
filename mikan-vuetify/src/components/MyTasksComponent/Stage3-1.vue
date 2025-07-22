@@ -15,7 +15,7 @@
       <template v-if="!isEditing">
         <v-toolbar-title  class="text-subtitle-1 my-0 py-0">{{ stage.title }}</v-toolbar-title>
         <v-spacer />
-        <v-btn density="compact" icon  v-if="!visitorMode" @click="startRename">
+        <v-btn density="compact" class="stage-button-edit" icon  v-if="!visitorMode" @click="startRename">
           <v-icon size="20px">mdi-pencil</v-icon>
         </v-btn>
         
@@ -27,7 +27,7 @@
          @confirm="onConfirmDelete"
        />
 <!-- <v-btn density="compact" icon class="mr-3" v-if="!visitorMode" @click="$emit('delete-stage', props.stageIndex)"> -->
-        <v-btn density="compact" class="mr-3" icon  v-if="!visitorMode" @click="showDelete = true">
+        <v-btn density="compact" class="mr-3 stage-button-delete" icon  v-if="!visitorMode" @click="showDelete = true">
           <v-icon size="20px">mdi-delete</v-icon>
         </v-btn>
       </template>
@@ -81,7 +81,7 @@
     </draggable>
     <!-- <v-divider></v-divider> -->
     <v-card-actions class="pa-0 pt-0 justify-center">
-      <v-btn density="compact" class="rounded-xl border-2 border-md ma-auto bg-grey-lighten-4" @click="$emit('add-task')" :disabled="visitorMode">
+      <v-btn density="compact" class="stage-button-add-task rounded-xl border-2 border-md ma-auto bg-grey-lighten-4" @click="$emit('add-task')" :disabled="visitorMode">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-card-actions>

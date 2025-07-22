@@ -13,7 +13,7 @@
         <v-btn icon density="compact" elevation="0" class="header-action-btn save-btn" @click="save">
           <v-icon color="rgba(0,0,0,0.6)">mdi-content-save-outline</v-icon>
         </v-btn>
-        <v-btn icon density="compact" elevation="0" class="header-action-btn delete-btn" @click="$emit('delete-task')">
+        <v-btn icon density="compact" elevation="0" class="header-action-btn stage-button-delete" @click="$emit('delete-task')">
           <v-icon color="rgba(0,0,0,0.6)">mdi-delete-outline</v-icon>
         </v-btn>
       </v-toolbar>

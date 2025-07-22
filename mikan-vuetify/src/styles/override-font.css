@@ -76,7 +76,7 @@
 }
 
 .divider-2 {
-  border: 0.75px solid rgb(55, 44, 180) !important;
+  border: 0.75px solid #372cb4 !important;
   box-shadow: none;
 }
 
@@ -97,6 +97,7 @@
 
 .stage-background{
   background: #f0f0f0 !important;
+  transition: transform 0.1s ease-in-out;
 }
 .stage-background,
 .stage-background * {
@@ -104,8 +105,53 @@
 }
 .stage-background:hover {
 
+  transform: translateY(-1px); 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
   
 }
+
+.task-draft-background{
+  background: #f0f0f0 !important;
+  transition: transform 0.1s ease-in-out;
+}
+
+.task-draft-background:hover {
+
+  transform: translateY(-1px); 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
+  
+}
+
+.task-draft-outer{
+  background: #f0f0f0 !important;
+  transition: transform 0.1s ease-in-out;
+}
+
+.task-draft-outer:hover {
+
+  transform: translateY(-1px); 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
+  
+}
+
 
 .taskcard-background {
   background: #CDCDCD !important;
@@ -167,7 +213,7 @@
   background-color: rgb(255, 230, 183) !important;
   transform: translateY(-1px); /* keep your lift effect */
   box-shadow:
-  6px 6px 12px rgba(0, 0, 0, 0.10),
+  3px 3px 6px rgba(0, 0, 0, 0.10),
  /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
 
   /* inset shadows for that pressed-in look */
@@ -183,6 +229,75 @@ color:#ffffff !important;
 .button-secondary{
   background-color:#ffffff !important;
   color:#515151 !important;
+}
+
+.stage-button-delete{
+
+}
+.stage-button-delete .v-ripple__animation{
+
+}
+.stage-button-delete:hover{
+  transform: translateY(-1px); /* keep your lift effect */
+  color: rgb(245, 66, 66) !important;
+  background-color: #cfcfcf !important;
+
+}
+
+.stage-button-approve{
+
+}
+.stage-button-approve .v-ripple__animation{
+
+}
+.stage-button-approve:hover{
+  transform: translateY(-1px); /* keep your lift effect */
+  color: rgb(68, 166, 22) !important;
+  background-color: #cfcfcf !important;
+
+}
+
+.stage-button-edit{
+
+}
+.stage-button-edit .v-ripple__animation{
+transform: scale(1.1); 
+}
+
+.stage-button-edit:hover{
+  transform: translateY(-1px); /* keep your lift effect */
+
+  color: #000000 !important;
+  background-color: #cdcdcd !important;
+}
+
+.stage-button-add-task{
+
+}
+.stage-button-add-task .v-ripple__animation{
+
+}
+
+.stage-button-add-task:hover{
+  transform: translateY(-1px); /* keep your lift effect */
+  transform: scale(1.1); 
+  color: #000000 !important;
+  background-color: #cdcdcd !important;
+}
+
+.sidebar{
+
+}
+
+.sidebar:hover{
+ 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
 }
 
 /* icons and fonts */
@@ -251,9 +366,10 @@ color:#ffffff !important;
 
 }
 
-.delete-button{
-  
+.taskdetail-icon-grey{
+  color: rgba(0,0,0,0.6)
 }
+
 /* *::-webkit-scrollbar,
 *::-webkit-scrollbar-track,
 *::-webkit-scrollbar-thumb {
