@@ -6,8 +6,13 @@ from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from typing import List
+from .agent_fetch_users import get_attendees
+
+load_dotenv()
 
 router = APIRouter()
+attendee =  get_attendees()
+# print(attendee)
 
 class TranscriptLine(BaseModel):
     timestamp: str = Field(description="Timestamp in [hh:mm:ss] format")
@@ -25,7 +30,7 @@ class ResponseFormatter(BaseModel):
     attendees: str = Field(description="List of attendees, newline-separated")
     transcript_lines: List[TranscriptLine] = Field(description="List of transcript entries with timestamp, speaker, and content")
 
-load_dotenv()
+# load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, thinking_budget=0, google_api_key=GEMINI_API_KEY)
 structured_llm = llm.with_structured_output(ResponseFormatter)
@@ -60,6 +65,10 @@ async def transcribe(file: UploadFile = File(...)):
                                 Ensure the transcription is clear, properly segmented, and captures speaker turns (if speaker information is available).
                                 Group consecutive speech from the same speaker into a single transcript block (i.e. avoid splitting it into multiple entries if the speaker continues talking without interruption).
                                 Do not include any additional explanation or commentary.
+                                For the title, please analyze the whole transcript and come out with the comprehensive title that make it so that the manager to find the context of the meeting easier. You can refer to this example: 'XXX meeting for XXX events'.
+                                For the purpose of the meeting, please analyze the tasks assinged, then categorized them into common category. To write the purpose, you can follow the following template: 'To discuss plans for the XXX, focusing {{common categories}}.'
+                                Available attendees in the system: {attendee_list}                                
+                                For the attendees field, match the speakers you identify in the transcript with the available attendees list above. Only include attendees who actually spoke or were mentioned in the meeting.
                                 """
                     },
                     {
@@ -72,7 +81,10 @@ async def transcribe(file: UploadFile = File(...)):
             ),
         ])
         chain = prompt | structured_llm
-        response = chain.invoke({})
+        # 
+        attendee_str = ", ".join(attendee) if attendee else "No attendees found"
+        response = chain.invoke({"attendee_list": attendee_str})
+        # response = chain.invoke({})
         return {"transcript": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred during transcription: {str(e)}")
