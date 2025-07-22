@@ -200,10 +200,18 @@ color:#ffffff !important;
 /* Primary button equivalent */
 
 }
+.kanban-button-1:hover {
+  background-color: rgb(251, 85, 7) !important;
+  transform: translateY(-1px); /* keep your lift effect */
+}
 
 .kanban-button-2{
 /* Secondary button equivalent */
 
+}
+.kanban-button-2:hover {
+  background-color: rgb(251, 85, 7) !important;
+  transform: translateY(-1px); /* keep your lift effect */
 }
 
 .kanban-button-3{
@@ -217,14 +225,29 @@ color:#ffffff !important;
 
 }
 
+@keyframes wiggle {
+  0%, 100% { transform: translateX(0) translateY(-3px) rotate(0); }
+  15%      { transform: translateX(-1px) translateY(-3px) rotate(-5deg); }
+  30%      { transform: translateX(1px)  translateY(-3px) rotate(5deg); }
+  45%      { transform: translateX(-1px) translateY(-3px) rotate(-5deg); }
+  60%      { transform: translateX(1px)  translateY(-3px) rotate(5deg); }
+  75%      { transform: translateX(-0.5px) translateY(-3px) rotate(-2.5deg); }
+}
+
 .mikan-button-1{
   background-color:#ff9046 !important;
   color:#ffffff !important;
 }
 
-.mikan-button-1 .v-ripple__animation {
-
+.mikan-button-1:hover {
   background-color: rgb(251, 85, 7) !important;
+  animation: wiggle 0.2s ease-in-out both;
+}
+
+.mikan-button-1 .v-ripple__animation {
+  --v-ripple-opacity: 1 !important;
+  background-color: rgb(251, 85, 7) !important;
+  color: rgb(255, 81, 0) !important;
 
 }
 

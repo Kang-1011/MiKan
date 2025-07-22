@@ -37,7 +37,7 @@
         {{ task.assignee }}
       </div>
       <v-btn
-        icon="mdi-auto-fix"
+        icon="mdi-rocket-launch"
         size="x-small"
         variant="tonal"
         class="mt-2 mikan-button-1"
@@ -45,7 +45,7 @@
         :loading="isAutostartRunning"
       >
       </v-btn>
-
+<!-- mdi-auto-fix -->
     </div>
 
   </v-card>
