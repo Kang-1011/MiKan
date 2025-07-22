@@ -8,3 +8,8 @@ langchain
 langchain-google-genai
 scikit-learn
 numpy 
+# langchain-google-storage
+unstructured
+unstructured[pdf]
+unstructured[docx]
+unstructured[xlsx]
