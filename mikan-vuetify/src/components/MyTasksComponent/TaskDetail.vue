@@ -54,7 +54,7 @@
               <div class="custom-input-wrapper subtask-wrapper">
                 <input
                   type="text"
-                  v-model="localTask.subtasks[idx]"
+                  v-model="localTask.subtasks[idx].text"
 
                   class="custom-input"
                 />
@@ -90,6 +90,7 @@
             v-model="localTask.attachments"
             mode="attachments"
             :visitorMode="visitorMode"
+			@deleted-attachment="onDeletedAttachment"
           />
 
           <!-- AI Attachments -->
@@ -116,22 +117,19 @@
           <!-- Assignee -->
           <div class="input-label small-gap">Assignee</div>
           <v-combobox
-            v-model="localTask.assignee"
-            transition="scale-transition"
-            :items="assigneeOptions"
-
-            label="Select assignee"
-            clearable
-            dense
-            hide-details
-            single-line
-            variant="outlined"
-            density="compact"
-            class="rounded-xl border-sm small-gap"
-            :menu-props="{
-          contentClass: 'rounded-xl text-body-2',
-          }"
-          />
+			:model-value="localTask.assignee_id"
+			:items="assigneeOptions"
+			item-title="name"
+			item-value="id"
+			label="Select assignee"
+			clearable
+			dense
+			hide-details
+			variant="outlined"
+			density="compact"
+			class="rounded-xl border-sm small-gap"
+			@update:modelValue="onAssigneeSelect"
+			/>
 
           <!-- Priority -->
           <div class="input-label small-gap">Priority</div>
@@ -151,33 +149,33 @@
           }"
         />
 
-        <!-- Due Date -->
-<div class="input-label small-gap">Due Date</div>
-<v-menu
-  v-model="dateMenu"
-  :close-on-content-click="false"
-  transition="scale-transition"
->
-  <template #activator="{ props }">
-    <v-text-field
-      v-model="formattedDate"
-      variant="outlined"
-      density="compact"
-      hide-details
-      prepend-inner-icon="mdi-calendar"
-      class="rounded-xl border-md text-body-2"
-      placeholder="Due Date"
-      v-bind="props"
-    />
-  </template>
+        <!-- Due Date --><div class="input-label small-gap">Due Date</div>
+		<v-menu
+		v-model="dateMenu"
+		:close-on-content-click="false"
+		transition="scale-transition"
+		>
+		<template #activator="{ props }">
+			<v-text-field
+			:model-value="formattedDate"
+			readonly
+			variant="outlined"
+			density="compact"
+			hide-details
+			prepend-inner-icon="mdi-calendar"
+			class="rounded-xl border-md text-body-2"
+			placeholder="Due Date"
+			v-bind="props"
+			/>
+		</template>
 
-  <v-date-picker
-    v-model="localTask.dueDate"
-    @update:model-value="dateMenu = false"
-    class="rounded-xl border-md text-body-2"
-    no-title
-  />
-</v-menu>
+		<v-date-picker
+			v-model="localTask.dueDate"
+			@update:model-value="dateMenu = false"
+			class="rounded-xl border-md text-body-2"
+			no-title
+		/>
+		</v-menu>
 
           <!-- Comments input -->
           <div class="input-label small-gap">Add Comment</div>
@@ -226,6 +224,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
+import axios from 'axios'
 import Attachment from '@/components/MyTasksComponent/AttachmentManager.vue'
 import { boards } from '@/stores/boards'
 
@@ -237,18 +236,24 @@ const internalDialogOpen = computed({
   set: v => emit('update:modelValue', v)
 })
 const localTask = ref<any>(null)
+const deletedAttachments = ref<any[]>([])
 const dateMenu = ref(false)
 const newComment = ref('')
-// derive assignee list dynamically from your boards store
 
 const assigneeOptions = computed(() => {
-  const set = new Set<string>()
+  const map = new Map<number, string>()
+
   boards.value.forEach(b =>
     b.stages.forEach(sg =>
-      sg.tasks.forEach(t => t.assignee && set.add(t.assignee))
+      sg.tasks.forEach(t => {
+        if (t.assignee_id && t.assignee) {
+          map.set(t.assignee_id, t.assignee)
+        }
+      })
     )
   )
-  return Array.from(set)
+
+  return Array.from(map.entries()).map(([id, name]) => ({ id, name }))
 })
 
 const descRef = ref<HTMLTextAreaElement | null>(null)
@@ -269,43 +274,48 @@ onMounted(() => {
 
 // Auto-grow each time dialog opens
 watch(internalDialogOpen, open => {
-   if (!open) return
-   // 1) Reset the localTask snapshot to the latest props.task
-   if (props.task) {
-    // shallow‐clone so File instances aren’t lost
+  if (!open) return
+  if (props.task) {
     const t = props.task
     const copy: any = {
       ...t,
-      subtasks:       [...(t.subtasks       || [])],
-      attachments:    [...(t.attachments    || [])],
-      autostart:      [...(t.autostart      || [])],
+      subtasks: [...(t.subtasks || [])],
+      attachments: [...(t.attachments || [])],
+      autostarts: [...(t.autostart || [])],
       ai_attachments: [...(t.ai_attachments || [])],
-      comments:       (t.comments || []).map(x =>
+      comments: (t.comments || []).map(x =>
         typeof x === 'string' ? { text: x, date: new Date() } : { ...x }
       ),
+      assignee_id: t.assignee_id
     }
     localTask.value = copy
   } else {
-     // If no task, clear out any previous edits
-     localTask.value = {
-       title:       '',
-       description: '',
-       subtasks:    [],
-       attachments: [],
-       autostart:   [],
-       ai_attachments: [],
-       comments:    [],
-       assignee:    '',
-       priority:    '',
-       dueDate:     '',
-     }
-   }
-   // 2) Then auto-grow the textarea as before
-   nextTick(() => {
-     if (descRef.value) autoGrowDesc({ target: descRef.value } as any)
-   })
- })
+    localTask.value = {
+      title: '',
+      description: '',
+      subtasks: [],
+      attachments: [],
+      autostarts: [],
+      ai_attachments: [],
+      comments: [],
+      assignee_id: null,
+      priority: '',
+      dueDate: '',
+      status: 'to-do'
+    }
+  }
+})
 
+function onAssigneeSelect(selected: number | { id: number; name: string }) {
+  if (typeof selected === 'object' && selected !== null) {
+    localTask.value.assignee_id = selected.id
+    localTask.value.assignee = selected.name
+  } else {
+    const assignee = assigneeOptions.value.find(a => a.id === selected)
+    localTask.value.assignee_id = selected
+    localTask.value.assignee = assignee ? assignee.name : ''
+  }
+}
 
 const formattedDate = computed({
   get() {
@@ -323,24 +333,133 @@ const formattedDate = computed({
 function closeDialog() {
   emit('update:modelValue', false)
 }
-function save() {
-  if (localTask.value) {
-    emit('save-task', localTask.value)
-    closeDialog()
+
+function onDeletedAttachment(file: any) {
+  if (file?.url) {
+    deletedAttachments.value.push(file)
   }
 }
+
+async function save() {
+  if (!localTask.value) return;
+
+  const payload = {
+    assignee_id: localTask.value.assignee_id,
+    title: localTask.value.title,
+    description: localTask.value.description,
+    due_date: localTask.value.dueDate ? new Date(localTask.value.dueDate).toISOString().slice(0, 10) : null,
+    priority: localTask.value.priority,
+    status: localTask.value.status
+  };
+  console.log("Payload sent from TaskDetail to Kanban: ", payload)
+  emit('save-task', localTask.value.id, payload)
+
+   // ✅ Handle NEW Subtasks
+  const newSubtasks = localTask.value.subtasks.filter((sub: { id?: any; text?: string }) => !sub.id && sub.text?.trim());
+
+  for (const sub of newSubtasks) {
+    try {
+      await axios.post("http://localhost:8000/subtasks/add_subtask", {
+        task_id: localTask.value.id,
+        text: sub.text.trim(),
+        date: sub.date || new Date().toISOString()
+      });
+    } catch (err) {
+      console.error("❌ Failed to save subtask:", err);
+    }
+  }
+
+  // ✅ Handle NEW Attachments
+  const newFiles = localTask.value.attachments.filter((att: any) => att instanceof File);
+  const existingAttachments = localTask.value.attachments.filter((att: any) => !(att instanceof File));
+  const uploadedAttachments = [];
+
+  for (const file of newFiles) {
+    try {
+      const formData = new FormData();
+      formData.append("task_id", localTask.value.id);
+      formData.append("file", file);
+      formData.append("title", file.name);
+
+      const res = await axios.post("http://localhost:8000/attachments/upload_attachment", formData);
+
+      uploadedAttachments.push({
+        id: res.data.attachment_id,
+        name: res.data.attachment_title,
+        size: file.size,
+        type: res.data.attachment_type,
+        url: res.data.attachment_url
+      });
+    } catch (err) {
+      console.error("❌ Failed to upload attachment:", err);
+    }
+  }
+
+  // ✅ Delete removed attachments
+	for (const deleted of deletedAttachments.value) {
+	const urlParts = deleted.url.split('/');
+	const attachmentId = urlParts[urlParts.length - 1];
+
+	if (attachmentId) {
+		try {
+		await axios.delete(`http://localhost:8000/attachments/delete_attachment/${attachmentId}`);
+		console.log(`🗑️ Deleted attachment ${attachmentId}`);
+		} catch (err) {
+		console.error(`❌ Failed to delete attachment ${attachmentId}:`, err);
+		}
+	}
+	}
+	deletedAttachments.value = []
+
+  localTask.value.attachments = [...existingAttachments, ...uploadedAttachments];
+
+  // 🧼 Optional: console.log everything at end
+  console.log("✔️ All updates done.");
+}
+
 function addSubtask() {
-  localTask.value.subtasks.push('')
+  localTask.value.subtasks.push({
+    text: "",
+    date: new Date().toISOString(),
+    id: null
+  });
 }
-function removeSubtask(i: number) {
-  localTask.value.subtasks.splice(i, 1)
+
+async function removeSubtask(i: number) {
+  const sub = localTask.value.subtasks[i];
+  console.log("subtask_id : ", sub.subtask_id)
+
+  if (sub.id) {
+    try {
+      await axios.delete(`http://localhost:8000/subtasks/delete_subtask/${sub.subtask_id}`);
+      console.log(`✅ Subtask ${sub.id} deleted from backend`);
+    } catch (err) {
+      console.error(`❌ Failed to delete subtask ${sub.id}:`, err);
+    }
+  }
+
+  // Then safely remove it from the UI
+  localTask.value.subtasks.splice(i, 1);
 }
-function submitComment() {
+
+async function submitComment() {
   if (newComment.value.trim()) {
-    localTask.value.comments.push({ text: newComment.value.trim(), date: new Date() })
-    newComment.value = ''
+    const commentData = {
+      task_id: localTask.value.id,
+      text: newComment.value.trim(),
+      date: new Date().toISOString()
+    };
+
+    try {
+      const response = await axios.post(`http://localhost:8000/comments/add_comment`, commentData);
+      localTask.value.comments.push(response.data);
+      newComment.value = '';
+    } catch (err) {
+      console.error("❌ Failed to submit comment:", err);
+    }
   }
 }
+
 function formatDateShort(d: any) {
   return new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }

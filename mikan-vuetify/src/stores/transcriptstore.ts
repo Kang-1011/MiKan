@@ -2,6 +2,23 @@ import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import axios from "axios";
 
+interface LLMTranscriptLine {
+  timestamp: string;
+  speaker: string;
+  text: string;
+}
+
+interface LLMTranscriptDate {
+	title: string;
+  purpose: string;
+	attendees: string;
+	transcript_lines: LLMTranscriptLine[];
+}
+
+interface ResponseFormatter {
+  transcript: LLMTranscriptDate;
+}
+
 export type TranscriptLine = {
   transcript: string;
 };
@@ -77,6 +94,41 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
+  // Kang's code to bring in transcript data from llm's result (JSON)
+  async function loadFromLLMJSON(llm_json: ResponseFormatter) {
+    try {
+      header.title = llm_json.transcript.title;
+      header.location = "Your Heart";
+      header.createdBy = "You";
+      header.date = "Now";
+      header.project = "Your Heart";
+      header.purpose = llm_json.transcript.purpose;
+      header.attendees = llm_json.transcript.attendees;
+
+      if (
+        llm_json.transcript.transcript_lines &&
+        Array.isArray(llm_json.transcript.transcript_lines)
+      ) {
+        body.transcriptLines = llm_json.transcript.transcript_lines.map((line) => ({
+          transcript: `[${formatTimestamp(line.timestamp)}] ${line.speaker}: ${line.text}`,
+        }));
+      } else {
+        console.warn("transcript_lines is missing or not an array");
+        body.transcriptLines = [];
+      }
+    } catch (error) {
+      console.error("Failed to load JSON from transcription json:", error);
+    }
+  }
+
+	function formatTimestamp(ts: string): string {
+		const parts = ts.split(':'); // ["00", "01", "680"]
+		if (parts.length !== 3) return ts; // fallback if unexpected format
+
+		const ms = parts[2].slice(0, 2); // get first two digits only
+		return `${parts[0]}:${parts[1]}:${ms}`;
+	}
+
   // ✅ Save transcript to FastAPI backend
   async function saveTranscriptToDB() {
     try {
@@ -111,6 +163,19 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
+  // ✨ ADDED: State for the highlighted transcript line
+  const highlightedLine = ref<string | null>(null);
+
+  // ✨ ADDED: Action to set or clear the highlight
+  function setHighlightedLine(line: string | null) {
+    highlightedLine.value = line;
+    if (line) {
+      console.log(`Highlighting line: ${line}`);
+    } else {
+      console.log("Clearing highlight.");
+    }
+  }
+
   return {
     isEditMode,
     activeEditorKey,
@@ -119,11 +184,14 @@ export const useTranscriptStore = defineStore("transcript", () => {
     transcriptHeaderData,
     transcriptBodyData,
     fullTranscriptText,
+    highlightedLine,
+    setHighlightedLine,
     toggleEditMode,
     setActiveEditor,
     updateHeaderField,
     updateTranscript,
     loadFromJson,
+    loadFromLLMJSON,
     saveTranscriptToDB, // ✅ expose this to use in TranscriptDisplay.vue
   };
 });

@@ -7,20 +7,7 @@
       <h2>Minutes</h2>
     </div>
     <div>
-      <v-tooltip text="Download Minutes" location="bottom">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            icon="mdi-download-outline"
-            variant="text"
-            v-bind="props"
-            @click="exportToPDF"
-          ></v-btn>
-        </template>
-      </v-tooltip>
-      <v-tooltip
-        :text="isEditMode ? 'Finish Editing' : 'Edit Minutes'"
-        location="bottom"
-      >
+        <v-tooltip :text="isEditMode ? 'Finish Editing' : 'Edit Minutes'" location="bottom">
         <template v-slot:activator="{ props }">
           <v-btn
             :icon="isEditMode ? 'mdi-check-outline' : 'mdi-square-edit-outline'"
@@ -29,8 +16,13 @@
             @click="toggleEditMode"
           ></v-btn>
         </template>
-      </v-tooltip>
-      <v-tooltip text="To Manager Review" location="bottom">
+        </v-tooltip>
+        <v-tooltip text="Download Minutes" location="bottom">
+        <template v-slot:activator="{ props }">
+            <v-btn icon="mdi-download-outline" variant="text"  v-bind="props" @click="exportToPDF"></v-btn>
+        </template>
+        </v-tooltip> 
+        <v-tooltip text="To Manager Review" location="bottom">
         <template v-slot:activator="{ props }">
           <v-btn
             icon="mdi-send-outline"
@@ -544,93 +536,174 @@ const toTask = () => {
 };
 
 const exportToPDF = () => {
-  console.log("Export to PDF triggered!");
+  console.log("Exporting Minutes to styled, text-based PDF...");
 
-  const elementToCapture = pdfContent.value?.$el;
-
-  if (!elementToCapture) {
-    console.error("Could not find the element to capture.");
-    alert("Error: PDF content not found.");
-    return;
-  }
-
-  // --- START OF CHANGES ---
-  const title = minuteHeaderData.value?.title || "Meeting-Minutes";
-  const safeFilename = title.replace(/[^a-z0-9]/gi, "_").toLowerCase() + ".pdf";
-  console.log(`Using filename: ${safeFilename}`);
-
+  // Ensure jsPDF and the autoTable plugin are loaded
   const { jsPDF } = window.jspdf;
-  const html2canvas = window.html2canvas;
-
-  if (!html2canvas || !jsPDF) {
-    console.error("PDF generation libraries not loaded!");
+  if (!jsPDF || !jsPDF.API.autoTable) {
+    console.error("jsPDF or jsPDF-AutoTable library not loaded!");
     alert("Sorry, the PDF export feature is currently unavailable.");
     return;
   }
 
-  html2canvas(elementToCapture, {
-    scale: 2,
-    useCORS: true,
-    // It can be beneficial to set the width explicitly if responsive issues persist
-    width: elementToCapture.scrollWidth,
-  })
-    .then((canvas) => {
-      console.log("html2canvas was SUCCESSFUL.");
-      const imgData = canvas.toDataURL("image/png");
+  // 1. Initialize jsPDF
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'pt',
+    format: 'a4'
+  });
 
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "pt", // Using points is often more reliable
-        format: "a4", // Standard page size
-      });
+  // 2. Define document properties and layout constants
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const margin = 40;
+  const contentWidth = pageWidth - (margin * 2);
+  let currentY = margin;
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
+  // 3. Get data from the store
+  const headerData = minuteHeaderData.value;
+  const tasks = body.value.Tasks;
+  const safeFilename = `${headerData.project || 'Meeting'}-Minutes.pdf`;
 
-      const canvasAspectRatio = canvas.width / canvas.height;
-      const pdfAspectRatio = pdfWidth / pdfHeight;
+  // --- START: Replicating the Webpage Layout ---
 
-      let finalCanvasWidth, finalCanvasHeight;
+  // 4. Add Main Title
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(20);
+  pdf.text(`Minutes - ${headerData.project || 'General'}`, pageWidth / 2, currentY, { align: 'center' });
+  currentY += 35;
+  // Add this line to debug
+  if (tasks && tasks.length > 0) {
+    console.log('Inspecting first task object:', JSON.stringify(tasks[0]));
+  }
 
-      // Fit canvas to PDF page width
-      finalCanvasWidth = pdfWidth;
-      finalCanvasHeight = finalCanvasWidth / canvasAspectRatio;
-
-      // If the content is too tall for one page, you might need to handle multi-page PDFs.
-      // For a single-page output, this will scale it down.
-      if (finalCanvasHeight > pdfHeight) {
-        console.warn(
-          "Content is taller than a single A4 page. It will be scaled to fit."
-        );
-        finalCanvasHeight = pdfHeight;
-        finalCanvasWidth = finalCanvasHeight * canvasAspectRatio;
+  // 5. Draw the main container box for header info
+  const headerBoxStartY = currentY;
+  pdf.setDrawColor(224, 224, 224); // Light grey border
+  pdf.setLineWidth(1);
+  
+  // 6. Create the four-column header section
+  const colWidth = contentWidth / 4;
+  const headerFields = [
+      { label: 'Location:', value: headerData.location },
+      { label: 'Written by:', value: headerData.createdBy },
+      { label: 'Date:', value: formatDate(headerData.date) },
+      { label: 'Project:', value: headerData.project }
+  ];
+  
+  let maxBoxHeight = 0;
+  
+  headerFields.forEach((field, index) => {
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      const labelLines = pdf.splitTextToSize(field.label, colWidth - 10);
+      
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(10);
+      const valueLines = pdf.splitTextToSize(field.value || 'N/A', colWidth - 10);
+      
+      const boxHeight = (labelLines.length + valueLines.length) * 12 + 20;
+      if (boxHeight > maxBoxHeight) {
+          maxBoxHeight = boxHeight;
       }
+  });
 
-      const xOffset = (pdfWidth - finalCanvasWidth) / 2;
-      const yOffset = 0; // Or center it vertically: (pdfHeight - finalCanvasHeight) / 2;
+  headerFields.forEach((field, index) => {
+      const xPos = margin + (index * colWidth);
+      let yPos = headerBoxStartY + 15;
+      
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.text(field.label, xPos + 10, yPos);
+      yPos += 15;
 
-      pdf.addImage(
-        imgData,
-        "PNG",
-        xOffset,
-        yOffset,
-        finalCanvasWidth,
-        finalCanvasHeight
-      );
-      pdf.save(safeFilename);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(field.value || 'N/A', xPos + 10, yPos, { maxWidth: colWidth - 20 });
+      
+      // Draw vertical separator lines
+      if (index < 3) {
+          pdf.line(xPos + colWidth, headerBoxStartY, xPos + colWidth, headerBoxStartY + maxBoxHeight);
+      }
+  });
 
-      console.log("PDF generation complete.");
-    })
-    .catch((error) => {
-      console.error("Oops, something went wrong with html2canvas!", error);
-      alert("Could not generate PDF. Please check the console for errors.");
-    });
+  currentY = headerBoxStartY + maxBoxHeight;
+  pdf.line(margin, currentY, pageWidth - margin, currentY); // Horizontal line below columns
+
+  // 7. Add Purpose and Attendees sections
+  const addSection = (label, value) => {
+    let yPos = currentY + 15;
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(10);
+    pdf.text(label, margin + 10, yPos);
+
+    pdf.setFont('helvetica', 'normal');
+    const valueLines = pdf.splitTextToSize(value || 'N/A', contentWidth - 120);
+    pdf.text(valueLines, margin + 100, yPos);
+    
+    const sectionHeight = (valueLines.length * 12) + 20;
+    currentY += sectionHeight;
+  };
+
+  addSection('Purpose:', headerData.Purpose);
+  addSection('Attendees:', headerData.Attendees);
+
+  // Draw the outer box for the header section
+  pdf.rect(margin, headerBoxStartY, contentWidth, currentY - headerBoxStartY);
+  currentY += 40; // Space before the task list
+
+  // 8. Add Task List using jsPDF-AutoTable
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(16);
+  pdf.text('Task List', pageWidth / 2, currentY, { align: 'center' });
+  currentY += 25;
+
+  const tableColumnStyles = {
+    0: { cellWidth: 40, halign: 'center' }, // No.
+    1: { cellWidth: 'auto' },               // Task Description
+    2: { cellWidth: 80, halign: 'center' }, // Action by
+    3: { cellWidth: 70, halign: 'center' }  // Due Date
+  };
+
+  const tableBody = tasks.map(task => [
+    task['Task No.'],
+    task.Description,
+    task['Action by'],
+    task['Due date']
+  ]);
+
+  pdf.autoTable({
+    startY: currentY,
+    head: [['No.', 'Task Description', 'Action by', 'Due Date']],
+    body: tableBody,
+    theme: 'grid',
+    headStyles: {
+      fillColor: [232, 232, 232],
+      textColor: [40, 40, 40],
+      fontStyle: 'bold',
+      halign: 'center'
+    },
+    columnStyles: tableColumnStyles,
+    didDrawCell: (data) => {
+      // Custom styling for main task rows
+      const taskNo = String(data.cell.raw);
+      if (data.section === 'body' && !taskNo.includes('.')) {
+        pdf.setFillColor(240, 240, 240); // Light grey for main task rows
+        pdf.rect(data.cell.x, data.cell.y, data.cell.width, data.cell.height, 'F');
+      }
+    }
+  });
+
+  // 9. Save the PDF
+  pdf.save(safeFilename);
+  console.log("Styled, text-based PDF generation complete.");
 };
 
+ 
 const isMainTask = (taskNumber) => {
   return !String(taskNumber).includes(".");
 };
 
+  
 // 2. Define a reusable function to set the context
 const updateChatContext = () => {
   // Directly access the .value of the reactive refs
