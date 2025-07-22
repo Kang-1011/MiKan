@@ -56,7 +56,8 @@
 }
 
 /* reusable utilities */
-.border-1 {
+
+.border-1 { /*from dark to bright*/
   --v-border-opacity: 1 !important;
   border: 1px solid #CCCCCC !important;
   box-shadow: none;
@@ -68,7 +69,7 @@
   box-shadow: none;
 }
 
-.border-2 {
+.border-2 { /*from bright to dark*/
   --v-border-opacity: 1 !important;
   border: 1px solid #d4d4d4 !important;
   box-shadow: none;
@@ -101,6 +102,10 @@
 .stage-background * {
   scrollbar-color: #6e6e6e #f0f0f0 !important;
 }
+.stage-background:hover {
+
+  
+}
 
 .taskcard-background {
   background: #CDCDCD !important;
@@ -127,12 +132,20 @@
 }
 
 .task-card-1:hover {
-  background-color: rgb(255, 236, 158) !important;
-  transform: translateY(-2px); /* keep your lift effect */
+  background-color: rgba(226, 255, 158, 0.634) !important;
+  transform: translateY(-2px); 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
+
 }
 
 .task-card-1 .v-ripple__animation {
-  background-color: rgb(255, 237, 203) !important;
+  color: rgb(103, 255, 65) !important;
 }
 
 /* Sidebar animations */
@@ -146,15 +159,22 @@
 }
 
 .sidebar-1 .v-ripple__animation {
-  background-color: rgb(255, 226, 172) !important;
+  background-color: rgb(174, 255, 0) !important;
 }
 
 /* draw your orange scrim on hover instead */
 .sidebar-1:hover {
   background-color: rgb(255, 230, 183) !important;
   transform: translateY(-1px); /* keep your lift effect */
-}
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
 
+  /* inset shadows for that pressed-in look */
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8) */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+}
+ 
 .button-primary{
 background-color:#545454 !important;
 color:#ffffff !important;
@@ -197,6 +217,20 @@ color:#ffffff !important;
 
 }
 
+.mikan-button-1{
+  background-color:#ff9046 !important;
+  color:#ffffff !important;
+}
+
+.mikan-button-1 .v-ripple__animation {
+
+  background-color: rgb(251, 85, 7) !important;
+
+}
+
+.delete-button{
+  
+}
 /* *::-webkit-scrollbar,
 *::-webkit-scrollbar-track,
 *::-webkit-scrollbar-thumb {

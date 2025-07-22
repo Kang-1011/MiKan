@@ -40,7 +40,7 @@
         icon="mdi-auto-fix"
         size="x-small"
         variant="tonal"
-        class="mt-2"
+        class="mt-2 mikan-button-1"
         @click.stop="runAutostart"
         :loading="isAutostartRunning"
       >
