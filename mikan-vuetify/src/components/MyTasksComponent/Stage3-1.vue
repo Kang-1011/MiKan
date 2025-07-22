@@ -5,14 +5,13 @@
   
   <v-sheet 
   elevation="0" 
-  class="border-sm border-2 rounded-v2 ma-2 hover:black d-flex flex-column" 
+  class="border-2 rounded-v2 ma-2 hover:black d-flex flex-column stage-background" 
   style="
   min-width: 340px; 
   max-width: 340px; 
   display:flex; 
-  flex-direction:column; 
-  background:#dddddd; ">
-    <v-toolbar density="compact" class="rounded-v2" color="#dddddd">
+  flex-direction:column;">
+    <v-toolbar density="compact" class="rounded-v2 stage-background" >
       <template v-if="!isEditing">
         <v-toolbar-title  class="text-subtitle-1 my-0 py-0">{{ stage.title }}</v-toolbar-title>
         <v-spacer />
@@ -157,7 +156,7 @@ function onTaskDrop(evt) {
     0 2px 4px rgba(0, 0, 0, 0.04),
     0 4px 12px rgba(0, 0, 0, 0.06);  /* Stronger shadow for depth */
   transition: box-shadow 0.2s ease, transform 0.1s ease;
-  border: 1px solid #f1f1f1;         /* Subtle border to separate on white bg */
+ 
 }
 .fill-height {
     height: 100%;

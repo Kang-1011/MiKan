@@ -7,90 +7,91 @@
     border="0"
     @click="rail = false"
   > <!-- vuetify elements have a tiny rounded to it, so rounded-0 removes all of it. (makes it sharp) --->
-    <v-card class="pa-3 fill-height rounded-0 bg-grey-lighten-1">
-      <v-card class="fill-height d-flex flex-column rounded-v1 border-1 " flat>
+    <v-card class="pa-3 fill-height rounded-0 unified-background">
+      <v-card class="fill-height d-flex flex-column rounded-v1 page-background border-1 " flat>
         <div class="sidebar-content align-center">
           <v-list density="compact" nav>
             <v-list-item
               value="toggle"
-              class="cursor-pointer rounded-v2"
+              class="cursor-pointer rounded-xl sidebar-1"
               @click.stop="rail = !rail"
               :active="false"
             >
               <template #prepend>
-                <v-icon size="24" class="icon-left-padding">
+                <v-icon size="24" class="icon-left-padding icon-grey">
                   {{ rail ? "mdi-menu" : "mdi-menu-open" }}
                 </v-icon>
               </template>
-              <v-list-item-title class="text-h6 font-weight-bold">
+              <v-list-item-title class="text-h6 font-weight-bold text-grey">
                 MIKAN.AI
               </v-list-item-title>
             </v-list-item>
           </v-list>
 
-          <v-divider class=" border-1" />
+          <v-divider class=" divider-1" />
 
           <v-list density="compact" nav>
             <v-list-item
-              class="rounded-v2"
+              class="rounded-xl sidebar-1"
               :to="{ path: '/AudioInput' }"
               exact
               :active="false"
             >
               <template #prepend>
-                <v-icon size="24" class="icon-left-padding"
+                <v-icon size="24" class="icon-left-padding icon-grey"
                   >mdi-plus-circle-outline</v-icon
                 >
               </template>
-              <v-list-item-title>New Meeting</v-list-item-title>
+              <v-list-item-title class="text-grey">New Meeting</v-list-item-title>
             </v-list-item>
 
             <v-list-item
-              class="rounded-v2"
+              class="rounded-xl sidebar-1"
               :to="{ path: '/ManagerReview' }"
               exact
               :active="false"
             >
               <template #prepend>
-                <v-icon size="24" class="icon-left-padding"
+                <v-icon size="24" class="icon-left-padding icon-grey"
                   >mdi-file-sign</v-icon
                 >
               </template>
-              <v-list-item-title>Manager Review</v-list-item-title>
+              <v-list-item-title class="text-grey">Manager Review</v-list-item-title>
             </v-list-item>
 
             <v-list-item
-              class="rounded-v2"
+              class="rounded-xl sidebar-1"
               :to="{ path: '/Kanban-2' }"
               exact
               :active="false"
             >
               <template #prepend>
-                <v-icon size="24" class="icon-left-padding"
+                <v-icon size="24" color="black" class="icon-left-padding"
                   >mdi-format-list-checkbox</v-icon
                 >
               </template>
-              <v-list-item-title>My Tasks</v-list-item-title>
+              <v-list-item-title class="text-grey">My Tasks</v-list-item-title>
             </v-list-item>
           </v-list>
 
-          <v-divider class="mx-2 border-1" />
+          <v-divider class="mx-2 divider-1" />
 
           <v-list density="compact" nav>
             <!-- Projects Header -->
             <v-list-item
-              class="cursor-pointer rounded-v2"
+              class="cursor-pointer rounded-xl sidebar-1"
               style="align-items: center; min-height: 48px"
               @click="isOpen = !isOpen"
             >
               <template #prepend>
-                <v-icon size="24" class="icon-left-padding"
+                <v-icon size="24" class="icon-left-padding icon-grey"
                   >mdi-folder-outline</v-icon
                 >
               </template>
 
               <v-list-item-title
                 style="font-weight: bold; font-size: 1.125rem; line-height: 1.6"
+                class="text-grey"
               >
                 Projects
               </v-list-item-title>
@@ -98,7 +99,7 @@
               <template #append>
                 <v-btn
                   icon="mdi-plus"
-                  color="grey"
+                  class="icon-grey"
                   variant="text"
                   density="compact"
                   @click.stop="createNewProject"
@@ -106,31 +107,31 @@
               </template>
             </v-list-item>
             <!-- Project Items List (no transition) -->
-            <div v-if="isOpen" class="px-2">
+            <div v-if="isOpen" class="px-0">
               <v-list-item
                 v-for="proj in projectItems"
                 :key="proj"
-                class="rounded-v2"
+                class="rounded-xl sidebar-1"
                 @click="handleClick(proj)"
                 density="compact"
               >
                 <div class="d-flex align-center" style="gap: 20px">
-                  <v-icon color="grey" size="20" class="pl-5"
+                  <v-icon  size="20" class="pl-5 icon-grey"
                     >mdi-circle-medium</v-icon
                   >
-                  <v-list-item-title v-if="!rail">{{ proj }}</v-list-item-title>
+                  <v-list-item-title class="text-grey" v-if="!rail">{{ proj }}</v-list-item-title>
                 </div>
               </v-list-item>
             </div>
           </v-list>
         </div>
 
-        <div class="sidebar-footer">
-          <v-divider class="border-1"/>
+        <div class="sidebar-footer ">
+          <v-divider class="divider-1"/>
           <v-list>
-            <v-list-item class="rounded-v2">
+            <v-list-item class="rounded-xl">
               <template #prepend>
-                <v-icon size="24" class="icon-footer-padding"
+                <v-icon size="24" class="icon-footer-padding icon-grey"
                   >mdi-account</v-icon
                 >
               </template>
@@ -214,7 +215,7 @@ function handleNewProject(project: { id: number; title: string }) {
 
 .sidebar-footer {
   margin-top: auto;
-  background-color: rgb(255, 255, 255); /* or whatever background you want */
+  /* background-color: rgb(255, 255, 255);  //or whatever background you want */ 
 }
 
 .icon-left-padding {

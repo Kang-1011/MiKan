@@ -46,10 +46,10 @@
         </v-btn>
       </v-app-bar>
       
-      <v-main  class="pa-0 bg-grey-lighten-1">
+      <v-main  class="pa-0 unified-background">
       <!-- Top pill bar -->
   <div
-    class="pa-3 rounded-v1 border-sm d-flex align-center ma-3"
+    class="pa-3 rounded-v1 border-1 page-background d-flex align-center ma-3"
     style="background: white;" 
   >
     <span class="text-h5 pl-1 me-4">My Tasks</span>
@@ -64,10 +64,10 @@
       density="compact"
       single-line
       hide-details
-      class="me-4 border-sm rounded-xl"
+      class="me-4 border-sm border-2 rounded-xl"
       style="background: #f5f5f5; max-width:180px"
       :menu-props="{
-          contentClass: 'rounded-xl text-body-2',
+          contentClass: 'rounded-v1 text-body-2',
           }"
     />
 
@@ -83,7 +83,7 @@
           v-model="formattedDate"
           label="Due Before"
           variant="outlined"
-          class="me-4 border-sm rounded-xl"
+          class="me-4 border-sm border-2 rounded-xl"
           density="compact"
           single-line
           clearable hide-details
@@ -92,7 +92,7 @@
         />
       </template>
       <v-date-picker
-        class="rounded-xl border-md text-body-2"
+        class="rounded-v1 border-md text-body-2"
         v-model="selectedDueDate"
         @input="dueDateMenu = false"
       />
@@ -105,13 +105,13 @@
       label="Assignee"
       clearable
       variant="outlined"
-      class="me-4 border-sm rounded-xl"
+      class="me-4 border-sm border-2 rounded-xl"
       density="compact"
       single-line
       hide-details
       style="background: #f5f5f5; max-width:180px"
       :menu-props="{
-          contentClass: 'rounded-xl text-body-2',
+          contentClass: 'rounded-v1 text-body-2',
           }"
     />
   </div>

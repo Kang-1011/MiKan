@@ -1,7 +1,7 @@
 <template>
     <!-- New Task Draft V4 -->
-    <v-card flat border class="mx-auto rounded-lg">
-        <v-card @click="openEditDialog" hover flat :ripple="false" class="bg-grey-lighten-5 pa-2">
+    <v-card flat border class="mx-auto rounded-v1 border-2 task-card-1">
+        <v-card @click="openEditDialog" hover flat :ripple="false" class="stage-background pa-2">
             <v-card-title class="text-truncate">
                 <v-row class="align-center text-truncate">
                     <v-col cols="10" class="text-truncate">
@@ -17,7 +17,7 @@
                 </v-row>
             </v-card-title>
 
-            <v-card flat border class="rounded-lg">
+            <v-card flat border class="rounded-v2">
                 <v-card-text>
                         <v-row>
                             <v-col>
