@@ -16,3 +16,5 @@ unstructured
 unstructured[pdf]
 unstructured[docx]
 unstructured[xlsx]
+pymongo
+langchain-mongodb
