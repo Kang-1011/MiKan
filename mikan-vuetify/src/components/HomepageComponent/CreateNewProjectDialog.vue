@@ -1,19 +1,19 @@
 <template>
     <v-dialog max-width="500px">
-        <v-card class="rounded-xl pa-3 px-6">
+        <v-card class="rounded-v1 pa-3 px-6">
             <v-card-title>Create New Project</v-card-title>
             
             <v-card-text>
                 <v-text-field clearable label="New Project Name" variant="outlined" density="compact" v-model="projectName"
-                        rounded="lg" class="my-1" :rules="[(v) => !!v || 'Project Name is required']">
+                        rounded="xl" class="my-1" :rules="[(v) => !!v || 'Project Name is required']">
                 </v-text-field>
             </v-card-text>
 
             <v-card-actions class="my-2">
-                <v-btn color="black" variant="outlined" class="text-body-2 mr-2" rounded="lg" @click="closeDialog">
+                <v-btn variant="outlined" class="text-body-2 rounded-xl mr-2 button-secondary" @click="closeDialog">
                     Cancel
                 </v-btn>
-                <v-btn color="black" variant="flat" class="text-body-2 mr-2" rounded="lg" @click="createNewProject">
+                <v-btn  variant="flat" class="text-body-2 mr-2 rounded-xl button-primary" @click="createNewProject">
                     Create
                 </v-btn>
             </v-card-actions>
@@ -23,16 +23,28 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+
 const projectName = ref("");
 
-const emit = defineEmits(["close-create-project-dialog"]);
+const emit = defineEmits(["close-create-project-dialog", "project-created"]);
+
 const closeDialog = () => {
     projectName.value = "";
     emit("close-create-project-dialog");
 }
 
-const createNewProject = () => {
-    console.log("Create New Project - API calls to save into database");
-    closeDialog();
+const createNewProject = async () => {
+    if (!projectName.value) return;
+
+    try {
+        const response = await axios.post("http://localhost:8000/projects/add_project", {
+            title: projectName.value,
+        });
+        emit("project-created", response.data);
+        closeDialog();
+    } catch (error) {
+        console.error("Error creating project:", error);
+    }
 }
 </script>

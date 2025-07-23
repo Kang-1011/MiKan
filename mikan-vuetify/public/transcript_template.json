@@ -1,0 +1,149 @@
+{
+  "title": "Product Launch Event",
+  "location": "Meeting Room A",
+  "created_by": "Azfar",
+  "date": "2024-02-29",
+  "project": "Dan Savi Car Showcase & Shaver Gaming Event",
+  "purpose": "The meeting is to discuss the planning, budgeting, and logistical aspects of the Dan Savi Car Showcase and Shaver Gaming events, including media invites, vendor coordination, safety measures, and potential cross-promotions.",
+  "attendees": "Alia\nRohimi\nAzfar\nKang\nJet\nSebastian",
+  "transcript_lines": [
+    {
+      "transcript": "[00:00:00] Alia: Okay, so then I'll start recording first. Um, this beginning part is just to so that we can sync up the text the audio later. space right. out the end one. Yeah. Is it looking ridiculous but as long as it's there. Just I have two mics, my laptop. And then I have this. okay. Ready? start start. I need to get I'll give you a. Okay okay. I'll cut it later."
+    },
+    {
+      "transcript": "[00:00:34] Alia: Wait. I don't want to see it. I'll make sure that it's not. Okay. 3, two, one, go."
+    },
+    {
+      "transcript": "[00:00:43] Alia: Good morning everyone. Thanks for making it. Let's get this done quickly. 10 minutes start. Sebastian, let's start with the Dan Savi car showcase. How's the staging plan coming along?"
+    },
+    {
+      "transcript": "[00:00:56] Sebastian: Morning, Alia. So, I've got a preliminary 200 square meter layout sketched out for Center Court. It looks good, spacious enough. The main thing I need to narrow down are the exact power strip specifications. I'm aiming to get those finalized with Jet by this Friday, July 11th."
+    },
+    {
+      "transcript": "[00:01:21] Alia: Finally. Honestly, sometimes it feels like we have to start on those specs. Let's hope here is happening."
+    },
+    {
+      "transcript": "[00:01:28] Alia: Good, good. Azfar, on the Dan Savi budget, where are we with the vendors? We don't want a repeat of the last event, eh?"
+    },
+    {
+      "transcript": "[00:01:37] Azfar: Right, so GTech is quoting us $80,000 and Jumbo Rentals is at $50,000. It's getting pretty close to our $150,000 cap for the event. We are flirting with the limit for sure."
+    },
+    {
+      "transcript": "[00:01:56] Alia: Hmm, that's tight. We really need to optimize here. Have we explored all our options for the sound system?"
+    },
+    {
+      "transcript": "[00:02:05] Kang: Speaking of options, I was just thinking about that. Didn't Klang Sound confirm their availability yesterday? I thought they were supposed to be quite competitive too, in price wise."
+    },
+    {
+      "transcript": "[00:02:18] Sebastian: Honestly, Kang, I haven't seen any updates in the share document. I've been checking, but there's nothing. So yeah, I'm a bit lost on what's happening with Klang Sound right now."
+    },
+    {
+      "transcript": "[00:02:35] Alia: Okay, that is something we need to clarify ASAP. Jet, Kang, can one of you follow up on Klang Sound's quote and availability immediately after this meeting? We need clear figures."
+    },
+    {
+      "transcript": "[00:02:50] Jet: I can do that, Alia. I'll reach out to them right away."
+    },
+    {
+      "transcript": "[00:02:53] Kang: Uh me too. I will check my emails again. I thought I saw something there."
+    },
+    {
+      "transcript": "[00:03:00] Azfar: Ayo, just got a message from my client upstairs. Someone apparently triggered a trolling content to the LG OLED17 and wants to swap with his player. What's going on with that, Alia?"
+    },
+    {
+      "transcript": "[00:03:15] Alia: No la. Tell them to stick with the Center Court for the car showcase. We have decided on that. Rohimi, can you tell them that right away?"
+    },
+    {
+      "transcript": "[00:03:25] Rohimi: Copy that, Alia."
+    },
+    {
+      "transcript": "[00:03:27] Sebastian: Back to the sound budget, I will push Jumbo Rentals for at least a 10% cut. I will report back to everyone on that by Sunday, July 13th. We need to stay within budget, especially after last time."
+    },
+    {
+      "transcript": "[00:03:44] Alia: Excellent, Azfar. That's what we need. Kang, how about the Shaver Gaming event? What's the plan for media and talent?"
+    },
+    {
+      "transcript": "[00:03:53] Kang: I will start drafting the Shaver Gaming media invites today, and I will work on locking in Can Lim's Twitch slot by Monday, July 14th. I want to make sure we get that right this time."
+    },
+    {
+      "transcript": "[00:04:07] Alia: Good. I will handle the Dan Savi media invites myself and get those out by Tuesday, July 15th."
+    },
+    {
+      "transcript": "[00:04:14] Alia: Jet, anything on Shaver, anything for Shaver gaming on your end?"
+    },
+    {
+      "transcript": "[00:04:18] Jet: Yes, I will confirm the custom rack specs with Tech Zone and email the dash dimensions to use partner by Saturday, July 12th. That should cover the immediate needs for the event."
+    },
+    {
+      "transcript": "[00:04:33] Azfar: I will also submit the police traffic permit applications for both events by Saturday, July 12th. It's crucial we don't have any hiccups with permits, especially after the last breaking incident."
+    },
+    {
+      "transcript": "[00:04:48] Sebastian: And I'll follow up with the fire department regarding the COVID-19 SOP and fire safety clearance for both events. I'll have that confirmed by Sunday, July 13th."
+    },
+    {
+      "transcript": "[00:05:00] Azfar: Wait a minute, guys. I thought the VR demo gear for Shaver Gaming was arriving July 9th. Today is July 10th. Did I miss something?"
+    },
+    {
+      "transcript": "[00:05:10] Kang: No, Azfar, my tracker says July 11th. I definitely have July 11th."
+    },
+    {
+      "transcript": "[00:05:16] Jet: Guys, can someone confirm this definitely? I'm completely in the dark here. We need to know when the equipment is coming."
+    },
+    {
+      "transcript": "[00:05:25] Sebastian: Same here. Okay, I'll ping the vendor directly and get us a concrete delivery date for the VR demo gear. I'll update the share document as soon as I have it."
+    },
+    {
+      "transcript": "[00:05:38] Alia: Hey, why didn't anyone flag the budget cap to Klang Sound earlier, Kang? We can't just go over."
+    },
+    {
+      "transcript": "[00:05:44] Kang: Stop blaming me, Azfar. I told them 150k max. Check my emails, dude, okay? It's all there, I swear."
+    },
+    {
+      "transcript": "[00:05:53] Alia: Chill, both of you. This is exactly why we double-check these documents and have a shared tracker before we start freaking out, okay? Let's just confirm the info."
+    },
+    {
+      "transcript": "[00:06:07] Alia: All right, moving on. Rohimi, quickly on security for both events, any particular concerns or areas we need to focus on given the expected footfall?"
+    },
+    {
+      "transcript": "[00:06:18] Rohimi: Yes, Alia. For Dan Savi with those with those"
+    },
+    {
+      "transcript": "[00:06:25] Alia: Are you okay, Rohimi?"
+    },
+    {
+      "transcript": "[00:06:30] Rohimi: Uh, sorry. Um with those expensive vehicles, we need to ensure enhanced surveillance, especially at those the zone air car park loading base could be a vulnerability if not managed tightly. And for Shaver Gaming, with the VR stations and the cosplay contest, we expect crowds who might be blocking the walkways. I'm thinking we will need extra personnel for crowd control around the main stage in demo areas, especially given the celebrity appearances."
+    },
+    {
+      "transcript": "[00:07:21] Alia: Good points. Azfar, how does that impact our logistical flow, especially for loading and unloading those cars and then getting gaming equipment in?"
+    },
+    {
+      "transcript": "[00:07:32] Azfar: Rohimi is right. For Dan Savi, two loading bays are assigned, but we need strict time slots. We cannot have any overlap. And the Maylo Falcon S and CYD Nova EV are quite large. So maneuvering them into Center Court will require precise coordination with security. For Shaver Gaming, it is less about the size, but more about the volume of smaller crates and personal equipment. We need a clear path from the loading bay to the main event area without disrupting shoppers. I will map out specific routes and timings this afternoon."
+    },
+    {
+      "transcript": "[00:08:23] Sebastian: Agreed. We'll need to coordinate closely with mall operators to ensure minimal disruption to mallgoers during setup and tear down for both, especially during peak hours."
+    },
+    {
+      "transcript": "[00:08:41] Alia: Okay. And then, and just a quick one on media, Kang, Jet, are we seeing any potential for cross-promotion between the Dan Savi and Shaver Gaming events? Maybe a combined social media push or something to leverage both audiences?"
+    },
+    {
+      "transcript": "[00:09:03] Kang: Hmm, that's an interesting idea, Alia. I think I could perhaps talk talk to esports channel about featuring a segment on the CYD Nova EV if they are looking for lifestyle content. And Autobus might be interested in a casual gaming peripheral review tied to the Shaver Gaming event."
+    },
+    {
+      "transcript": "[00:09:30] Jet: And from my side, I can reach out to Xbox and Logitech, the Shaver gaming sponsors. They might have a cross-promotional budget to tap into, perhaps a giveaway that ties into both. We could definitely explore that synergy."
+    },
+    {
+      "transcript": "[00:09:51] Alia: Great. Let's explore that. We want maximum buzz. All right, last thing. How's the logistic renovation fire safety audit, Azfar? You were supposed to confirm that by Wednesday."
+    },
+    {
+      "transcript": "[00:10:04] Azfar: Yeah, the fire department never actually got my submission. So, nada, still pending."
+    },
+    {
+      "transcript": "[00:10:12] Jet: Don't worry, Azfar. We will chase you on that right after this meeting. I will make sure we get the clearance sorted by Monday, July 14th. We can't afford any delay there."
+    },
+    {
+      "transcript": "[00:10:24] Alia: Perfect. Thanks everyone. The rest of our sync, meeting adjourned."
+    },
+    {
+      "transcript": "[00:10:33] Alia: Thank you. Thank you. good picture good picture."
+    }
+  ]
+}
