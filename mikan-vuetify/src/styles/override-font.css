@@ -104,7 +104,6 @@
   scrollbar-color: #6e6e6e #f0f0f0 !important;
 }
 .stage-background:hover {
-
   transform: translateY(-1px); 
   box-shadow:
   6px 6px 12px rgba(0, 0, 0, 0.10),
@@ -300,6 +299,7 @@ transform: scale(1.1);
   /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
 }
 
+
 /* icons and fonts */
 .icon-grey{
   color:#242424 !important;
@@ -348,7 +348,6 @@ transform: scale(1.1);
   60%      { transform: translateX(1px)  translateY(-3px) rotate(5deg); }
   75%      { transform: translateX(-0.5px) translateY(-3px) rotate(-2.5deg); }
 }
-
 .mikan-button-1{
   background-color:#ff9046 !important;
   color:#ffffff !important;

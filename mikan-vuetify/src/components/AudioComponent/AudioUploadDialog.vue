@@ -19,7 +19,7 @@
 				</div>
 
 				<div v-else>
-					<UploadfileCustom :files="uploadedFiles" @remove-file="removeFile" />
+					<UploadFileCustom :files="uploadedFiles" @remove-file="removeFile" />
 				</div>
 
 				<div v-if="!hasUploaded" class="d-flex justify-space-between">
@@ -51,7 +51,7 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
-import UploadfileCustom from "../AudioComponent/UploadfileCustom.vue";
+import UploadFileCustom from "../AudioComponent/UploadFileCustom.vue";
 
 import { useTranscriptStore } from "@/stores/transcriptstore";
 const transcriptStore = useTranscriptStore();
