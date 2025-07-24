@@ -111,6 +111,34 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
+  async function generateMinutesFromTranscript() {
+    try {
+      const payload = {
+        title: header.title,
+        location: header.location,
+        created_by: header.createdBy,
+        date: header.date,
+        project: header.project,
+        purpose: header.purpose,
+        attendees: header.attendees,
+        transcript_lines: body.transcriptLines.map((line) => ({
+          transcript: line.transcript,
+        })),
+      };
+
+      const response = await axios.post(
+        "http://localhost:8000/minutes/generate",
+        payload
+      );
+      console.log("Generated minutes:", response.data);
+
+      return response.data;
+    } catch (error) {
+      console.error("Failed to generate minutes:", error);
+      throw error;
+    }
+  }
+
   return {
     isEditMode,
     activeEditorKey,
@@ -125,5 +153,6 @@ export const useTranscriptStore = defineStore("transcript", () => {
     updateTranscript,
     loadFromJson,
     saveTranscriptToDB, // ✅ expose this to use in TranscriptDisplay.vue
+    generateMinutesFromTranscript, // ✅ ADD THIS LINE!
   };
 });

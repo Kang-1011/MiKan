@@ -146,6 +146,43 @@ def generate_minutes():
         print(f"[ERROR] Failed to generate minutes: {e}")
         raise
 
+def gemini_generate_minutes(transcript_data: dict) -> dict:
+    header_fields = [
+        "title", "location", "date", "created_by",
+        "purpose", "project", "attendees"
+    ]
+    header = {field: transcript_data.get(field, "") for field in header_fields}
+    lines = transcript_data.get("transcript_lines", [])
+
+    # Construct a full string prompt
+    prompt = f"""Title: {header["title"]}
+Location: {header["location"]}
+Created by: {header["created_by"]}
+Date: {header["date"]}
+Project: {header["project"]}
+Purpose: {header["purpose"]}
+Attendees: {header["attendees"]}
+
+Transcript:
+""" + "\n".join(line["transcript"] for line in lines)
+
+    try:
+        result_json = chain.invoke({
+            "input": prompt,
+            "format_instructions": output_parser.get_format_instructions()
+        })
+        
+        # Save to file
+        with open(OUTPUT_JSON_PATH, "w", encoding="utf-8") as f:
+            json.dump(result_json, f, indent=4, ensure_ascii=False)
+        
+        print(f"[✅] Minutes generated successfully and saved to {OUTPUT_JSON_PATH}")
+
+        return result_json
+    except Exception as e:
+        print(f"[ERROR] Failed to generate minutes from store JSON: {e}")
+        raise
+
 # === TEST FUNCTION ===
 if __name__ == "__main__":
     try:

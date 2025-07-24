@@ -1,7 +1,7 @@
 from fastapi import *
 from database import *
 from model import *
-from .generate_minutes import generate_minutes
+from .generate_minutes import gemini_generate_minutes,generate_minutes
 from fastapi.responses import FileResponse
 
 router = APIRouter()
@@ -55,15 +55,17 @@ def create_transcript_api(transcript: TranscriptCreate, db: Session = Depends(ge
     return create_transcript(db, transcript)
 
 @router.post("/minutes/generate")
-def generate_minutes_api():
+def generate_minutes(transcript_data: Dict = Body(...)):
+    """
+    Generate minutes from transcript JSON provided by frontend (not from DB).
+    """
     try:
-        result = generate_minutes()
+        print("Generating minutes using frontend-provided transcript JSON...")
+        result = gemini_generate_minutes(transcript_data)
         return result
     except Exception as e:
-        import traceback
-        print("[ERROR] Failed to generate minutes:")
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail="Minutes generation failed")
+        print(f"Error generating minutes: {e}")
+        return {"error": "Failed to generate minutes"}
 
 @router.get("/minutes/generate")
 def fetch_last_generated_minutes():

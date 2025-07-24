@@ -412,16 +412,17 @@ const toMinute = async () => {
     // Step 2: Trigger minutes generation using Gemini backend
     const response = await fetch("http://localhost:8000/minutes/generate", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(savedTranscript), // ✅ Use clean DB-saved data
     });
 
     if (!response.ok) {
-      throw new Error("Failed to generate minutes from AI");
+      throw new Error(`Generation failed: ${await response.text()}`);
     }
 
     const generatedMinutes = await response.json();
-    console.log("Generated minutes:", generatedMinutes);
 
-    // ✅ Step 3: Store in Pinia minuteStore
+    // Step 3: Load into minuteStore for display/editing
     minuteStore.loadFromJson(generatedMinutes);
 
     // ✅ Step 4: Navigate to minutes page
