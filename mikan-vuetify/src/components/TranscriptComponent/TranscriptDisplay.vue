@@ -1,3 +1,5 @@
+// transcript.vue
+
 <template>
   <v-row
     class="justify-space-between attachment-manager align-center ma-2"
@@ -7,16 +9,6 @@
       <h2>Transcript</h2>
     </div>
     <div>
-      <v-tooltip text="Download Transcript" location="bottom">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            icon="mdi-download-outline"
-            variant="text"
-            v-bind="props"
-            @click="exportToPDF"
-          ></v-btn>
-        </template>
-      </v-tooltip>
       <v-tooltip
         :text="isEditMode ? 'Finish Editing' : 'Edit Transcript'"
         location="bottom"
@@ -27,6 +19,17 @@
             variant="text"
             v-bind="props"
             @click="toggleEditMode"
+          ></v-btn>
+        </template>
+      </v-tooltip>
+
+      <v-tooltip text="Download Transcript" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            icon="mdi-download-outline"
+            variant="text"
+            v-bind="props"
+            @click="exportToPDF"
           ></v-btn>
         </template>
       </v-tooltip>
@@ -101,332 +104,305 @@
         />
       </v-col>
     </v-row>
-    <template v-else>
-      <div class="attachment-manager minutes-section-card">
-        <v-row no-gutters>
-          <v-col cols="12">
-            <div class="title-cell d-flex justify-center align-center">
-              <h1 class="text-h4 font-weight-bold text-center">
-                {{ transcriptHeaderData.title }} -
-                {{ transcriptHeaderData.project }}
-              </h1>
-            </div>
-          </v-col>
-        </v-row>
+    <div class="attachment-manager minutes-section-card">
+      <v-row no-gutters>
+        <v-col cols="12">
+          <div class="title-cell d-flex justify-center align-center">
+            <h1 class="text-h4 font-weight-bold text-center">
+              {{ transcriptHeaderData.title }}
+            </h1>
+          </div>
+        </v-col>
+      </v-row>
 
-        <v-row style="border-bottom: 2px solid #eaeaea" no-gutters class="pa-4">
-          <v-col cols="12" md="3" class="pa-2">
-            <div class="rounded-header-cell">
-              <span class="font-weight-bold" style="font-size: 18px"
-                >Location:</span
-              >
-              <div
-                v-if="activeEditorKey !== 'location'"
-                @click="isEditMode && setActiveEditor('location')"
-                :class="{ 'editable-field': isEditMode }"
-                class="pa-2"
-                style="min-height: 40px"
-              >
-                {{ transcriptHeaderData.location }}
-              </div>
-              <VConfirmEdit
-                v-if="isEditMode && activeEditorKey === 'location'"
-                :model-value="transcriptHeaderData.location"
-                @save="
-                  (newValue) => handleSaveHeaderField('location', newValue)
-                "
-                @cancel="handleCancelEdit"
-              >
-                <template #input="{ model }"
-                  ><v-text-field
-                    v-model="model.value"
-                    label="Edit Location"
-                    variant="outlined"
-                  ></v-text-field
-                ></template>
-              </VConfirmEdit>
-            </div>
-          </v-col>
-          <v-col cols="12" md="3" class="pa-2">
-            <div class="rounded-header-cell">
-              <span class="font-weight-bold" style="font-size: 18px"
-                >Written by:</span
-              >
-              <div
-                v-if="activeEditorKey !== 'createdBy'"
-                @click="isEditMode && setActiveEditor('createdBy')"
-                :class="{ 'editable-field': isEditMode }"
-                class="pa-2"
-                style="min-height: 40px"
-              >
-                {{ transcriptHeaderData.createdBy }}
-              </div>
-              <VConfirmEdit
-                v-if="isEditMode && activeEditorKey === 'createdBy'"
-                :model-value="transcriptHeaderData.createdBy"
-                @save="
-                  (newValue) => handleSaveHeaderField('createdBy', newValue)
-                "
-                @cancel="handleCancelEdit"
-              >
-                <template #input="{ model }"
-                  ><v-text-field
-                    v-model="model.value"
-                    label="Edit Author"
-                    variant="outlined"
-                  ></v-text-field
-                ></template>
-              </VConfirmEdit>
-            </div>
-          </v-col>
-          <v-col cols="12" md="3" class="pa-2">
-            <div class="rounded-header-cell">
-              <span class="font-weight-bold" style="font-size: 18px"
-                >Date:</span
-              >
-              <div
-                v-if="activeEditorKey !== 'date'"
-                @click="isEditMode && setActiveEditor('date')"
-                :class="{ 'editable-field': isEditMode }"
-                class="pa-2"
-                style="min-height: 40px"
-              >
-                {{ formatDate(transcriptHeaderData.date) }}
-              </div>
-              <VConfirmEdit
-                v-if="isEditMode && activeEditorKey === 'date'"
-                :model-value="transcriptHeaderData.date"
-                @save="(newValue) => handleSaveHeaderField('date', newValue)"
-                @cancel="handleCancelEdit"
-              >
-                <template #input="{ model }"
-                  ><v-text-field
-                    v-model="model.value"
-                    label="Edit Date"
-                    variant="outlined"
-                    hint="YYYY-MM-DD"
-                  ></v-text-field
-                ></template>
-              </VConfirmEdit>
-            </div>
-          </v-col>
-          <v-col cols="12" md="3" class="pa-2">
-            <div class="rounded-header-cell" style="border-right: none">
-              <span class="font-weight-bold" style="font-size: 18px"
-                >Project:</span
-              >
-              <div
-                v-if="activeEditorKey !== 'project'"
-                @click="isEditMode && setActiveEditor('project')"
-                :class="{ 'editable-field': isEditMode }"
-                class="pa-2"
-                style="min-height: 40px"
-              >
-                {{ transcriptHeaderData.project }}
-              </div>
-              <VConfirmEdit
-                v-if="isEditMode && activeEditorKey === 'project'"
-                :model-value="transcriptHeaderData.project"
-                @save="(newValue) => handleSaveHeaderField('project', newValue)"
-                @cancel="handleCancelEdit"
-              >
-                <template #input="{ model }"
-                  ><v-text-field
-                    v-model="model.value"
-                    label="Edit Project"
-                    variant="outlined"
-                  ></v-text-field
-                ></template>
-              </VConfirmEdit>
-            </div>
-          </v-col>
-        </v-row>
-
-        <v-row no-gutters>
-          <v-col cols="12" class="px-4">
-            <div class="content-cell">
-              <v-row no-gutters align="start">
-                <v-col cols="12" md="2">
-                  <span class="font-weight-bold" style="font-size: 18px"
-                    >Purpose:</span
-                  >
-                </v-col>
-                <v-col cols="12" md="10">
-                  <div
-                    v-if="activeEditorKey !== 'Purpose'"
-                    @click="isEditMode && setActiveEditor('Purpose')"
-                    :class="{ 'editable-field': isEditMode }"
-                    class="mb-0"
-                    style="min-height: 40px"
-                  >
-                    {{ transcriptHeaderData.purpose }}
-                  </div>
-                  <VConfirmEdit
-                    v-if="isEditMode && activeEditorKey === 'Purpose'"
-                    :model-value="transcriptHeaderData.purpose"
-                    @save="
-                      (newValue) => handleSaveHeaderField('Purpose', newValue)
-                    "
-                    @cancel="handleCancelEdit"
-                  >
-                    <template #input="{ model }"
-                      ><v-textarea
-                        v-model="model.value"
-                        label="Edit Purpose"
-                        variant="outlined"
-                        auto-grow
-                        rows="3"
-                      ></v-textarea
-                    ></template>
-                  </VConfirmEdit>
-                </v-col>
-              </v-row>
-            </div>
-          </v-col>
-        </v-row>
-
-        <v-row no-gutters>
-          <v-col cols="12" class="px-4 pb-4">
-            <div class="content-cell" style="border-bottom: none">
-              <v-row no-gutters align="start">
-                <v-col cols="12" md="2">
-                  <span class="font-weight-bold" style="font-size: 18px"
-                    >Attendees:</span
-                  >
-                </v-col>
-                <v-col cols="12" md="10">
-                  <div
-                    v-if="activeEditorKey !== 'Attendees'"
-                    @click="isEditMode && setActiveEditor('Attendees')"
-                    :class="{ 'editable-field': isEditMode }"
-                    class="mb-0 attendees-text"
-                    style="min-height: 40px"
-                  >
-                    {{ transcriptHeaderData.attendees }}
-                  </div>
-                  <VConfirmEdit
-                    v-if="isEditMode && activeEditorKey === 'Attendees'"
-                    :model-value="transcriptHeaderData.attendees"
-                    @save="
-                      (newValue) => handleSaveHeaderField('Attendees', newValue)
-                    "
-                    @cancel="handleCancelEdit"
-                  >
-                    <template #input="{ model }"
-                      ><v-textarea
-                        v-model="model.value"
-                        label="Edit Attendees"
-                        variant="outlined"
-                        auto-grow
-                        rows="3"
-                      ></v-textarea
-                    ></template>
-                  </VConfirmEdit>
-                </v-col>
-              </v-row>
-            </div>
-          </v-col>
-        </v-row>
-      </div>
-
-      <div class="my-6"></div>
-      <div class="tasks-section-card">
-        <v-row no-gutters>
-          <v-col cols="12">
-            <div
-              class="task-list-header d-flex justify-center align-center ga-4"
+      <v-row style="border-bottom: 2px solid #eaeaea" no-gutters class="pa-4">
+        <v-col cols="12" md="3" class="pa-2">
+          <div class="rounded-header-cell">
+            <span class="font-weight-bold" style="font-size: 18px"
+              >Location:</span
             >
-              <h3 class="font-weight-bold" style="font-size: 24px">
-                Transcript List
-              </h3>
-            </div>
-          </v-col>
-        </v-row>
-
-        <v-row no-gutters>
-          <v-col cols="12" class="pa-4">
             <div
-              v-if="activeEditorKey !== 'transcript'"
-              class="transcript-container"
+              v-if="activeEditorKey !== 'location'"
+              @click="isEditMode && setActiveEditor('location')"
               :class="{ 'editable-field': isEditMode }"
-              @click="isEditMode && setActiveEditor('transcript')"
+              class="pa-2"
+              style="min-height: 40px"
             >
-              <div
-                v-for="(line, index) in body.transcriptLines"
-                :key="index"
-                class="transcript-line"
-              >
-                <span class="speaker-info"
-                  >{{ parseLine(line.transcript).speaker }} :</span
-                >
-                <span class="content">{{
-                  parseLine(line.transcript).content
-                }}</span>
-              </div>
+              {{ transcriptHeaderData.location }}
             </div>
             <VConfirmEdit
-              v-if="isEditMode && activeEditorKey === 'transcript'"
-              :model-value="fullTranscriptText"
-              @save="handleSaveTranscript"
+              v-if="isEditMode && activeEditorKey === 'location'"
+              :model-value="transcriptHeaderData.location"
+              @save="(newValue) => handleSaveHeaderField('location', newValue)"
               @cancel="handleCancelEdit"
             >
-              <template #input="{ model }">
-                <v-textarea
+              <template #input="{ model }"
+                ><v-text-field
                   v-model="model.value"
-                  label="Edit Transcript"
+                  label="Edit Location"
                   variant="outlined"
-                  auto-grow
-                  rows="10"
-                  hint="Edit the raw transcript text here."
-                ></v-textarea>
-              </template>
+                ></v-text-field
+              ></template>
             </VConfirmEdit>
-          </v-col>
-        </v-row>
-      </div>
-    </template>
+          </div>
+        </v-col>
+        <v-col cols="12" md="3" class="pa-2">
+          <div class="rounded-header-cell">
+            <span class="font-weight-bold" style="font-size: 18px"
+              >Written by:</span
+            >
+            <div
+              v-if="activeEditorKey !== 'createdBy'"
+              @click="isEditMode && setActiveEditor('createdBy')"
+              :class="{ 'editable-field': isEditMode }"
+              class="pa-2"
+              style="min-height: 40px"
+            >
+              {{ transcriptHeaderData.createdBy }}
+            </div>
+            <VConfirmEdit
+              v-if="isEditMode && activeEditorKey === 'createdBy'"
+              :model-value="transcriptHeaderData.createdBy"
+              @save="(newValue) => handleSaveHeaderField('createdBy', newValue)"
+              @cancel="handleCancelEdit"
+            >
+              <template #input="{ model }"
+                ><v-text-field
+                  v-model="model.value"
+                  label="Edit Author"
+                  variant="outlined"
+                ></v-text-field
+              ></template>
+            </VConfirmEdit>
+          </div>
+        </v-col>
+        <v-col cols="12" md="3" class="pa-2">
+          <div class="rounded-header-cell">
+            <span class="font-weight-bold" style="font-size: 18px">Date:</span>
+            <div
+              v-if="activeEditorKey !== 'date'"
+              @click="isEditMode && setActiveEditor('date')"
+              :class="{ 'editable-field': isEditMode }"
+              class="pa-2"
+              style="min-height: 40px"
+            >
+              {{ formatDate(transcriptHeaderData.date) }}
+            </div>
+            <VConfirmEdit
+              v-if="isEditMode && activeEditorKey === 'date'"
+              :model-value="transcriptHeaderData.date"
+              @save="(newValue) => handleSaveHeaderField('date', newValue)"
+              @cancel="handleCancelEdit"
+            >
+              <template #input="{ model }"
+                ><v-text-field
+                  v-model="model.value"
+                  label="Edit Date"
+                  variant="outlined"
+                  hint="YYYY-MM-DD"
+                ></v-text-field
+              ></template>
+            </VConfirmEdit>
+          </div>
+        </v-col>
+        <v-col cols="12" md="3" class="pa-2">
+          <div class="rounded-header-cell" style="border-right: none">
+            <span class="font-weight-bold" style="font-size: 18px"
+              >Project:</span
+            >
+            <div
+              v-if="activeEditorKey !== 'project'"
+              @click="isEditMode && setActiveEditor('project')"
+              :class="{ 'editable-field': isEditMode }"
+              class="pa-2"
+              style="min-height: 40px"
+            >
+              {{ transcriptHeaderData.project }}
+            </div>
+            <VConfirmEdit
+              v-if="isEditMode && activeEditorKey === 'project'"
+              :model-value="transcriptHeaderData.project"
+              @save="(newValue) => handleSaveHeaderField('project', newValue)"
+              @cancel="handleCancelEdit"
+            >
+              <template #input="{ model }"
+                ><v-text-field
+                  v-model="model.value"
+                  label="Edit Project"
+                  variant="outlined"
+                ></v-text-field
+              ></template>
+            </VConfirmEdit>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12" class="px-4">
+          <div class="content-cell">
+            <v-row no-gutters align="start">
+              <v-col cols="12" md="2">
+                <span class="font-weight-bold" style="font-size: 18px"
+                  >Purpose:</span
+                >
+              </v-col>
+              <v-col cols="12" md="10">
+                <div
+                  v-if="activeEditorKey !== 'purpose'"
+                  @click="isEditMode && setActiveEditor('purpose')"
+                  :class="{ 'editable-field': isEditMode }"
+                  class="mb-0"
+                  style="min-height: 40px"
+                >
+                  {{ transcriptHeaderData.purpose }}
+                </div>
+                <VConfirmEdit
+                  v-if="isEditMode && activeEditorKey === 'purpose'"
+                  :model-value="transcriptHeaderData.purpose"
+                  @save="
+                    (newValue) => handleSaveHeaderField('purpose', newValue)
+                  "
+                  @cancel="handleCancelEdit"
+                >
+                  <template #input="{ model }"
+                    ><v-textarea
+                      v-model="model.value"
+                      label="Edit Purpose"
+                      variant="outlined"
+                      auto-grow
+                      rows="3"
+                    ></v-textarea
+                  ></template>
+                </VConfirmEdit>
+              </v-col>
+            </v-row>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12" class="px-4 pb-4">
+          <div class="content-cell" style="border-bottom: none">
+            <v-row no-gutters align="start">
+              <v-col cols="12" md="2">
+                <span class="font-weight-bold" style="font-size: 18px"
+                  >Attendees:</span
+                >
+              </v-col>
+              <v-col cols="12" md="10">
+                <div
+                  v-if="activeEditorKey !== 'attendees'"
+                  @click="isEditMode && setActiveEditor('attendees')"
+                  :class="{ 'editable-field': isEditMode }"
+                  class="mb-0 attendees-text"
+                  style="min-height: 40px"
+                >
+                  {{ transcriptHeaderData.attendees }}
+                </div>
+                <VConfirmEdit
+                  v-if="isEditMode && activeEditorKey === 'attendees'"
+                  :model-value="transcriptHeaderData.attendees"
+                  @save="
+                    (newValue) => handleSaveHeaderField('attendees', newValue)
+                  "
+                  @cancel="handleCancelEdit"
+                >
+                  <template #input="{ model }"
+                    ><v-textarea
+                      v-model="model.value"
+                      label="Edit Attendees"
+                      variant="outlined"
+                      auto-grow
+                      rows="3"
+                    ></v-textarea
+                  ></template>
+                </VConfirmEdit>
+              </v-col>
+            </v-row>
+          </div>
+        </v-col>
+      </v-row>
+    </div>
+
+    <div class="my-6"></div>
+    <div class="tasks-section-card">
+      <v-row no-gutters>
+        <v-col cols="12">
+          <div class="task-list-header d-flex justify-center align-center ga-4">
+            <h3 class="font-weight-bold" style="font-size: 24px">
+              Transcript List
+            </h3>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12" class="pa-4">
+          <div
+            v-if="activeEditorKey !== 'transcript'"
+            class="transcript-container"
+            :class="{ 'editable-field': isEditMode }"
+            @click="isEditMode && setActiveEditor('transcript')"
+          >
+            <div
+              v-for="(line, index) in body.transcriptLines"
+              :key="index"
+              class="transcript-line"
+              :class="{
+                highlight:
+                  normalizeString(line.transcript) === activelyHighlightedLine,
+              }"
+              :ref="(el) => setLineRef(el, line.transcript)"
+            >
+              <span class="speaker-info"
+                >{{ parseLine(line.transcript).speaker }}:</span
+              >
+              <span class="content">{{
+                parseLine(line.transcript).content
+              }}</span>
+            </div>
+          </div>
+          <VConfirmEdit
+            v-if="isEditMode && activeEditorKey === 'transcript'"
+            :model-value="fullTranscriptText"
+            @save="handleSaveTranscript"
+            @cancel="handleCancelEdit"
+          >
+            <template #input="{ model }">
+              <v-textarea
+                v-model="model.value"
+                label="Edit Transcript"
+                variant="outlined"
+                auto-grow
+                rows="10"
+                hint="Edit the raw transcript text here."
+              ></v-textarea>
+            </template>
+          </VConfirmEdit>
+        </v-col>
+      </v-row>
+    </div>
   </v-container>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onMounted, onUnmounted, watch, nextTick } from "vue";
 import { storeToRefs } from "pinia";
 import { useTranscriptStore } from "@/stores/transcriptstore";
 import { useRouter } from "vue-router";
 import VConfirmEdit from "../VConfirmEdit.vue";
-import { useChatbotStore } from "@/stores/chatbotStore"; // 1. Import the chatbot store
+
 import { useMinuteStore } from "@/stores/minutestore";
 
 const minuteStore = useMinuteStore();
 
-onMounted(() => {
-  transcriptStore.loadFromJson(); // default: loads from /sample-transcript.json
-});
-
-const chatbotStore = useChatbotStore(); // 2. Create an instance of the chatbot store
+import { useChatbotStore } from "@/stores/chatbotStore";
 
 const transcriptStore = useTranscriptStore();
+const chatbotStore = useChatbotStore();
 const pdfContent = ref(null);
 const router = useRouter();
-
-// FIX: Re-added defineEmits as it is used by the toTask function.
 const emit = defineEmits(["action"]);
-
-const parseLine = (line) => {
-  const parts = line.split(":");
-
-  // If there's nothing to split, return the original line as content.
-  if (parts.length <= 1) {
-    return { speaker: "", content: line };
-  }
-
-  // Take the last part as the content
-  const content = parts.pop().trim();
-  // Join the remaining parts back together to form the speaker/timestamp
-  const speaker = parts.join(":").trim();
-
-  return { speaker, content };
-};
 
 const {
   header: transcriptHeaderData,
@@ -434,9 +410,21 @@ const {
   isEditMode,
   activeEditorKey,
   fullTranscriptText,
+  highlightedLine,
 } = storeToRefs(transcriptStore);
+
 const { updateHeaderField, toggleEditMode, setActiveEditor, updateTranscript } =
   transcriptStore;
+
+const parseLine = (line) => {
+  const parts = line.split(":");
+  if (parts.length <= 1) {
+    return { speaker: "", content: line };
+  }
+  const content = parts.pop().trim();
+  const speaker = parts.join(":").trim();
+  return { speaker, content };
+};
 
 const handleSaveTranscript = (newValue) => {
   updateTranscript(newValue);
@@ -506,156 +494,238 @@ const toMinute = async () => {
 };
 
 const exportToPDF = () => {
-  console.log("Export to PDF triggered!");
-
-  const elementToCapture = pdfContent.value?.$el;
-
-  if (!elementToCapture) {
-    console.error("Could not find the element to capture.");
-    alert("Error: PDF content not found.");
-    return;
-  }
-
-  // --- START: Fix for capturing full scrollable content ---
-
-  // 1. Find the specific scrollable element within our capture area
-  const scrollableElement = elementToCapture.querySelector(
-    ".transcript-container"
-  );
-  let originalMaxHeight = "";
-  let originalOverflowY = "";
-
-  if (scrollableElement) {
-    // 2. Store its original CSS so we can restore it later
-    originalMaxHeight = scrollableElement.style.maxHeight;
-    originalOverflowY = scrollableElement.style.overflowY;
-
-    // 3. Temporarily override the CSS to make all content visible
-    scrollableElement.style.maxHeight = "none";
-    scrollableElement.style.overflowY = "visible";
-  }
-
-  // --- END: Fix for capturing full scrollable content ---
-
-  const title = "Meeting-Transcript";
-  const safeFilename = title.replace(/[^a-z0-9]/gi, "_").toLowerCase() + ".pdf";
-  console.log(`Using filename: ${safeFilename}`);
-
+  console.log("Exporting Transcript to styled, text-based PDF...");
   const { jsPDF } = window.jspdf;
-  const html2canvas = window.html2canvas;
-
-  if (!html2canvas || !jsPDF) {
-    console.error("PDF generation libraries not loaded!");
+  if (!jsPDF || !jsPDF.API.autoTable) {
+    console.error("jsPDF or jsPDF-AutoTable library not loaded!");
     alert("Sorry, the PDF export feature is currently unavailable.");
     return;
   }
 
-  html2canvas(elementToCapture, {
-    scale: 2,
-    useCORS: true,
-    width: elementToCapture.scrollWidth,
-  })
-    .then((canvas) => {
-      console.log("html2canvas was SUCCESSFUL.");
-      const imgData = canvas.toDataURL("image/png");
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "pt",
+    format: "a4",
+  });
 
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "pt",
-        format: "a4",
-      });
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const margin = 40;
+  let currentY = margin;
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const canvasAspectRatio = canvas.width / canvas.height;
+  const headerData = transcriptHeaderData.value;
+  const transcriptLines = body.value.transcriptLines;
+  const safeFilename = `${headerData.project || "Meeting"}-Transcript.pdf`;
 
-      let finalCanvasWidth = pdfWidth;
-      let finalCanvasHeight = finalCanvasWidth / canvasAspectRatio;
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(18);
+  pdf.text(
+    `Transcript - ${headerData.project || "General"}`,
+    pageWidth / 2,
+    currentY,
+    { align: "center" }
+  );
+  currentY += 35;
 
-      // This logic now correctly handles the newly expanded height.
-      // If it's still taller than one page, it will be scaled to fit.
-      // For multi-page PDFs, a more advanced approach would be needed.
-      if (finalCanvasHeight > pdfHeight) {
-        console.warn(
-          "Content is taller than a single A4 page. It will be scaled to fit."
-        );
-        finalCanvasHeight = pdfHeight;
-        finalCanvasWidth = finalCanvasHeight * canvasAspectRatio;
-      }
+  const headerBoxStartY = currentY;
+  pdf.setDrawColor(224, 224, 224);
+  pdf.setLineWidth(1);
+  const colWidth = (pageWidth - margin * 2) / 4;
 
-      const xOffset = (pdfWidth - finalCanvasWidth) / 2;
-      const yOffset = 0;
+  const headerFields = [
+    { label: "Location:", value: headerData.location },
+    { label: "Written by:", value: headerData.createdBy },
+    { label: "Date:", value: formatDate(headerData.date) },
+    { label: "Project:", value: headerData.project },
+  ];
 
-      pdf.addImage(
-        imgData,
-        "PNG",
-        xOffset,
-        yOffset,
-        finalCanvasWidth,
-        finalCanvasHeight
-      );
-      pdf.save(safeFilename);
-      console.log("PDF generation complete.");
-    })
-    .catch((error) => {
-      console.error("Oops, something went wrong with html2canvas!", error);
-      alert("Could not generate PDF. Please check the console for errors.");
-    })
-    .finally(() => {
-      // --- START: Restore Original Styles ---
-      // IMPORTANT: Restore the original styles regardless of success or failure.
-      if (scrollableElement) {
-        scrollableElement.style.maxHeight = originalMaxHeight;
-        scrollableElement.style.overflowY = originalOverflowY;
-      }
-      // --- END: Restore Original Styles ---
+  let maxBoxHeight = 0;
+  headerFields.forEach((field) => {
+    const valueLines = pdf.splitTextToSize(field.value || "N/A", colWidth - 20);
+    const boxHeight = 30 + valueLines.length * 12;
+    if (boxHeight > maxBoxHeight) maxBoxHeight = boxHeight;
+  });
+
+  headerFields.forEach((field, index) => {
+    const xPos = margin + index * colWidth;
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(10);
+    pdf.text(field.label, xPos + 10, headerBoxStartY + 15);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(field.value || "N/A", xPos + 10, headerBoxStartY + 30, {
+      maxWidth: colWidth - 20,
     });
+    if (index < 3) {
+      pdf.line(
+        xPos + colWidth,
+        headerBoxStartY,
+        xPos + colWidth,
+        headerBoxStartY + maxBoxHeight
+      );
+    }
+  });
+  currentY = headerBoxStartY + maxBoxHeight;
+  pdf.line(margin, currentY, pageWidth - margin, currentY);
+
+  const addSection = (label, value) => {
+    let yPos = currentY + 15;
+    pdf.setFont("helvetica", "bold");
+    pdf.text(label, margin + 10, yPos);
+    pdf.setFont("helvetica", "normal");
+    const valueLines = pdf.splitTextToSize(
+      value || "N/A",
+      pageWidth - margin * 2 - 100
+    );
+    pdf.text(valueLines, margin + 100, yPos);
+    currentY += valueLines.length * 12 + 10;
+  };
+
+  addSection("Purpose:", headerData.purpose);
+  addSection("Attendees:", headerData.attendees);
+  pdf.rect(
+    margin,
+    headerBoxStartY,
+    pageWidth - margin * 2,
+    currentY - headerBoxStartY
+  );
+  currentY += 40;
+
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(16);
+  pdf.text("Transcript List", pageWidth / 2, currentY, { align: "center" });
+  currentY += 25;
+
+  const tableBody = transcriptLines.map((line) => {
+    const { speaker, content } = parseLine(line.transcript);
+    return [speaker, content];
+  });
+
+  pdf.autoTable({
+    startY: currentY,
+    head: [["Speaker/Timestamp", "Content"]],
+    body: tableBody,
+    theme: "plain",
+    headStyles: {
+      fontStyle: "bold",
+      fontSize: 11,
+      fillColor: [245, 245, 245],
+    },
+    columnStyles: {
+      0: { cellWidth: 150, fontStyle: "bold" },
+      1: { cellWidth: "auto" },
+    },
+    styles: {
+      cellPadding: 8,
+      fontSize: 10,
+      valign: "top",
+    },
+  });
+
+  pdf.save(safeFilename);
+  console.log("Styled, text-based Transcript PDF generation complete.");
 };
 
-// 2. Define a reusable function to set the context
-const updateChatContext = () => {
-  // Directly access the .value of the reactive refs
-  const headerData = transcriptHeaderData.value;
-  const bodyData = body.value;
+// transcript.vue -> <script setup> section
 
-  // Check if both parts of the minutes data are available
-  if (headerData && bodyData) {
-    // Combine header and body into a single context object
-    const fullPageContext = {
-      header: headerData,
-      body: bodyData,
-    };
-    chatbotStore.setPageContext(fullPageContext, "Meeting Transcript Page");
-    console.log("Chatbot context SET for Meeting Transcript page.");
-  } else {
-    // This log correctly indicates that data isn't ready yet.
-    console.log("No minutes data available to set as context yet.");
+// --- ✨ START: UNIFIED HIGHLIGHT & SCROLL LOGIC ---
+
+const { lastSourceLine } = storeToRefs(chatbotStore);
+const lineRefs = new Map();
+
+// ✅ NEW: A dedicated reactive state to hold the full, matched line
+const activelyHighlightedLine = ref(null);
+
+// Helper to normalize strings for comparison (removes extra whitespace)
+const normalizeString = (str) => {
+  if (!str) return "";
+  return str.trim().replace(/\s+/g, " ");
+};
+
+// Function to populate the map of refs
+const setLineRef = (el, line) => {
+  if (el) {
+    lineRefs.set(normalizeString(line), el);
   }
 };
 
-// 3. Watch for changes in the data
-// This handles the case where data loads AFTER the component has already mounted.
-// Watching both refs ensures the context is updated when either part changes.
+// Watch for a new source line from the chatbot
+watch(lastSourceLine, (newLine) => {
+  transcriptStore.setHighlightedLine(newLine);
+});
+
+// ✅ MODIFIED: This watcher now sets the 'activelyHighlightedLine' state
+// which drives BOTH highlighting and scrolling.
+watch(highlightedLine, (newVal) => {
+  // If the citation from the AI exists...
+  if (newVal) {
+    nextTick(() => {
+      const partialNormalizedKey = normalizeString(newVal);
+      if (!partialNormalizedKey) {
+        activelyHighlightedLine.value = null;
+        return;
+      }
+
+      let foundKey = null;
+
+      // Iterate through the full, original lines to find a match
+      for (const fullLineKey of lineRefs.keys()) {
+        if (fullLineKey.includes(partialNormalizedKey)) {
+          foundKey = fullLineKey; // We found the full line!
+          break;
+        }
+      }
+
+      // If a match was found...
+      if (foundKey) {
+        const targetElement = lineRefs.get(foundKey);
+        // 1. Set the state for the visual highlight
+        activelyHighlightedLine.value = foundKey;
+        // 2. Scroll to the element
+        if (targetElement) {
+          console.log(
+            `✅ Match found! Highlighting and scrolling to: "${foundKey}"`
+          );
+          targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      } else {
+        // If no match was found, clear the highlight
+        activelyHighlightedLine.value = null;
+        console.error(
+          `❌ No match found for partial key: "${partialNormalizedKey}"`
+        );
+      }
+    });
+  } else {
+    // If the citation from the AI is cleared, clear our highlight state
+    activelyHighlightedLine.value = null;
+  }
+});
+
+// --- ✨ END: UNIFIED HIGHLIGHT & SCROLL LOGIC ---
+const updateChatContext = () => {
+  const headerData = transcriptHeaderData.value;
+  const bodyData = body.value;
+  if (headerData && bodyData) {
+    const fullPageContext = { header: headerData, body: bodyData };
+    chatbotStore.setPageContext(fullPageContext, "Meeting Transcript Page");
+  }
+};
+
 watch(
   [transcriptHeaderData, body],
   () => {
     updateChatContext();
   },
-  {
-    deep: true, // Important for watching complex objects
-  }
+  { deep: true }
 );
 
-// 4. Use onMounted to set the context as soon as the component is on the page
-// This handles cases where the data is already in the store from a previous visit.
 onMounted(() => {
   updateChatContext();
 });
 
-// 5. Use onUnmounted to clean up when leaving the page
 onUnmounted(() => {
+  transcriptStore.setHighlightedLine(null);
   chatbotStore.clearPageContext();
-  console.log("Chatbot context CLEARED from Minutes page.");
 });
 </script>
 
@@ -665,16 +735,14 @@ onUnmounted(() => {
 .attachment-manager,
 .attachment-manager * {
   font-family: "Inter", serif !important;
-  /* font-family: "Times New Roman", serif !important */
 }
 
 .transcript-container {
-  /* font-family: 'Courier New', Courier, monospace; */
   border-radius: 4px;
   padding: 16px;
   line-height: 1.6;
-  max-height: 400px; /* You can adjust this value as needed */
-  overflow-y: auto; /* Adds a scrollbar only when content exceeds max-height */
+  max-height: 50vh; /* Adjusted for better viewport fit */
+  overflow-y: auto;
   font-family: "Inter", serif !important;
 }
 
@@ -682,14 +750,27 @@ onUnmounted(() => {
   display: flex;
   align-items: flex-start;
   margin-bottom: 8px;
+  padding: 4px 8px; /* Added padding for the highlight effect */
   font-family: "Inter", serif !important;
+  border-radius: 4px; /* Added for the highlight effect */
+  transition: background-color 0.3s ease-in-out;
+}
+
+.transcript-line.highlight {
+  background-color: #ffe951; /* A pleasant light yellow */
 }
 
 .speaker-info {
   flex-shrink: 0;
-  min-width: 300px;
+  width: 250px; /* Adjusted width */
+  padding-right: 1em; /* Added spacing */
   color: #333;
+  font-weight: 500; /* Made speaker slightly bolder */
   font-family: "Inter", serif !important;
+}
+
+.content {
+  flex-grow: 1;
 }
 
 .editable-field {
@@ -700,20 +781,16 @@ onUnmounted(() => {
   font-family: "Inter", serif !important;
 }
 .editable-field:hover {
-  background-color: #e0e0e0; /* A very light yellow */
-  border-color: #e0e0e0; /* A light orange/yellow */
+  background-color: #f0f0f0;
+  border-color: #e0e0e0;
 }
 
-.minutes-section-card {
-  border: 2px solid #e0e0e0;
-  border-radius: 24px;
-  overflow: hidden;
-  font-family: "Inter", serif !important;
-}
+.minutes-section-card,
 .tasks-section-card {
   border: 2px solid #e0e0e0;
   border-radius: 24px;
   overflow: hidden;
+  font-family: "Inter", serif !important;
 }
 .rounded-header-cell {
   border-right: 2px solid #e0e0e0;
@@ -739,13 +816,5 @@ onUnmounted(() => {
 .attendees-text {
   white-space: pre-wrap;
   line-height: 1.5;
-}
-
-.transcript-display {
-  white-space: pre-wrap; /* Ensures newlines are respected */
-  line-height: 1.6;
-  /* font-family: monospace; Often good for transcripts */
-  border-radius: 4px;
-  border: 1px solid #e0e0e0;
 }
 </style>

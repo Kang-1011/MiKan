@@ -16,6 +16,8 @@ from routers.subtasks import router as subtasks_router
 from routers.boards import router as boards_router
 from routers.transcript import router as transcript_router
 from routers.minutes import router as minutes_router
+from routers.chatbot import router as chatbot_router 
+from routers.llm_speech_json import router as llm_speech_json
 
 app = FastAPI()
 create_tables()
@@ -44,3 +46,5 @@ app.include_router(meetings_router, prefix="/meetings", tags=["Meetings"])
 app.include_router(boards_router, prefix="/boards", tags=["Boards"])
 app.include_router(transcript_router, prefix="", tags=["Transcript"])
 app.include_router(minutes_router, prefix="/minutes", tags=["Minutes"])
+app.include_router(chatbot_router, prefix="/chatbot", tags=["Chatbot"]) 
+app.include_router(llm_speech_json, prefix="/llm_speech_json", tags=["LLM Speech JSON"])

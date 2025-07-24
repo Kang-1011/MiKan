@@ -4,7 +4,39 @@
     style="border-bottom: 2px solid #e0e0e0; padding: 8px 16px"
   >
     <div>
-      <h2>Minutes</h2>
+      <v-tooltip
+        :text="isEditMode ? 'Finish Editing' : 'Edit Minutes'"
+        location="bottom"
+      >
+        <template v-slot:activator="{ props }">
+          <v-btn
+            :icon="isEditMode ? 'mdi-check-outline' : 'mdi-square-edit-outline'"
+            variant="text"
+            v-bind="props"
+            @click="toggleEditMode"
+          ></v-btn>
+        </template>
+      </v-tooltip>
+      <v-tooltip text="Download Minutes" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            icon="mdi-download-outline"
+            variant="text"
+            v-bind="props"
+            @click="exportToPDF"
+          ></v-btn>
+        </template>
+      </v-tooltip>
+      <v-tooltip text="To Manager Review" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            icon="mdi-send-outline"
+            variant="text"
+            v-bind="props"
+            @click="toTask"
+          ></v-btn>
+        </template>
+      </v-tooltip>
     </div>
     <div>
       <v-tooltip text="Download Minutes" location="bottom">
@@ -537,163 +569,243 @@ const formatDate = (dateString) => {
 const toTask = async () => {
   console.log("Submitting minutes...");
 
-  try {
-    const payload = {
-      header: minuteHeaderData.value,
-      tasks: body.value.tasks,
-    };
+  const exportToPDF = () => {
+    console.log("Exporting Minutes to styled, text-based PDF...");
 
-    const response = await axios.post(
-      "http://localhost:8000/minutes/submit",
-      payload
-    );
-
-    if (response.data.status === "ok") {
-      console.log("Minutes submitted:", response.data);
-      router.push("/ManagerReviewV2"); // Navigate after success
-    } else {
-      console.error("Submission failed:", response.data.message);
-      alert("Submission failed: " + response.data.message);
+    // Ensure jsPDF and the autoTable plugin are loaded
+    const { jsPDF } = window.jspdf;
+    if (!jsPDF || !jsPDF.API.autoTable) {
+      console.error("jsPDF or jsPDF-AutoTable library not loaded!");
+      alert("Sorry, the PDF export feature is currently unavailable.");
+      return;
     }
-  } catch (err) {
-    console.error("Error submitting minutes:", err);
-    alert("An error occurred while submitting minutes.");
-  }
-};
 
-const exportToPDF = () => {
-  console.log("Export to PDF triggered!");
+    // 1. Initialize jsPDF
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "pt",
+      format: "a4",
+    });
 
-  const elementToCapture = pdfContent.value?.$el;
+    // 2. Define document properties and layout constants
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const margin = 40;
+    const contentWidth = pageWidth - margin * 2;
+    let currentY = margin;
 
-  if (!elementToCapture) {
-    console.error("Could not find the element to capture.");
-    alert("Error: PDF content not found.");
-    return;
-  }
+    // 3. Get data from the store
+    const headerData = minuteHeaderData.value;
+    const tasks = body.value.Tasks;
+    const safeFilename = `${headerData.project || "Meeting"}-Minutes.pdf`;
 
-  // --- START OF CHANGES ---
-  const title = minuteHeaderData.value?.title || "Meeting-Minutes";
-  const safeFilename = title.replace(/[^a-z0-9]/gi, "_").toLowerCase() + ".pdf";
-  console.log(`Using filename: ${safeFilename}`);
+    // --- START: Replicating the Webpage Layout ---
 
-  const { jsPDF } = window.jspdf;
-  const html2canvas = window.html2canvas;
+    // 4. Add Main Title
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(20);
+    pdf.text(
+      `Minutes - ${headerData.project || "General"}`,
+      pageWidth / 2,
+      currentY,
+      { align: "center" }
+    );
+    currentY += 35;
+    // Add this line to debug
+    if (tasks && tasks.length > 0) {
+      console.log("Inspecting first task object:", JSON.stringify(tasks[0]));
+    }
 
-  if (!html2canvas || !jsPDF) {
-    console.error("PDF generation libraries not loaded!");
-    alert("Sorry, the PDF export feature is currently unavailable.");
-    return;
-  }
+    // 5. Draw the main container box for header info
+    const headerBoxStartY = currentY;
+    pdf.setDrawColor(224, 224, 224); // Light grey border
+    pdf.setLineWidth(1);
 
-  html2canvas(elementToCapture, {
-    scale: 2,
-    useCORS: true,
-    // It can be beneficial to set the width explicitly if responsive issues persist
-    width: elementToCapture.scrollWidth,
-  })
-    .then((canvas) => {
-      console.log("html2canvas was SUCCESSFUL.");
-      const imgData = canvas.toDataURL("image/png");
+    // 6. Create the four-column header section
+    const colWidth = contentWidth / 4;
+    const headerFields = [
+      { label: "Location:", value: headerData.location },
+      { label: "Written by:", value: headerData.createdBy },
+      { label: "Date:", value: formatDate(headerData.date) },
+      { label: "Project:", value: headerData.project },
+    ];
 
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "pt", // Using points is often more reliable
-        format: "a4", // Standard page size
+    let maxBoxHeight = 0;
+
+    headerFields.forEach((field, index) => {
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(10);
+      const labelLines = pdf.splitTextToSize(field.label, colWidth - 10);
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+      const valueLines = pdf.splitTextToSize(
+        field.value || "N/A",
+        colWidth - 10
+      );
+
+      const boxHeight = (labelLines.length + valueLines.length) * 12 + 20;
+      if (boxHeight > maxBoxHeight) {
+        maxBoxHeight = boxHeight;
+      }
+    });
+
+    headerFields.forEach((field, index) => {
+      const xPos = margin + index * colWidth;
+      let yPos = headerBoxStartY + 15;
+
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(10);
+      pdf.text(field.label, xPos + 10, yPos);
+      yPos += 15;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.text(field.value || "N/A", xPos + 10, yPos, {
+        maxWidth: colWidth - 20,
       });
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-
-      const canvasAspectRatio = canvas.width / canvas.height;
-      const pdfAspectRatio = pdfWidth / pdfHeight;
-
-      let finalCanvasWidth, finalCanvasHeight;
-
-      // Fit canvas to PDF page width
-      finalCanvasWidth = pdfWidth;
-      finalCanvasHeight = finalCanvasWidth / canvasAspectRatio;
-
-      // If the content is too tall for one page, you might need to handle multi-page PDFs.
-      // For a single-page output, this will scale it down.
-      if (finalCanvasHeight > pdfHeight) {
-        console.warn(
-          "Content is taller than a single A4 page. It will be scaled to fit."
+      // Draw vertical separator lines
+      if (index < 3) {
+        pdf.line(
+          xPos + colWidth,
+          headerBoxStartY,
+          xPos + colWidth,
+          headerBoxStartY + maxBoxHeight
         );
-        finalCanvasHeight = pdfHeight;
-        finalCanvasWidth = finalCanvasHeight * canvasAspectRatio;
       }
-
-      const xOffset = (pdfWidth - finalCanvasWidth) / 2;
-      const yOffset = 0; // Or center it vertically: (pdfHeight - finalCanvasHeight) / 2;
-
-      pdf.addImage(
-        imgData,
-        "PNG",
-        xOffset,
-        yOffset,
-        finalCanvasWidth,
-        finalCanvasHeight
-      );
-      pdf.save(safeFilename);
-
-      console.log("PDF generation complete.");
-    })
-    .catch((error) => {
-      console.error("Oops, something went wrong with html2canvas!", error);
-      alert("Could not generate PDF. Please check the console for errors.");
     });
-};
 
-const isMainTask = (taskNumber) => {
-  return !String(taskNumber).includes(".");
-};
+    currentY = headerBoxStartY + maxBoxHeight;
+    pdf.line(margin, currentY, pageWidth - margin, currentY); // Horizontal line below columns
 
-// 2. Define a reusable function to set the context
-const updateChatContext = () => {
-  // Directly access the .value of the reactive refs
-  const headerData = minuteHeaderData.value;
-  const bodyData = body.value;
+    // 7. Add Purpose and Attendees sections
+    const addSection = (label, value) => {
+      let yPos = currentY + 15;
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(10);
+      pdf.text(label, margin + 10, yPos);
 
-  // Check if both parts of the minutes data are available
-  if (headerData && bodyData) {
-    // Combine header and body into a single context object
-    const fullPageContext = {
-      header: headerData,
-      body: bodyData,
+      pdf.setFont("helvetica", "normal");
+      const valueLines = pdf.splitTextToSize(
+        value || "N/A",
+        contentWidth - 120
+      );
+      pdf.text(valueLines, margin + 100, yPos);
+
+      const sectionHeight = valueLines.length * 12 + 20;
+      currentY += sectionHeight;
     };
-    chatbotStore.setPageContext(fullPageContext, "Meeting Minutes Page");
-    console.log("Chatbot context SET for Meeting Minutes page.");
-  } else {
-    // This log correctly indicates that data isn't ready yet.
-    console.log("No minutes data available to set as context yet.");
-  }
-};
 
-// 3. Watch for changes in the data
-// This handles the case where data loads AFTER the component has already mounted.
-// Watching both refs ensures the context is updated when either part changes.
-watch(
-  [minuteHeaderData, body],
-  () => {
+    addSection("Purpose:", headerData.Purpose);
+    addSection("Attendees:", headerData.Attendees);
+
+    // Draw the outer box for the header section
+    pdf.rect(margin, headerBoxStartY, contentWidth, currentY - headerBoxStartY);
+    currentY += 40; // Space before the task list
+
+    // 8. Add Task List using jsPDF-AutoTable
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(16);
+    pdf.text("Task List", pageWidth / 2, currentY, { align: "center" });
+    currentY += 25;
+
+    const tableColumnStyles = {
+      0: { cellWidth: 40, halign: "center" }, // No.
+      1: { cellWidth: "auto" }, // Task Description
+      2: { cellWidth: 80, halign: "center" }, // Action by
+      3: { cellWidth: 70, halign: "center" }, // Due Date
+    };
+
+    const tableBody = tasks.map((task) => [
+      task["Task No."],
+      task.Description,
+      task["Action by"],
+      task["Due date"],
+    ]);
+
+    pdf.autoTable({
+      startY: currentY,
+      head: [["No.", "Task Description", "Action by", "Due Date"]],
+      body: tableBody,
+      theme: "grid",
+      headStyles: {
+        fillColor: [232, 232, 232],
+        textColor: [40, 40, 40],
+        fontStyle: "bold",
+        halign: "center",
+      },
+      columnStyles: tableColumnStyles,
+      didDrawCell: (data) => {
+        // Custom styling for main task rows
+        const taskNo = String(data.cell.raw);
+        if (data.section === "body" && !taskNo.includes(".")) {
+          pdf.setFillColor(240, 240, 240); // Light grey for main task rows
+          pdf.rect(
+            data.cell.x,
+            data.cell.y,
+            data.cell.width,
+            data.cell.height,
+            "F"
+          );
+        }
+      },
+    });
+
+    // 9. Save the PDF
+    pdf.save(safeFilename);
+    console.log("Styled, text-based PDF generation complete.");
+  };
+
+  const isMainTask = (taskNumber) => {
+    return !String(taskNumber).includes(".");
+  };
+
+  // 2. Define a reusable function to set the context
+  const updateChatContext = () => {
+    // Directly access the .value of the reactive refs
+    const headerData = minuteHeaderData.value;
+    const bodyData = body.value;
+
+    // Check if both parts of the minutes data are available
+    if (headerData && bodyData) {
+      // Combine header and body into a single context object
+      const fullPageContext = {
+        header: headerData,
+        body: bodyData,
+      };
+      chatbotStore.setPageContext(fullPageContext, "Meeting Minutes Page");
+      console.log("Chatbot context SET for Meeting Minutes page.");
+    } else {
+      // This log correctly indicates that data isn't ready yet.
+      console.log("No minutes data available to set as context yet.");
+    }
+  };
+
+  // 3. Watch for changes in the data
+  // This handles the case where data loads AFTER the component has already mounted.
+  // Watching both refs ensures the context is updated when either part changes.
+  watch(
+    [minuteHeaderData, body],
+    () => {
+      updateChatContext();
+    },
+    {
+      deep: true, // Important for watching complex objects
+    }
+  );
+
+  // 4. Use onMounted to set the context as soon as the component is on the page
+  // This handles cases where the data is already in the store from a previous visit.
+  onMounted(() => {
     updateChatContext();
-  },
-  {
-    deep: true, // Important for watching complex objects
-  }
-);
+  });
 
-// 4. Use onMounted to set the context as soon as the component is on the page
-// This handles cases where the data is already in the store from a previous visit.
-onMounted(() => {
-  updateChatContext();
-});
-
-// 5. Use onUnmounted to clean up when leaving the page
-onUnmounted(() => {
-  chatbotStore.clearPageContext();
-  console.log("Chatbot context CLEARED from Minutes page.");
-});
+  // 5. Use onUnmounted to clean up when leaving the page
+  onUnmounted(() => {
+    chatbotStore.clearPageContext();
+    console.log("Chatbot context CLEARED from Minutes page.");
+  });
+};
 </script>
 
 <style scoped>

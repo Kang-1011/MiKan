@@ -31,15 +31,11 @@ def update_task(task_id: int, task_data: TaskUpdate, db: db_dependency):
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    
-    update_data = task_data.dict()
+
+    update_data = task_data.dict(exclude_unset=True, exclude={"attachments", "ai_attachments", "autostarts", "comments"})
+
     for key, value in update_data.items():
-        setattr(task, key, value) 
-
-    # update_data = task_data.dict(exclude_unset=True, exclude={"attachments", "ai_attachments", "autostarts", "comments"})
-
-    # for key, value in update_data.items():
-    #     setattr(task, key, value)
+        setattr(task, key, value)
 
     # # Clear and recreate relationships if provided
     # if task_data.attachments is not None:
@@ -47,20 +43,20 @@ def update_task(task_id: int, task_data: TaskUpdate, db: db_dependency):
     #     for a in task_data.attachments:
     #         task.attachments.append(Attachment(name=a.name, type=a.type))
 
-    # if task_data.ai_attachments is not None:
-    #     task.ai_attachments.clear()
-    #     for ai in task_data.ai_attachments:
-    #         task.ai_attachments.append(AIAttachment(name=ai.name, url=ai.url))
+    if task_data.ai_attachments is not None:
+        task.ai_attachments.clear()
+        for ai in task_data.ai_attachments:
+            task.ai_attachments.append(AIAttachment(name=ai.name, url=ai.url))
 
-    # if task_data.autostarts is not None:
-    #     task.autostarts.clear()
-    #     for auto in task_data.autostarts:
-    #         task.autostarts.append(Autostart(name=auto.name, url=auto.url))
+    if task_data.autostarts is not None:
+        task.autostarts.clear()
+        for auto in task_data.autostarts:
+            task.autostarts.append(Autostart(name=auto.name, url=auto.url))
 
-    # if task_data.comments is not None:
-    #     task.comments.clear()
-    #     for c in task_data.comments:
-    #         task.comments.append(Comment(text=c.text, date=c.date))
+    if task_data.comments is not None:
+        task.comments.clear()
+        for c in task_data.comments:
+            task.comments.append(Comment(text=c.text, date=c.date))
 
     db.commit()
     db.refresh(task)
