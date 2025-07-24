@@ -6,7 +6,7 @@
 			<v-stepper v-model="step" class="no-shadow">
 				<v-stepper-header class="no-shadow">
 					<v-stepper-item :value="1" title="Configuration" />
-					<div class="step-line" />
+					<v-divider></v-divider>
 					<v-stepper-item :value="2" title="Upload" />
 				</v-stepper-header>
 
@@ -211,17 +211,6 @@ async function transcribeUploadedAudio() {
 	border-radius: 10px;
 	padding: 32px;
 	width: 100%;
-}
-
-.step-line {
-	position: absolute;
-	top: 50%;
-	left: 180px;
-	/* adjust depending on spacing */
-	right: 180px;
-	height: 1px;
-	background-color: grey;
-	z-index: 0;
 }
 
 .no-shadow {
