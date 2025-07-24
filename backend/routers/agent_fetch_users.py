@@ -1,13 +1,7 @@
-import os
-from dotenv import load_dotenv
 import psycopg2
 
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-json_attendee_path = "/home/rohimi/checkoutroot/MiKan/backend/routers/attendees.json"
-
 DB_USER = "postgres"
-DB_PASSWORD = "1234"
+DB_PASSWORD = "password"
 DB_HOST = "localhost"
 DB_PORT = 5432
 DB_NAME = "mikan_db"
