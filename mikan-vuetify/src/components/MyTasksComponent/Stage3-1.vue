@@ -3,12 +3,19 @@
 // ======================== -->
 <template>
   
-  <v-sheet elevation="0" class="border-sm rounded-xl ma-2 hover:black" style="min-width: 340px; max-width: 340px; display:flex; flex-direction:column; background:#fcfcfc; ">
-    <v-toolbar density="compact" class="rounded-xl" color="#fcfcfc">
+  <v-sheet 
+  elevation="0" 
+  class="border-2 rounded-v2 ma-2 hover:black d-flex flex-column stage-background" 
+  style="
+  min-width: 340px; 
+  max-width: 340px; 
+  display:flex; 
+  flex-direction:column;">
+    <v-toolbar density="compact" class="rounded-v2 " >
       <template v-if="!isEditing">
         <v-toolbar-title  class="text-subtitle-1 my-0 py-0">{{ stage.title }}</v-toolbar-title>
         <v-spacer />
-        <v-btn density="compact" icon  v-if="!visitorMode" @click="startRename">
+        <v-btn density="compact" class="stage-button-edit" icon  v-if="!visitorMode" @click="startRename">
           <v-icon size="20px">mdi-pencil</v-icon>
         </v-btn>
         
@@ -20,7 +27,7 @@
          @confirm="onConfirmDelete"
        />
 <!-- <v-btn density="compact" icon class="mr-3" v-if="!visitorMode" @click="$emit('delete-stage', props.stageIndex)"> -->
-        <v-btn density="compact" class="mr-3" icon  v-if="!visitorMode" @click="showDelete = true">
+        <v-btn density="compact" class="mr-3 stage-button-delete" icon  v-if="!visitorMode" @click="showDelete = true">
           <v-icon size="20px">mdi-delete</v-icon>
         </v-btn>
       </template>
@@ -45,9 +52,8 @@
       :item-key="'id'"
       :animation="150"
       :group="{ name: `tasks-board-${boardIndex}`, pull: true, put: [`tasks-board-${boardIndex}`] }"
-      class="pa-2"
-      
-      style="min-height:75vh; max-height: 75vh; overflow-y:auto" 
+      class="pa-2 flex-grow-1 overflow-y-auto"
+       
       :disabled="visitorMode"
 	  @change="onTaskDrop"
 
@@ -75,7 +81,7 @@
     </draggable>
     <!-- <v-divider></v-divider> -->
     <v-card-actions class="pa-0 pt-0 justify-center">
-      <v-btn density="compact" class="rounded-xl border-md ma-auto" @click="$emit('add-task')" :disabled="visitorMode">
+      <v-btn density="compact" class="stage-button-add-task rounded-xl border-2 border-md ma-auto bg-grey-lighten-4" @click="$emit('add-task')" :disabled="visitorMode">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-card-actions>
@@ -150,6 +156,12 @@ function onTaskDrop(evt) {
     0 2px 4px rgba(0, 0, 0, 0.04),
     0 4px 12px rgba(0, 0, 0, 0.06);  /* Stronger shadow for depth */
   transition: box-shadow 0.2s ease, transform 0.1s ease;
-  border: 1px solid #f1f1f1;         /* Subtle border to separate on white bg */
+ 
 }
+.fill-height {
+    height: 100%;
+    /* Make sure it fills the full screen */
+}
+
+
 </style>

@@ -13,7 +13,7 @@
         <v-btn icon density="compact" elevation="0" class="header-action-btn save-btn" @click="save">
           <v-icon color="rgba(0,0,0,0.6)">mdi-content-save-outline</v-icon>
         </v-btn>
-        <v-btn icon density="compact" elevation="0" class="header-action-btn delete-btn" @click="$emit('delete-task')">
+        <v-btn icon density="compact" elevation="0" class="header-action-btn stage-button-delete" @click="$emit('delete-task')">
           <v-icon color="rgba(0,0,0,0.6)">mdi-delete-outline</v-icon>
         </v-btn>
       </v-toolbar>
@@ -90,6 +90,7 @@
             v-model="localTask.attachments"
             mode="attachments"
             :visitorMode="visitorMode"
+			@deleted-attachment="onDeletedAttachment"
           />
 
           <!-- AI Attachments -->
@@ -235,6 +236,7 @@ const internalDialogOpen = computed({
   set: v => emit('update:modelValue', v)
 })
 const localTask = ref<any>(null)
+const deletedAttachments = ref<any[]>([])
 const dateMenu = ref(false)
 const newComment = ref('')
 
@@ -332,6 +334,12 @@ function closeDialog() {
   emit('update:modelValue', false)
 }
 
+function onDeletedAttachment(file: any) {
+  if (file?.url) {
+    deletedAttachments.value.push(file)
+  }
+}
+
 async function save() {
   if (!localTask.value) return;
 
@@ -386,6 +394,23 @@ async function save() {
       console.error("❌ Failed to upload attachment:", err);
     }
   }
+
+  // ✅ Delete removed attachments
+	for (const deleted of deletedAttachments.value) {
+	const urlParts = deleted.url.split('/');
+	const attachmentId = urlParts[urlParts.length - 1];
+
+	if (attachmentId) {
+		try {
+		await axios.delete(`http://localhost:8000/attachments/delete_attachment/${attachmentId}`);
+		console.log(`🗑️ Deleted attachment ${attachmentId}`);
+		} catch (err) {
+		console.error(`❌ Failed to delete attachment ${attachmentId}:`, err);
+		}
+	}
+	}
+	deletedAttachments.value = []
+
   localTask.value.attachments = [...existingAttachments, ...uploadedAttachments];
 
   // 🧼 Optional: console.log everything at end

@@ -131,7 +131,7 @@ const props = defineProps<{
   mode: 'attachments' | 'ai_attachments' | 'autostart';
   visitorMode?: boolean;
 }>()
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'deleted-attachment'])
 
 const isRecording = ref(false)
 const isDragging = ref(false)
@@ -179,12 +179,17 @@ function addFiles(files: File[]) {
 }
 
 function removeFile(index: number) {
-  uploadedFiles.value.splice(index, 1)
-  emit('update:modelValue', uploadedFiles.value)
+  const deleted = uploadedFiles.value[index];
+  uploadedFiles.value.splice(index, 1);
+  console.log("Deleted attachment:", deleted);
+  emit('update:modelValue', uploadedFiles.value);
+
   if (uploadedFiles.value.length === 0 && props.mode === 'attachments') {
-    isRecording.value = false
-    isDragging.value = false
+    isRecording.value = false;
+    isDragging.value = false;
   }
+
+  emit('deleted-attachment', deleted);
 }
 
 function openFile(file: any) {
