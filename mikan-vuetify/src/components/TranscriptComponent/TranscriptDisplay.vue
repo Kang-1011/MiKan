@@ -52,8 +52,7 @@
         <v-col cols="12">
           <div class="title-cell d-flex justify-center align-center">
             <h1 class="text-h4 font-weight-bold text-center">
-              {{ transcriptHeaderData.title }} -
-              {{ transcriptHeaderData.project }}
+              {{ transcriptHeaderData.title }}
             </h1>
           </div>
         </v-col>
