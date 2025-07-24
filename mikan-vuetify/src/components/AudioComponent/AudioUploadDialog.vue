@@ -33,7 +33,7 @@
 									:disabled="step == 1">
 									Previous
 								</v-btn>
-								<v-btn color="black" variant="flat" class="text-body-2 rounded-lg" @click="goToStep2">
+								<v-btn color="black" variant="flat" class="text-body-2 rounded-lg" @click="goToStep2" >
 									Next
 								</v-btn>
 							</div>
@@ -134,6 +134,7 @@ async function goToStep2() {
 	const { valid } = await configForm.value.validate();
 	if (valid) {
 		step.value = 2;
+		transcriptStore.loadConfig(location.value, project.value)
 	}
 }
 

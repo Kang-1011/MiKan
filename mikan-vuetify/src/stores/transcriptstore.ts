@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import axios from "axios";
+import { useProjectStore } from '@/stores/projects'
 
 interface LLMTranscriptLine {
   timestamp: string;
@@ -98,10 +99,8 @@ export const useTranscriptStore = defineStore("transcript", () => {
   async function loadFromLLMJSON(llm_json: ResponseFormatter) {
     try {
       header.title = llm_json.transcript.title;
-      header.location = "Your Heart";
       header.createdBy = "You";
       header.date = "Now";
-      header.project = "Your Heart";
       header.purpose = llm_json.transcript.purpose;
       header.attendees = llm_json.transcript.attendees;
 
@@ -120,6 +119,15 @@ export const useTranscriptStore = defineStore("transcript", () => {
       console.error("Failed to load JSON from transcription json:", error);
     }
   }
+
+  const projectStore = useProjectStore()
+  async function loadConfig(location: string, projectID: number) {
+    header.location = location;
+
+    const retrievedProject = await projectStore.fetchProjectByID(projectID)
+    header.project = retrievedProject?.title as string
+  }
+  
 
 	function formatTimestamp(ts: string): string {
 		const parts = ts.split(':'); // ["00", "01", "680"]
@@ -193,5 +201,6 @@ export const useTranscriptStore = defineStore("transcript", () => {
     loadFromJson,
     loadFromLLMJSON,
     saveTranscriptToDB, // ✅ expose this to use in TranscriptDisplay.vue
+    loadConfig,
   };
 });
