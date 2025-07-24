@@ -1,0 +1,41 @@
+{
+  "title": "Team Sync July",
+  "location": "Conference Room B",
+  "created_by": "Alpha",
+  "date": "2025-07-08",
+  "project": "Project Orion",
+  "purpose": "The meeting was held to review progress, assign follow-up actions, and align priorities for Q3 across departments.",
+  "attendees": "Alpha (alpha@company.com)\nBravo (bravo@company.com)\nCharlie (charlie@company.com)\nDelta (delta@company.com)",
+  "transcript_lines": [
+    {
+      "transcript": "[00:00:02-00:00:08] Alpha: Alright everyone, thank you for joining. Let’s kick off with the progress on the Orion deployment."
+    },
+    {
+      "transcript": "[00:00:09-00:00:16] Bravo: The deployment went smoothly. We still need to document the API changes. I’ll handle that by Friday."
+    },
+    {
+      "transcript": "[00:00:17-00:00:22] Charlie: We also need to follow up with marketing about the launch blog post. Who’s taking that?"
+    },
+    {
+      "transcript": "[00:00:23-00:00:27] Alpha: I’ll do that. I’ll email the draft to everyone by next Wednesday."
+    },
+    {
+      "transcript": "[00:00:28-00:00:32] Delta: Can we also clean up the ticket backlog before the next sprint planning?"
+    },
+    {
+      "transcript": "[00:00:33-00:00:37] Bravo: Yes, I’ll go through and close the stale tickets by next Monday."
+    },
+    {
+      "transcript": "[00:00:38-00:00:42] Charlie: We should schedule user testing for Orion Beta next month."
+    },
+    {
+      "transcript": "[00:00:43-00:00:47] Alpha: Great point. Charlie, can you draft the test scenarios and share them with QA?"
+    },
+    {
+      "transcript": "[00:00:48-00:00:52] Charlie: Will do. I’ll send the scenarios by end of this week."
+    },
+    {
+      "transcript": "[00:00:53-00:00:56] Alpha: Thanks, everyone. Let’s regroup same time next week."
+    }
+  ]
+}

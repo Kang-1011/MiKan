@@ -152,6 +152,21 @@ export const useMinuteStore = defineStore("minutes", () => {
   }
 
   // ✅ Accept external JSON data (e.g., from API or Gemini)
+  // ✅ Load JSON locally on mount
+  async function loadFromJsonFile() {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/transcripts/generated"
+      );
+      if (!response.ok) throw new Error("Failed to fetch from API");
+      const data = await response.json();
+      loadFromJson(data);
+    } catch (err) {
+      console.error("Failed to load minutes JSON from API:", err);
+    }
+  }
+
+  // ✅ Accept external JSON data (e.g., from local fetch)
   function loadFromJson(data: any) {
     if (data.header) {
       Object.keys(header).forEach((key) => {
@@ -200,5 +215,6 @@ export const useMinuteStore = defineStore("minutes", () => {
     setTasksFromGemini,
     loadFromJson,
     generateMinutesAndStore,
+    loadFromJsonFile,
   };
 });

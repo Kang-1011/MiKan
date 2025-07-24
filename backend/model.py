@@ -62,58 +62,6 @@ class ProjectOut(ProjectBase):
         orm_mode = True
 
 
-# ------------------------- Task -------------------------
-class Task(Base):
-    __tablename__ = "tasks"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    assignee_id = Column(Integer, ForeignKey('users.id'), nullable=True)
-    project_id = Column(Integer, ForeignKey('projects.id'), nullable=False)
-    title = Column(String, nullable=False)
-    description = Column(String, nullable=False)
-    due_date = Column(Date)
-    priority = Column(String, nullable=False)
-    status = Column(String, default="todo")
-    created_at = Column(DateTime, default=func.now())
-
-    assignee = relationship("User", back_populates="task")
-    project = relationship("Project", back_populates="task")
-    comments = relationship("Comment", cascade="all, delete-orphan", back_populates="task")
-    subtask = relationship("Subtask", cascade="all, delete-orphan", back_populates="task")
-    attachments = relationship("Attachment", cascade="all, delete-orphan", back_populates="task")
-    ai_attachments = relationship("AIAttachment", cascade="all, delete-orphan", back_populates="task")
-    autostarts = relationship("Autostart", cascade="all, delete-orphan", back_populates="task")
-
-class TaskBase(BaseModel):
-    assignee_id: int
-    project_id: int
-    title: str
-    description: str
-    due_date: date
-    priority: str
-    status: str
-
-class TaskIn(TaskBase):
-    pass
-
-class TaskOut(TaskBase):
-    id: int
-    
-    # attachments: List[AttachmentOut] = []
-    # ai_attachments: List[AIAttachmentOut] = []
-    # autostarts: List[AutostartOut] = []
-    # comments: List[CommentOut] = []
-    
-    class Config:
-        orm_mode = True
-
-class TaskUpdate(TaskBase):
-    pass
-    # attachments: Optional[List[AttachmentIn]] = None
-    # ai_attachments: Optional[List[AIAttachmentIn]] = None
-    # autostarts: Optional[List[AutostartIn]] = None
-    # comments: Optional[List[CommentIn]] = None
-
-
 # ------------------------- Comment -------------------------
 class Comment(Base):
     __tablename__ = "comments"
@@ -236,6 +184,57 @@ class AutostartOut(AutostartBase):
         orm_mode = True
 
 
+# ------------------------- Task -------------------------
+class Task(Base):
+    __tablename__ = "tasks"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    assignee_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+    project_id = Column(Integer, ForeignKey('projects.id'), nullable=False)
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    due_date = Column(Date)
+    priority = Column(String, nullable=False)
+    status = Column(String, default="todo")
+    created_at = Column(DateTime, default=func.now())
+
+    assignee = relationship("User", back_populates="task")
+    project = relationship("Project", back_populates="task")
+    comments = relationship("Comment", cascade="all, delete-orphan", back_populates="task")
+    subtask = relationship("Subtask", cascade="all, delete-orphan", back_populates="task")
+    attachments = relationship("Attachment", cascade="all, delete-orphan", back_populates="task")
+    ai_attachments = relationship("AIAttachment", cascade="all, delete-orphan", back_populates="task")
+    autostarts = relationship("Autostart", cascade="all, delete-orphan", back_populates="task")
+
+class TaskBase(BaseModel): 
+    assignee_id: Optional[int]
+    project_id: Optional[int]
+    title: Optional[str]
+    description: Optional[str]
+    due_date: Optional[date]
+    priority: Optional[str]
+    status: Optional[str]
+
+class TaskIn(TaskBase):
+    pass
+
+class TaskOut(TaskBase):
+    id: int
+    # attachments: List[AttachmentOut] = []
+    ai_attachments: List[AIAttachmentOut] = []
+    autostarts: List[AutostartOut] = []
+    comments: List[CommentOut] = []
+    subtask: List[SubtaskOut] = []
+    class Config:
+        orm_mode = True
+
+class TaskUpdate(TaskBase):
+    # attachments: Optional[List[AttachmentIn]] = None
+    ai_attachments: Optional[List[AIAttachmentIn]] = None
+    autostarts: Optional[List[AutostartIn]] = None
+    comments: Optional[List[CommentIn]] = None
+    subtasks: Optional[List[SubtaskIn]] = None
+    
+
 # ------------------------- Meeting -------------------------
 class Meeting(Base):
     __tablename__ = "meetings"
@@ -295,6 +294,9 @@ class DraftUpdate(BaseModel):
     description: Optional[str] = None
     due_date: Optional[date] = None
     approved: Optional[bool] = None
+
+class DraftApprove(BaseModel):
+    approved: bool = True
 
 class DraftOut(BaseModel):
     id: Optional[int]

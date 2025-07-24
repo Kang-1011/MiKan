@@ -2,8 +2,8 @@
     <div>
         <v-tooltip text="Approve" location="top">
             <template #activator="{ props }">
-                <v-btn icon v-bind="props" @click.stop="dialog = true" variant="flat" density="compact" style="background: transparent;">
-                    <v-icon size="large" color="grey-darken-3">mdi-check-circle-outline</v-icon>
+                <v-btn icon v-bind="props" @click.stop="dialog = true" class="stage-button-approve" variant="flat" density="compact" style="background: transparent;">
+                    <v-icon size="large" >mdi-check-circle-outline</v-icon>
                 </v-btn>
             </template>
         </v-tooltip>
@@ -46,8 +46,11 @@ const taskIndex = inject("taskIndex");
 const emit = defineEmits(["task-approved"])
 
 function approveDraft() {
-    console.log("Approve One Task - API calls to save into database");
-    emit("task-approved")
-    draftStore.deleteDraft(taskIndex);
+  console.log("Approve One Task - API call to approve this draft");
+
+  draftStore.approveOneDraft(taskIndex);  // <- Approve the draft in DB
+  emit("task-approved");                    // <- Notify parent if needed
+  dialog.value = false;                     // <- Close the dialog
 }
+
 </script>
