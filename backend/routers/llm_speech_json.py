@@ -1,5 +1,5 @@
 import os, base64, json
-from fastapi import FastAPI, UploadFile, File, HTTPException, APIRouter
+from fastapi import FastAPI, UploadFile, File, HTTPException, APIRouter, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -7,6 +7,10 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from typing import List
 from .agent_fetch_users import get_attendees
+
+from sqlalchemy.orm import Session
+from database import get_db
+from .users import get_users
 
 router = APIRouter()
 
@@ -31,10 +35,10 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, thinking_budget=0, google_api_key=GEMINI_API_KEY)
 structured_llm = llm.with_structured_output(ResponseFormatter)
 
-attendee =  get_attendees()
+# attendee =  get_attendees()
 
 @router.post("/transcribe")
-async def transcribe(file: UploadFile = File(...)):
+async def transcribe(file: UploadFile = File(...), db: Session = Depends(get_db)):
     try:
         print("Transcribing audio...")
         # if file.content_type not in ["audio/mpeg"]:
@@ -45,6 +49,11 @@ async def transcribe(file: UploadFile = File(...)):
         
         audio_content = await file.read()
         audio_data = base64.b64encode(audio_content).decode("utf-8")
+
+        users = get_users(db)
+        users = [user.username for user in users]
+        users_str = ",".join(users) if users else "No users found"
+        print("Users:", users_str)
 
         prompt = ChatPromptTemplate.from_messages([
             (
@@ -63,9 +72,9 @@ async def transcribe(file: UploadFile = File(...)):
                                 Ensure the transcription is clear, properly segmented, and captures speaker turns (if speaker information is available).
                                 Group consecutive speech from the same speaker into a single transcript block (i.e. avoid splitting it into multiple entries if the speaker continues talking without interruption).
                                 Do not include any additional explanation or commentary.
-                                For title, please analyze the whole transcript and come out with a comprehensive title that makes it easy to know the context of the meeting. You can refer to this example: 'XXX meeting for XXX events'.
-                                For the purpose of the meeting, please analyze the tasks assigned, then categorized them into common category. To write the purpose, you can follow the following template: 'To discuss plans for the XXX, focusing {{common categories}}.'
-                                Available attendees in the system: {attendee_list}                                
+                                For title, please provide one that can well represent the audio. Example: 'XXX meeting for XXX events'.
+                                For purpose, please analyze the tasks assigned, then categorized them into common category. Template: 'To discuss plans for the XXX, focusing {{common categories}}.'
+                                Available attendees: {attendee_list}                                
                                 For the attendees field, match the speakers you identify in the transcript with the available attendees list above. Only include attendees who actually spoke or were mentioned in the meeting.
                                 """
                     },
@@ -80,9 +89,10 @@ async def transcribe(file: UploadFile = File(...)):
         ])
         chain = prompt | structured_llm
         
-        attendee_str = ", ".join(attendee) if attendee else "No attendees found"
-        print(attendee_str)
-        response = chain.invoke({"attendee_list": attendee_str})
+        # attendee_str = ", ".join(attendee) if attendee else "No attendees found"
+        # print(attendee_str)
+        response = chain.invoke({"attendee_list": users_str})
+        # response = chain.invoke({})
 
         return {"transcript": response}
     except Exception as e:
