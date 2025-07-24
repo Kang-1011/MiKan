@@ -1,12 +1,12 @@
 <template>
   <v-card 
-  class="border-sm border-1 rounded-v1 ma-3 d-flex flex-column" 
+  class="border-sm border-1 rounded-v1 ma-3 page-background d-flex flex-column" 
   elevation="0" 
   style="width:100%; height:100%;" 
-  color="white"
+
   >
     <!-- Board Header -->
-    <v-toolbar color="white">
+    <v-toolbar class="page-background ">
       <template v-if="!isEditing">
         <span style=" margin-left:16px" >{{ board.title }}</span>
         <v-btn icon v-if="!visitorMode" @click="startRename">
@@ -141,7 +141,7 @@
      </draggable>
      <!-- Add Stage Button now scrolls with stages -->
      <v-btn
-       class="rounded-v1 border-md ml-4 flex-shrink-0 align-self-center"
+       class="rounded-v1 border-2 ml-4 stage-button-add-task flex-shrink-0 align-self-center"
        icon
        tile
        style="height: 120px; width: 80px;"
@@ -150,7 +150,7 @@
        @click="$emit('add-stage', boardIndex)"
        :disabled="visitorMode"
      >
-       <v-icon size="40" color="gray">mdi-plus</v-icon>
+       <v-icon size="40" >mdi-plus</v-icon>
      </v-btn>
     </div>
   </v-card>

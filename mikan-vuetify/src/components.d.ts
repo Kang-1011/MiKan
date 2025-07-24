@@ -25,7 +25,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('./components/HomepageComponent/Sidebar.vue')['default']
     'Sidebar(Deprecated)': typeof import('./components/HomepageComponent/Sidebar(Deprecated).vue')['default']
-    Sidebar3: typeof import('./components/HomepageComponent/Sidebar3.vue')['default']
     Stage23: typeof import('./components/MyTasksComponent/Stage2-3.vue')['default']
     Stage31: typeof import('./components/MyTasksComponent/Stage3-1.vue')['default']
     TaskCard23: typeof import('./components/MyTasksComponent/TaskCard2-3.vue')['default']
@@ -40,6 +39,5 @@ declare module 'vue' {
     Uploadfile: typeof import('./components/AudioComponent/Uploadfile.vue')['default']
     UploadFileCustom: typeof import('./components/AudioComponent/UploadFileCustom.vue')['default']
     VConfirmEdit: typeof import('./components/VConfirmEdit.vue')['default']
-    VuetifyTaskModal6: typeof import('./components/MyTasksComponent/VuetifyTaskModal6.vue')['default']
   }
 }

@@ -3,8 +3,8 @@
 // ======================== -->
 <template>
   
-  <v-sheet elevation="0" class="border-sm rounded-v2 ma-2 hover:black" style="min-width: 340px; max-width: 340px; display:flex; flex-direction:column; background:#fcfcfc; ">
-    <v-toolbar density="compact" class="rounded-v2" color="#fcfcfc">
+  <v-sheet elevation="0" class="border-sm border-2 rounded-v2 ma-2 stage-background" style="min-width: 340px; max-width: 340px; display:flex; flex-direction:column; background:#dddddd; ">
+    <v-toolbar density="compact" class="rounded-v2" >
       <template v-if="!isEditing">
         <v-toolbar-title  class="text-subtitle-1 my-0 py-0">{{ stage.title }}</v-toolbar-title>
         <v-spacer />

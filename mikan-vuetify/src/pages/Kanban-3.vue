@@ -45,7 +45,7 @@
 
 
  <!-- SUGGESTION: Replace the fixed container+row with Vuetify App Bar -->
- <v-main class="pa-0 bg-grey-lighten-1 " style="display:flex; flex-direction:column; height:100vh; min-height:0; overflow:hidden;">
+ <v-main class="pa-0 unified-background" style="display:flex; flex-direction:column; height:100vh; min-height:0; overflow:hidden;">
     <v-container fluid class="pa-0 pr-6 fill-height" style="width:100%;">
       <!-- No boards at all -->
       <div v-if="boards.length === 0" class="text-center grey--text pa-4">

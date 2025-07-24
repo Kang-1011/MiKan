@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import axios from "axios";
+import { useProjectStore } from '@/stores/projects'
 
 interface LLMTranscriptLine {
   timestamp: string;
@@ -72,36 +73,20 @@ export const useTranscriptStore = defineStore("transcript", () => {
     body.transcriptLines = newLines;
   }
 
-  // ✅ Load placeholder data from JSON
-  async function loadFromJson(filePath: string = "/transcript_template.json") {
-    try {
-      const response = await fetch(filePath);
-      const data = await response.json();
+	function formatTimestamp(ts: string): string {
+		const parts = ts.split(':'); // ["00", "01", "680"]
+		if (parts.length !== 3) return ts; // fallback if unexpected format
 
-      header.title = data.title;
-      header.location = data.location;
-      header.createdBy = data.created_by;
-      header.date = data.date;
-      header.project = data.project;
-      header.purpose = data.purpose;
-      header.attendees = data.attendees;
-
-      body.transcriptLines = data.transcript_lines.map((line: any) => ({
-        transcript: line.transcript,
-      }));
-    } catch (error) {
-      console.error("Failed to load JSON:", error);
-    }
-  }
-
+		const ms = parts[2].slice(0, 2); // get first two digits only
+		return `${parts[0]}:${parts[1]}:${ms}`;
+	}
+  
   // Kang's code to bring in transcript data from llm's result (JSON)
   async function loadFromLLMJSON(llm_json: ResponseFormatter) {
     try {
       header.title = llm_json.transcript.title;
-      header.location = "Your Heart";
       header.createdBy = "You";
-      header.date = "Now";
-      header.project = "Your Heart";
+      header.date = new Date().toISOString().slice(0, 10);
       header.purpose = llm_json.transcript.purpose;
       header.attendees = llm_json.transcript.attendees;
 
@@ -121,13 +106,13 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
-	function formatTimestamp(ts: string): string {
-		const parts = ts.split(':'); // ["00", "01", "680"]
-		if (parts.length !== 3) return ts; // fallback if unexpected format
+  const projectStore = useProjectStore()
+  async function loadConfig(location: string, projectID: number) {
+    header.location = location;
 
-		const ms = parts[2].slice(0, 2); // get first two digits only
-		return `${parts[0]}:${parts[1]}:${ms}`;
-	}
+    const retrievedProject = await projectStore.fetchProjectByID(projectID)
+    header.project = retrievedProject?.title as string
+  }
 
   // ✅ Save transcript to FastAPI backend
   async function saveTranscriptToDB() {
@@ -190,8 +175,8 @@ export const useTranscriptStore = defineStore("transcript", () => {
     setActiveEditor,
     updateHeaderField,
     updateTranscript,
-    loadFromJson,
     loadFromLLMJSON,
     saveTranscriptToDB, // ✅ expose this to use in TranscriptDisplay.vue
+    loadConfig,
   };
 });

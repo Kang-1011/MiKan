@@ -3,7 +3,7 @@
 // ======================== -->
 <!--  -->
 <template>
-  <v-card class="pa-3 rounded-v2 border-1 border-sm mb-3 \" elevation="0">
+  <v-card class="pa-3 rounded-v2 task-card-1 border-1 mb-3" elevation="0">
     <!-- Title + Priority -->
     <div class="d-flex justify-space-between align-center mb-2">
       <div class="font-weight-medium text-truncate">{{ task.title }}</div>
@@ -19,29 +19,35 @@
     </div>
 
     <!-- Description with Tooltip -->
-    <div v-if="task.description" class="text-body-2 mb-2 clamp-4-lines">
+    <div v-if="task.description" class="text-body-2 clamp-4-lines">
   {{ task.description }}
 </div>
 
     <!-- Due Date + Assignee -->
+
     <div class="d-flex justify-space-between align-center">
-      <div class="d-flex align-center text-caption">
+ 
+      <div class="d-flex align-self-end text-caption">
         <v-icon size="16" class="me-1">mdi-calendar-blank</v-icon>
         {{ formatDate(task.dueDate) }}
       </div>
-      <div v-if="!filterByAssignee" class="text-caption font-italic">
+      <v-spacer/>
+
+      <div v-if="!filterByAssignee" class="text-caption align-self-end font-italic mr-4">
         {{ task.assignee }}
       </div>
-    </div>
-    <v-btn
-        icon="mdi-auto-fix"
+      <v-btn
+        icon="mdi-rocket-launch"
         size="x-small"
         variant="tonal"
-        class="mt-2"
+        class="mt-2 mikan-button-1"
         @click.stop="runAutostart"
         :loading="isAutostartRunning"
       >
       </v-btn>
+<!-- mdi-auto-fix -->
+    </div>
+
   </v-card>
 </template>
 

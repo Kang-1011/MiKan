@@ -1,2 +1,11 @@
 __pycache__
 .env
+.credentials
+token.json
+
+# Python Virtual Environment
+Include
+Lib
+Scripts
+share
+pyvenv.cfg
