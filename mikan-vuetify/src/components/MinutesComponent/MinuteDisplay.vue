@@ -550,7 +550,7 @@ const toTask = async () => {
 
     if (response.data.status === "ok") {
       console.log("Minutes submitted:", response.data);
-      router.push("/ManagerReviewV2"); // Navigate after success
+      router.push("/ManagerReview"); // Navigate after success
     } else {
       console.error("Submission failed:", response.data.message);
       alert("Submission failed: " + response.data.message);
