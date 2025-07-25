@@ -10,7 +10,7 @@
                     <v-stepper-item :value="2" title="Record" />
                 </v-stepper-header>
 
-                <v-stepper-window align="center">
+                <v-stepper-window>
                     <v-stepper-window-item :value="1">
                         <div>
                             <div style="height: 300px;">
@@ -40,7 +40,7 @@
                         </div>
                     </v-stepper-window-item>
 
-                    <v-stepper-window-item :value="2">
+                    <v-stepper-window-item :value="2" align="center">
                         <div>
                             <div style="height: 300px;">
                                 <div style="height: 150px;" class="d-flex align-center justify-center text-center">
