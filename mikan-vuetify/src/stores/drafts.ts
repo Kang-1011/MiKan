@@ -61,12 +61,8 @@ export const useDraftStore = defineStore("draft", {
           project_id: draftData.project,
           approved: draftData.approved,
         });
-        const transformedDraft = {
-          ...response.data,
-          dueDate: response.data.due_date
-        };
         console.log("Draft created:", response.data);
-        this.drafts.push(response.data);
+        this.fetchFromAPI();
       } catch (error) {
         console.error("Failed to create draft:", error);
       }

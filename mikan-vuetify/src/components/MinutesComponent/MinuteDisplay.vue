@@ -7,7 +7,20 @@
       <h2>Minutes</h2>
     </div>
     <div>
-        <v-tooltip :text="isEditMode ? 'Finish Editing' : 'Edit Minutes'" location="bottom">
+      <v-tooltip text="Download Minutes" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            icon="mdi-download-outline"
+            variant="text"
+            v-bind="props"
+            @click="exportToPDF"
+          ></v-btn>
+        </template>
+      </v-tooltip>
+      <v-tooltip
+        :text="isEditMode ? 'Finish Editing' : 'Edit Minutes'"
+        location="bottom"
+      >
         <template v-slot:activator="{ props }">
           <v-btn
             :icon="isEditMode ? 'mdi-check-outline' : 'mdi-square-edit-outline'"
@@ -16,13 +29,8 @@
             @click="toggleEditMode"
           ></v-btn>
         </template>
-        </v-tooltip>
-        <v-tooltip text="Download Minutes" location="bottom">
-        <template v-slot:activator="{ props }">
-            <v-btn icon="mdi-download-outline" variant="text"  v-bind="props" @click="exportToPDF"></v-btn>
-        </template>
-        </v-tooltip> 
-        <v-tooltip text="To Manager Review" location="bottom">
+      </v-tooltip>
+      <v-tooltip text="To Manager Review" location="bottom">
         <template v-slot:activator="{ props }">
           <v-btn
             icon="mdi-send-outline"
@@ -43,7 +51,7 @@
             <h1
               class="attachment-manager text-h4 font-weight-black text-center"
             >
-              {{ minuteHeaderData.title }} - {{ minuteHeaderData.project }}
+              {{ minuteHeaderData.title }}
             </h1>
           </div>
         </v-col>
@@ -458,15 +466,12 @@ import { useMinuteStore } from "@/stores/minutestore";
 import { useRouter } from "vue-router";
 import { useChatbotStore } from "@/stores/chatbotStore"; // Import the chatbot store
 import VConfirmEdit from "../VConfirmEdit.vue";
+import axios from "axios";
 
 const minuteStore = useMinuteStore();
 const pdfContent = ref(null);
 const router = useRouter();
 const chatbotStore = useChatbotStore();
-
-onMounted(() => {
-  minuteStore.loadFromJsonFile();
-});
 
 const emit = defineEmits(["action"]);
 
@@ -529,10 +534,31 @@ const formatDate = (dateString) => {
   }
 };
 
-const toTask = () => {
-  console.log("Task clicked");
-  emit("action", { type: "Task" });
-  router.push("/ManagerReviewV2");
+const toTask = async () => {
+  console.log("Submitting minutes...");
+
+  try {
+    const payload = {
+      header: minuteHeaderData.value,
+      tasks: body.value.tasks,
+    };
+
+    const response = await axios.post(
+      "http://localhost:8000/minutes/submit",
+      payload
+    );
+
+    if (response.data.status === "ok") {
+      console.log("Minutes submitted:", response.data);
+      router.push("/ManagerReview"); // Navigate after success
+    } else {
+      console.error("Submission failed:", response.data.message);
+      alert("Submission failed: " + response.data.message);
+    }
+  } catch (err) {
+    console.error("Error submitting minutes:", err);
+    alert("An error occurred while submitting minutes.");
+  }
 };
 
 const exportToPDF = () => {
@@ -548,82 +574,94 @@ const exportToPDF = () => {
 
   // 1. Initialize jsPDF
   const pdf = new jsPDF({
-    orientation: 'portrait',
-    unit: 'pt',
-    format: 'a4'
+    orientation: "portrait",
+    unit: "pt",
+    format: "a4",
   });
 
   // 2. Define document properties and layout constants
   const pageHeight = pdf.internal.pageSize.getHeight();
   const pageWidth = pdf.internal.pageSize.getWidth();
   const margin = 40;
-  const contentWidth = pageWidth - (margin * 2);
+  const contentWidth = pageWidth - margin * 2;
   let currentY = margin;
 
   // 3. Get data from the store
   const headerData = minuteHeaderData.value;
   const tasks = body.value.Tasks;
-  const safeFilename = `${headerData.project || 'Meeting'}-Minutes.pdf`;
+  const safeFilename = `${headerData.project || "Meeting"}-Minutes.pdf`;
 
   // --- START: Replicating the Webpage Layout ---
 
   // 4. Add Main Title
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont("helvetica", "bold");
   pdf.setFontSize(20);
-  pdf.text(`Minutes - ${headerData.project || 'General'}`, pageWidth / 2, currentY, { align: 'center' });
+  pdf.text(
+    `Minutes - ${headerData.project || "General"}`,
+    pageWidth / 2,
+    currentY,
+    { align: "center" }
+  );
   currentY += 35;
   // Add this line to debug
   if (tasks && tasks.length > 0) {
-    console.log('Inspecting first task object:', JSON.stringify(tasks[0]));
+    console.log("Inspecting first task object:", JSON.stringify(tasks[0]));
   }
 
   // 5. Draw the main container box for header info
   const headerBoxStartY = currentY;
   pdf.setDrawColor(224, 224, 224); // Light grey border
   pdf.setLineWidth(1);
-  
+
   // 6. Create the four-column header section
   const colWidth = contentWidth / 4;
   const headerFields = [
-      { label: 'Location:', value: headerData.location },
-      { label: 'Written by:', value: headerData.createdBy },
-      { label: 'Date:', value: formatDate(headerData.date) },
-      { label: 'Project:', value: headerData.project }
+    { label: "Location:", value: headerData.location },
+    { label: "Written by:", value: headerData.createdBy },
+    { label: "Date:", value: formatDate(headerData.date) },
+    { label: "Project:", value: headerData.project },
   ];
-  
+
   let maxBoxHeight = 0;
-  
+
   headerFields.forEach((field, index) => {
-      pdf.setFont('helvetica', 'bold');
-      pdf.setFontSize(10);
-      const labelLines = pdf.splitTextToSize(field.label, colWidth - 10);
-      
-      pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(10);
-      const valueLines = pdf.splitTextToSize(field.value || 'N/A', colWidth - 10);
-      
-      const boxHeight = (labelLines.length + valueLines.length) * 12 + 20;
-      if (boxHeight > maxBoxHeight) {
-          maxBoxHeight = boxHeight;
-      }
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(10);
+    const labelLines = pdf.splitTextToSize(field.label, colWidth - 10);
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(10);
+    const valueLines = pdf.splitTextToSize(field.value || "N/A", colWidth - 10);
+
+    const boxHeight = (labelLines.length + valueLines.length) * 12 + 20;
+    if (boxHeight > maxBoxHeight) {
+      maxBoxHeight = boxHeight;
+    }
   });
 
   headerFields.forEach((field, index) => {
-      const xPos = margin + (index * colWidth);
-      let yPos = headerBoxStartY + 15;
-      
-      pdf.setFont('helvetica', 'bold');
-      pdf.setFontSize(10);
-      pdf.text(field.label, xPos + 10, yPos);
-      yPos += 15;
+    const xPos = margin + index * colWidth;
+    let yPos = headerBoxStartY + 15;
 
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(field.value || 'N/A', xPos + 10, yPos, { maxWidth: colWidth - 20 });
-      
-      // Draw vertical separator lines
-      if (index < 3) {
-          pdf.line(xPos + colWidth, headerBoxStartY, xPos + colWidth, headerBoxStartY + maxBoxHeight);
-      }
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(10);
+    pdf.text(field.label, xPos + 10, yPos);
+    yPos += 15;
+
+    pdf.setFont("helvetica", "normal");
+    pdf.text(field.value || "N/A", xPos + 10, yPos, {
+      maxWidth: colWidth - 20,
+    });
+
+    // Draw vertical separator lines
+    if (index < 3) {
+      pdf.line(
+        xPos + colWidth,
+        headerBoxStartY,
+        xPos + colWidth,
+        headerBoxStartY + maxBoxHeight
+      );
+    }
   });
 
   currentY = headerBoxStartY + maxBoxHeight;
@@ -632,65 +670,71 @@ const exportToPDF = () => {
   // 7. Add Purpose and Attendees sections
   const addSection = (label, value) => {
     let yPos = currentY + 15;
-    pdf.setFont('helvetica', 'bold');
+    pdf.setFont("helvetica", "bold");
     pdf.setFontSize(10);
     pdf.text(label, margin + 10, yPos);
 
-    pdf.setFont('helvetica', 'normal');
-    const valueLines = pdf.splitTextToSize(value || 'N/A', contentWidth - 120);
+    pdf.setFont("helvetica", "normal");
+    const valueLines = pdf.splitTextToSize(value || "N/A", contentWidth - 120);
     pdf.text(valueLines, margin + 100, yPos);
-    
-    const sectionHeight = (valueLines.length * 12) + 20;
+
+    const sectionHeight = valueLines.length * 12 + 20;
     currentY += sectionHeight;
   };
 
-  addSection('Purpose:', headerData.Purpose);
-  addSection('Attendees:', headerData.Attendees);
+  addSection("Purpose:", headerData.Purpose);
+  addSection("Attendees:", headerData.Attendees);
 
   // Draw the outer box for the header section
   pdf.rect(margin, headerBoxStartY, contentWidth, currentY - headerBoxStartY);
   currentY += 40; // Space before the task list
 
   // 8. Add Task List using jsPDF-AutoTable
-  pdf.setFont('helvetica', 'bold');
+  pdf.setFont("helvetica", "bold");
   pdf.setFontSize(16);
-  pdf.text('Task List', pageWidth / 2, currentY, { align: 'center' });
+  pdf.text("Task List", pageWidth / 2, currentY, { align: "center" });
   currentY += 25;
 
   const tableColumnStyles = {
-    0: { cellWidth: 40, halign: 'center' }, // No.
-    1: { cellWidth: 'auto' },               // Task Description
-    2: { cellWidth: 80, halign: 'center' }, // Action by
-    3: { cellWidth: 70, halign: 'center' }  // Due Date
+    0: { cellWidth: 40, halign: "center" }, // No.
+    1: { cellWidth: "auto" }, // Task Description
+    2: { cellWidth: 80, halign: "center" }, // Action by
+    3: { cellWidth: 70, halign: "center" }, // Due Date
   };
 
-  const tableBody = tasks.map(task => [
-    task['Task No.'],
+  const tableBody = tasks.map((task) => [
+    task["Task No."],
     task.Description,
-    task['Action by'],
-    task['Due date']
+    task["Action by"],
+    task["Due date"],
   ]);
 
   pdf.autoTable({
     startY: currentY,
-    head: [['No.', 'Task Description', 'Action by', 'Due Date']],
+    head: [["No.", "Task Description", "Action by", "Due Date"]],
     body: tableBody,
-    theme: 'grid',
+    theme: "grid",
     headStyles: {
       fillColor: [232, 232, 232],
       textColor: [40, 40, 40],
-      fontStyle: 'bold',
-      halign: 'center'
+      fontStyle: "bold",
+      halign: "center",
     },
     columnStyles: tableColumnStyles,
     didDrawCell: (data) => {
       // Custom styling for main task rows
       const taskNo = String(data.cell.raw);
-      if (data.section === 'body' && !taskNo.includes('.')) {
+      if (data.section === "body" && !taskNo.includes(".")) {
         pdf.setFillColor(240, 240, 240); // Light grey for main task rows
-        pdf.rect(data.cell.x, data.cell.y, data.cell.width, data.cell.height, 'F');
+        pdf.rect(
+          data.cell.x,
+          data.cell.y,
+          data.cell.width,
+          data.cell.height,
+          "F"
+        );
       }
-    }
+    },
   });
 
   // 9. Save the PDF
@@ -698,12 +742,10 @@ const exportToPDF = () => {
   console.log("Styled, text-based PDF generation complete.");
 };
 
- 
 const isMainTask = (taskNumber) => {
   return !String(taskNumber).includes(".");
 };
 
-  
 // 2. Define a reusable function to set the context
 const updateChatContext = () => {
   // Directly access the .value of the reactive refs

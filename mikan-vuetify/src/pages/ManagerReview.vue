@@ -38,7 +38,7 @@
                         </v-card-subtitle>
                     </div>
 
-                    <v-container v-if="draftStore.drafts.length === 0 && !snackbar" style="height: 90%;" fluid
+                    <v-container v-if="draftStore.drafts.length === 0" style="height: 90%;" fluid
                         class="d-flex align-center justify-center">
                         <h2 class="text-center text-grey-darken-2">No pending tasks</h2>
                     </v-container>
@@ -56,10 +56,6 @@
                         <ApproveAllDialog v-model="approveAllDialogFlag"
                             @close-approve-dialog="approveAllDialogFlag = false"
                             @approve-all-drafts="approveAllDrafts($event)" />
-                        <v-snackbar v-model="snackbar" :timeout="2000" :color="snackbarColor" variant="tonal"
-                            class="justify-center align center" location="center middle">
-                            <h1 class="text-center">{{ snackbarMessage }}</h1>
-                        </v-snackbar>
                         <Toast position="top-right" group="tr" />
                     </v-container>
                 </v-card>
@@ -95,10 +91,6 @@ const showBottomRight = (paramSeverity, paramSummary) => {
     toast.add({ severity: paramSeverity, summary: paramSummary, group: 'tr', life: 3000 });
 };
 
-const snackbar = ref(false);
-const snackbarMessage = ref("");
-const snackbarColor = ref("");
-
 function openCreateTaskDialog() {
     newTaskDialogFlag.value = true;
 }
@@ -109,7 +101,6 @@ function openApproveAllDialog() {
 
 // Problems with this function
 function createNewDraft() {
-    console.log("Create Draft - create draft in drafts.ts");
     console.log(draftStore.drafts);
     newTaskDialogFlag.value = false;
 }
@@ -117,14 +108,7 @@ function createNewDraft() {
 
 function approveAllDrafts() {
     approveAllDialogFlag.value = false;
-    console.log(
-        "Approve All - API calls to save into database and delete drafts"
-    );
     draftStore.approveAllDrafts();
-
-    // snackbarMessage.value = "All Tasks Approved!";
-    // snackbarColor.value = "success";
-    // snackbar.value = true;
 
     toastSeverity.value = "success";
     toastSummary.value = "All Tasks Approved!";
@@ -132,30 +116,18 @@ function approveAllDrafts() {
 }
 
 function oneTaskApproved() {
-    // snackbarMessage.value = "Task Approved!";
-    // snackbarColor.value = "success";
-    // snackbar.value = true;
-
     toastSeverity.value = "success";
     toastSummary.value = "Task Approved!";
     showBottomRight(toastSeverity.value, toastSummary.value);
 }
 
 function oneTaskDeleted() {
-    // snackbarMessage.value = "Task Deleted!";
-    // snackbarColor.value = "error";
-    // snackbar.value = true;
-
     toastSeverity.value = "warn";
     toastSummary.value = "Task Deleted!";
     showBottomRight(toastSeverity.value, toastSummary.value);
 }
 
 function oneTaskEdited() {
-    // snackbarMessage.value = "Task Edited!";
-    // snackbarColor.value = "warning";
-    // snackbar.value = true;
-
     toastSeverity.value = "info";
     toastSummary.value = "Task Edited!";
     showBottomRight(toastSeverity.value, toastSummary.value);

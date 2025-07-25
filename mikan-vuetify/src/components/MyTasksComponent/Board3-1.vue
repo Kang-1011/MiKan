@@ -141,7 +141,7 @@
      </draggable>
      <!-- Add Stage Button now scrolls with stages -->
      <v-btn
-       class="rounded-v1 border-md border-2 ml-4 flex-shrink-0 align-self-center"
+       class="rounded-v1 border-2 ml-4 stage-button-add-task flex-shrink-0 align-self-center"
        icon
        tile
        style="height: 120px; width: 80px;"
@@ -150,7 +150,7 @@
        @click="$emit('add-stage', boardIndex)"
        :disabled="visitorMode"
      >
-       <v-icon size="40" color="#111111">mdi-plus</v-icon>
+       <v-icon size="40" >mdi-plus</v-icon>
      </v-btn>
     </div>
   </v-card>

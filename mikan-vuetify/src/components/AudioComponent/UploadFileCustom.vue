@@ -1,6 +1,5 @@
 <template>
-  <div class="d-flex flex-column gap-4 rounded-xl px-6 py-8">
-    <div class="d-flex justify-space-between align-center"></div>
+  <div class="d-flex flex-column gap-4 rounded-xl px-6">
 
     <v-list>
       <v-list-item

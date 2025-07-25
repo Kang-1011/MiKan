@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import axios from "axios";
+import { useProjectStore } from "@/stores/projects";
 
 interface LLMTranscriptLine {
   timestamp: string;
@@ -9,10 +10,10 @@ interface LLMTranscriptLine {
 }
 
 interface LLMTranscriptDate {
-	title: string;
+  title: string;
   purpose: string;
-	attendees: string;
-	transcript_lines: LLMTranscriptLine[];
+  attendees: string;
+  transcript_lines: LLMTranscriptLine[];
 }
 
 interface ResponseFormatter {
@@ -72,36 +73,33 @@ export const useTranscriptStore = defineStore("transcript", () => {
     body.transcriptLines = newLines;
   }
 
-  // ✅ Load placeholder data from JSON
-  async function loadFromJson(filePath: string = "/transcript_template.json") {
-    try {
-      const response = await fetch(filePath);
-      const data = await response.json();
+	function formatTimestamp(ts: string): string {
+		const parts = ts.split(':'); // ["00", "01", "680"]
+		if (parts.length !== 3) return ts; // fallback if unexpected format
 
-      header.title = data.title;
-      header.location = data.location;
-      header.createdBy = data.created_by;
-      header.date = data.date;
-      header.project = data.project;
-      header.purpose = data.purpose;
-      header.attendees = data.attendees;
+		const ms = parts[2].slice(0, 2); // get first two digits only
+		return `${parts[0]}:${parts[1]}:${ms}`;
+	}
 
-      body.transcriptLines = data.transcript_lines.map((line: any) => ({
-        transcript: line.transcript,
-      }));
-    } catch (error) {
-      console.error("Failed to load JSON:", error);
-    }
+  function getTodayInTimezone(timeZone = 'Asia/Kuala_Lumpur') {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    
+    // Format to YYYY-MM-DD by default using 'en-CA' locale
+    return formatter.format(now);
   }
-
+  
   // Kang's code to bring in transcript data from llm's result (JSON)
   async function loadFromLLMJSON(llm_json: ResponseFormatter) {
     try {
       header.title = llm_json.transcript.title;
-      header.location = "Your Heart";
       header.createdBy = "You";
-      header.date = "Now";
-      header.project = "Your Heart";
+      header.date = getTodayInTimezone();
       header.purpose = llm_json.transcript.purpose;
       header.attendees = llm_json.transcript.attendees;
 
@@ -109,9 +107,13 @@ export const useTranscriptStore = defineStore("transcript", () => {
         llm_json.transcript.transcript_lines &&
         Array.isArray(llm_json.transcript.transcript_lines)
       ) {
-        body.transcriptLines = llm_json.transcript.transcript_lines.map((line) => ({
-          transcript: `[${formatTimestamp(line.timestamp)}] ${line.speaker}: ${line.text}`,
-        }));
+        body.transcriptLines = llm_json.transcript.transcript_lines.map(
+          (line) => ({
+            transcript: `[${formatTimestamp(line.timestamp)}] ${
+              line.speaker
+            }: ${line.text}`,
+          })
+        );
       } else {
         console.warn("transcript_lines is missing or not an array");
         body.transcriptLines = [];
@@ -121,13 +123,13 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
-	function formatTimestamp(ts: string): string {
-		const parts = ts.split(':'); // ["00", "01", "680"]
-		if (parts.length !== 3) return ts; // fallback if unexpected format
+  const projectStore = useProjectStore();
+  async function loadConfig(location: string, projectID: number) {
+    header.location = location;
 
-		const ms = parts[2].slice(0, 2); // get first two digits only
-		return `${parts[0]}:${parts[1]}:${ms}`;
-	}
+    const retrievedProject = await projectStore.fetchProjectByID(projectID);
+    header.project = retrievedProject?.title as string;
+  }
 
   // ✅ Save transcript to FastAPI backend
   async function saveTranscriptToDB() {
@@ -163,6 +165,34 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
+  async function generateMinutesFromTranscript() {
+    try {
+      const payload = {
+        title: header.title,
+        location: header.location,
+        created_by: header.createdBy,
+        date: header.date,
+        project: header.project,
+        purpose: header.purpose,
+        attendees: header.attendees,
+        transcript_lines: body.transcriptLines.map((line) => ({
+          transcript: line.transcript,
+        })),
+      };
+
+      const response = await axios.post(
+        "http://localhost:8000/minutes/generate",
+        payload
+      );
+      console.log("Generated minutes:", response.data);
+
+      return response.data;
+    } catch (error) {
+      console.error("Failed to generate minutes:", error);
+      throw error;
+    }
+  }
+
   // ✨ ADDED: State for the highlighted transcript line
   const highlightedLine = ref<string | null>(null);
 
@@ -190,8 +220,9 @@ export const useTranscriptStore = defineStore("transcript", () => {
     setActiveEditor,
     updateHeaderField,
     updateTranscript,
-    loadFromJson,
+    generateMinutesFromTranscript, // ✅ ADD THIS LINE!
     loadFromLLMJSON,
     saveTranscriptToDB, // ✅ expose this to use in TranscriptDisplay.vue
+    loadConfig,
   };
 });
