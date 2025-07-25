@@ -22,20 +22,20 @@ class User(Base):
     task = relationship("Task", back_populates="assignee")
 
 class UserBase(BaseModel):
-    name: str
-    username: str
-    email: str
-    password: str
-    position: str
-    role: str
+    name: Optional[str]
+    username: Optional[str]
+    email: Optional[str]
+    password: Optional[str]
+    position: Optional[str]
+    role: Optional[str]
 
 class UserIn(UserBase):
     pass
 
 class UserOut(BaseModel):
-    id: int
-    name: str
-    username: str
+    id: Optional[int]
+    name: Optional[str]
+    username: Optional[str]
     class Config:
         orm_mode = True
 
@@ -57,7 +57,7 @@ class ProjectIn(ProjectBase):
     pass
 
 class ProjectOut(ProjectBase):
-    id: int
+    id: Optional[int]
     class Config:
         orm_mode = True
 
@@ -278,10 +278,10 @@ class Draft(Base):
     
 class DraftBase(BaseModel):
     assignee_id: Optional[int]
-    project_id: int
-    title: str
-    description: str
-    due_date: date
+    project_id: Optional[int]
+    title: Optional[str]
+    description: Optional[str]
+    due_date: Optional[date]
     approved: Optional[bool] = None
 
 class DraftCreate(DraftBase):
@@ -299,15 +299,82 @@ class DraftApprove(BaseModel):
     approved: bool = True
 
 class DraftOut(BaseModel):
-    id: int
-    title: str
-    description: str
+    id: Optional[int]
+    title: Optional[str]
+    description: Optional[str]
     due_date: Optional[date]
     approved: Optional[bool]
     assignee: Optional["UserOut"]
-    project: "ProjectOut"
+    project: Optional["ProjectOut"]
     class Config:
         orm_mode = True
 
 #_________________________________________________________________________________________________________
 
+# ------------------------- Transcript -------------------------
+
+# --- SQLAlchemy model ---
+class Transcript(Base):
+    __tablename__ = "transcripts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String)
+    location = Column(String)
+    created_by = Column(String)
+    date = Column(Date)
+    project = Column(String)
+    purpose = Column(Text)
+    attendees = Column(Text)
+
+    transcript_lines = relationship(
+        "TranscriptLine",
+        back_populates="transcript_record",
+        cascade="all, delete-orphan"
+    )
+
+class TranscriptLine(Base):
+    __tablename__ = "transcript_lines"
+
+    id = Column(Integer, primary_key=True, index=True)
+    transcript_id = Column(Integer, ForeignKey("transcripts.id", ondelete="CASCADE"))
+    transcript = Column(Text, nullable=False)
+
+    transcript_record = relationship("Transcript", back_populates="transcript_lines")
+
+
+# --- Pydantic schemas ---
+class TranscriptLineSchema(BaseModel):
+    transcript: str
+
+    class Config:
+        orm_mode = True
+
+
+class TranscriptResponse(BaseModel):
+    id: int
+    title: str
+    location: str
+    created_by: str
+    date: date
+    project: str
+    purpose: str
+    attendees: str
+    transcript_lines: List[TranscriptLineSchema]  # Use renamed schema
+
+    class Config:
+        orm_mode = True
+
+
+class TranscriptLineCreate(BaseModel):
+    transcript: str
+
+
+class TranscriptCreate(BaseModel):
+    title: str
+    location: str
+    created_by: str
+    date: str
+    project: str
+    purpose: str
+    attendees: str
+    transcript_lines: List[TranscriptLineCreate]

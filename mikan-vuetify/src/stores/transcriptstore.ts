@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import axios from "axios";
-import { useProjectStore } from '@/stores/projects'
+import { useProjectStore } from "@/stores/projects";
 
 interface LLMTranscriptLine {
   timestamp: string;
@@ -10,10 +10,10 @@ interface LLMTranscriptLine {
 }
 
 interface LLMTranscriptDate {
-	title: string;
+  title: string;
   purpose: string;
-	attendees: string;
-	transcript_lines: LLMTranscriptLine[];
+  attendees: string;
+  transcript_lines: LLMTranscriptLine[];
 }
 
 interface ResponseFormatter {
@@ -107,9 +107,13 @@ export const useTranscriptStore = defineStore("transcript", () => {
         llm_json.transcript.transcript_lines &&
         Array.isArray(llm_json.transcript.transcript_lines)
       ) {
-        body.transcriptLines = llm_json.transcript.transcript_lines.map((line) => ({
-          transcript: `[${formatTimestamp(line.timestamp)}] ${line.speaker}: ${line.text}`,
-        }));
+        body.transcriptLines = llm_json.transcript.transcript_lines.map(
+          (line) => ({
+            transcript: `[${formatTimestamp(line.timestamp)}] ${
+              line.speaker
+            }: ${line.text}`,
+          })
+        );
       } else {
         console.warn("transcript_lines is missing or not an array");
         body.transcriptLines = [];
@@ -119,12 +123,12 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
-  const projectStore = useProjectStore()
+  const projectStore = useProjectStore();
   async function loadConfig(location: string, projectID: number) {
     header.location = location;
 
-    const retrievedProject = await projectStore.fetchProjectByID(projectID)
-    header.project = retrievedProject?.title as string
+    const retrievedProject = await projectStore.fetchProjectByID(projectID);
+    header.project = retrievedProject?.title as string;
   }
 
   // ✅ Save transcript to FastAPI backend
@@ -161,6 +165,34 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
+  async function generateMinutesFromTranscript() {
+    try {
+      const payload = {
+        title: header.title,
+        location: header.location,
+        created_by: header.createdBy,
+        date: header.date,
+        project: header.project,
+        purpose: header.purpose,
+        attendees: header.attendees,
+        transcript_lines: body.transcriptLines.map((line) => ({
+          transcript: line.transcript,
+        })),
+      };
+
+      const response = await axios.post(
+        "http://localhost:8000/minutes/generate",
+        payload
+      );
+      console.log("Generated minutes:", response.data);
+
+      return response.data;
+    } catch (error) {
+      console.error("Failed to generate minutes:", error);
+      throw error;
+    }
+  }
+
   // ✨ ADDED: State for the highlighted transcript line
   const highlightedLine = ref<string | null>(null);
 
@@ -188,6 +220,7 @@ export const useTranscriptStore = defineStore("transcript", () => {
     setActiveEditor,
     updateHeaderField,
     updateTranscript,
+    generateMinutesFromTranscript, // ✅ ADD THIS LINE!
     loadFromLLMJSON,
     saveTranscriptToDB, // ✅ expose this to use in TranscriptDisplay.vue
     loadConfig,

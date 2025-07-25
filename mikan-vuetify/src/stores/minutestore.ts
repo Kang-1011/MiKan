@@ -151,6 +151,7 @@ export const useMinuteStore = defineStore("minutes", () => {
     renumberAllTasks();
   }
 
+  // ✅ Accept external JSON data (e.g., from API or Gemini)
   // ✅ Load JSON locally on mount
   async function loadFromJsonFile() {
     try {
@@ -185,6 +186,18 @@ export const useMinuteStore = defineStore("minutes", () => {
     }
   }
 
+  // ✅ Call FastAPI to generate minutes and load result into store
+  async function generateMinutesAndStore() {
+    try {
+      const response = await fetch("http://localhost:8000/minutes/generate");
+      if (!response.ok) throw new Error("Failed to generate minutes");
+      const data = await response.json();
+      loadFromJson(data);
+    } catch (err) {
+      console.error("Failed to generate minutes from FastAPI:", err);
+    }
+  }
+
   return {
     isEditMode,
     activeEditorKey,
@@ -201,6 +214,7 @@ export const useMinuteStore = defineStore("minutes", () => {
     deleteTaskAndRenumber,
     setTasksFromGemini,
     loadFromJson,
+    generateMinutesAndStore,
     loadFromJsonFile,
   };
 });
