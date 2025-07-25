@@ -51,7 +51,7 @@
             <h1
               class="attachment-manager text-h4 font-weight-black text-center"
             >
-              {{ minuteHeaderData.title }} - {{ minuteHeaderData.project }}
+              {{ minuteHeaderData.title }}
             </h1>
           </div>
         </v-col>
