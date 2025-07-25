@@ -99,28 +99,3 @@ def create_transcript(db: Session, transcript_data: TranscriptCreate):
 
 def get_transcript_by_id(db: Session, transcript_id: int):
     return db.query(Transcript).filter(Transcript.id == transcript_id).first()
-
-def create_mock_data(db: Session):
-    # Check if mock data already exists
-    if db.query(Transcript).first():
-        return
-
-    transcript = Transcript(
-        title="Transcript",
-        location="Meeting Room 1",
-        created_by="Alpha",
-        date="2025-07-03",
-        project="Project Capstone",
-        purpose="This meeting focused on...",
-        attendees="Alpha (alpha@example.com)\nBravo (bravo@example.com)"
-    )
-    db.add(transcript)
-    db.commit()
-    db.refresh(transcript)
-
-    lines = [
-        TranscriptLine(transcript_id=transcript.id, transcript="00:00:05 Speaker 1 (Alpha) : Welcome everyone."),
-        TranscriptLine(transcript_id=transcript.id, transcript="00:00:10 Speaker 2 (Bravo) : Thanks, Alpha."),
-    ]
-    db.add_all(lines)
-    db.commit()
