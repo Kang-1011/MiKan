@@ -80,13 +80,26 @@ export const useTranscriptStore = defineStore("transcript", () => {
 		const ms = parts[2].slice(0, 2); // get first two digits only
 		return `${parts[0]}:${parts[1]}:${ms}`;
 	}
+
+  function getTodayInTimezone(timeZone = 'Asia/Kuala_Lumpur') {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    
+    // Format to YYYY-MM-DD by default using 'en-CA' locale
+    return formatter.format(now);
+  }
   
   // Kang's code to bring in transcript data from llm's result (JSON)
   async function loadFromLLMJSON(llm_json: ResponseFormatter) {
     try {
       header.title = llm_json.transcript.title;
       header.createdBy = "You";
-      header.date = new Date().toISOString().slice(0, 10);
+      header.date = getTodayInTimezone();
       header.purpose = llm_json.transcript.purpose;
       header.attendees = llm_json.transcript.attendees;
 
