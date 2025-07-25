@@ -1,7 +1,7 @@
 <template>
 	<v-dialog max-width="500px" min-height="350px">
 		<v-card class="rounded-xl pa-2">
-			<v-card-title class="ml-3">Upload Recording</v-card-title>
+			<v-card-title class="ml-3">Transcribe</v-card-title>
 
 			<v-stepper v-model="step" class="no-shadow">
 				<v-stepper-header class="no-shadow">
