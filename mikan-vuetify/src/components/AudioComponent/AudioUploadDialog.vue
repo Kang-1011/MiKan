@@ -83,7 +83,7 @@
 									Previous
 								</v-btn>
 								<v-btn color="black" variant="flat" class="text-body-2 rounded-lg"
-									@click="transcribeUploadedAudio" :loading="isTranscribing">
+									@click="transcribeUploadedAudio" :loading="isTranscribing" :disabled="!hasUploaded">
 									Transcribe
 								</v-btn>
 							</div>
