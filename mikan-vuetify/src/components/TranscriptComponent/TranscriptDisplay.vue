@@ -357,6 +357,8 @@
                 v-for="(line, index) in body.transcriptLines"
                 :key="index"
                 class="transcript-line"
+                :class="{ highlight: normalizeString(line.transcript) === activelyHighlightedLine }"
+                :ref="(el) => setLineRef(el, line.transcript)"
               >
                 <span class="speaker-info"
                   >{{ parseLine(line.transcript).speaker }} :</span
