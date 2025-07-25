@@ -1,73 +1,137 @@
 <template>
     <v-dialog max-width="500px" min-height="450px" :persistent="started && !stopped">
         <v-card class="rounded-xl pa-2">
-            <v-card-title class="ml-3">Record</v-card-title>
+            <v-card-title class="ml-3">Transcribe</v-card-title>
 
-            <v-card-text align="center">
-                <v-sheet min-height="200px" class="d-flex align-center justify-center text-center">
-                    <div v-if="!started">
-                        <h3>Press the button below to start recording</h3>
-                    </div>
-                    <div v-else>
-                        <AVMedia :media="stream" type="frequ" :canv-width="360" :canv-height="120" frequ-direction="mo"
-                            :frequ-lnum="60" line-color="red" :line-width="2" />
-                        <h3>{{ formattedTime }}</h3>
-                    </div>
-                </v-sheet>
+            <v-stepper v-model="step" class="no-shadow">
+                <v-stepper-header class="no-shadow">
+                    <v-stepper-item :value="1" title="Configuration" />
+                    <v-divider></v-divider>
+                    <v-stepper-item :value="2" title="Record" />
+                </v-stepper-header>
 
-                <div v-if="stopped && audioUrl" class="mt-3">
-                    <audio :src="audioUrl" controls></audio>
-                    <p>Recording complete. Press "Transcribe" to proceed.</p>
-                </div>
+                <v-stepper-window align="center">
+                    <v-stepper-window-item :value="1">
+                        <div>
+                            <div style="height: 300px;">
+                                <v-form ref="configForm" lazy-validation>
+                                    <v-text-field v-model="location" label="Location" clearable variant="outlined"
+                                        density="compact" rounded="lg" class="mb-1 mt-2"
+                                        :rules="[(v) => !!v || 'Location is required']" />
 
-                <!-- Structured this way to ensure record button and (pauseResume + stop) buttons are aligned -->
-                <v-card v-if="!started" min-height="100px" elevation="0">
-                    <v-btn size="64" icon @click="startRecording" variant="flat">
-                        <v-icon size="64" color="red" class="circle-border-icon">mdi-record</v-icon>
-                    </v-btn>
-                </v-card>
-                <v-card v-if="started && !stopped" min-height="100px" elevation="0">
-                    <v-row justify="center" style="gap: 100px;">
-                        <v-col cols="auto">
-                            <v-btn size="64" icon @click="pauseResumeRecording" variant="flat">
-                                <v-icon size="64" color="red" class="circle-border-icon"
-                                    :icon="isPaused ? 'mdi-play' : 'mdi-pause'" />
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="auto">
-                            <v-btn size="64" icon @click="stopRecording" variant="flat">
-                                <v-icon size="64" color="red" class="circle-border-icon">mdi-stop</v-icon>
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                </v-card>
-            </v-card-text>
+                                    <v-select v-model="project" :items="projectOptions" item-title="title"
+                                        item-value="id" label="Project" clearable variant="outlined" density="compact"
+                                        rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']" />
 
-            <v-card-actions class="justify-end mb-2">
-                <div v-if="stopped">
-                    <v-btn @click="resetRecording" variant="outlined" class="text-body-2 mr-2 rounded-lg"
-                        color="grey-darken-1" :disabled="isTranscribing">
-                        Retake
-                    </v-btn>
-                    <v-btn @click="transcribeRecordedAudio" variant="flat" class="text-body-2 mr-4 rounded-lg"
-                        color="black" :loading="isTranscribing">
-                        Transcribe
-                    </v-btn>
-                </div>
-            </v-card-actions>
+                                    <v-select v-model="mode" :items="['Summary', 'Kan']" label="Mode" clearable
+                                        variant="outlined" density="compact" rounded="lg" class="mb-1"
+                                        :rules="[(v) => !!v || 'Transcription mode is required']" />
+                                </v-form>
+                            </div>
+                            <div class="d-flex justify-space-between">
+                                <v-btn color="black" variant="flat" class="text-body-2 rounded-lg"
+                                    :disabled="step == 1">
+                                    Previous
+                                </v-btn>
+                                <v-btn color="black" variant="flat" class="text-body-2 rounded-lg" @click="goToStep2">
+                                    Next
+                                </v-btn>
+                            </div>
+                        </div>
+                    </v-stepper-window-item>
+
+                    <v-stepper-window-item :value="2">
+                        <div>
+                            <div style="height: 300px;">
+                                <div style="height: 150px;" class="d-flex align-center justify-center text-center">
+                                    <div v-if="!started">
+                                        <p class="audio-record-text">Press the button below to start recording</p>
+                                    </div>
+                                    <div v-if="started">
+                                        <AVMedia :media="stream" type="frequ" :canv-width="360" :canv-height="120"
+                                            frequ-direction="mo" :frequ-lnum="60" line-color="red" :line-width="2" />
+                                        <p class="audio-record-text">{{ formattedTime }}</p>
+                                    </div>
+                                </div>
+
+                                <div v-if="stopped && audioUrl" class="mt-3">
+                                    <audio :src="audioUrl" controls></audio>
+                                    <p class="text-subtitle-1">Recording complete. Press "Transcribe" to proceed.</p>
+                                </div>
+
+                                <!-- Structured this way to ensure record button and (pauseResume + stop) buttons are aligned -->
+                                <div v-if="!started" style="height: 150px;" elevation="0">
+                                    <v-btn size="64" icon @click="startRecording" variant="flat">
+                                        <v-icon size="64" color="red" class="circle-border-icon">mdi-record</v-icon>
+                                    </v-btn>
+                                </div>
+                                <div v-if="started && !stopped" style="height: 150px;" elevation="0">
+                                    <div class="d-flex justify-space-around">
+                                        <v-btn size="64" icon @click="pauseResumeRecording" variant="flat">
+                                            <v-icon size="64" color="red" class="circle-border-icon"
+                                                :icon="isPaused ? 'mdi-play' : 'mdi-pause'" />
+                                        </v-btn>
+                                        <v-btn size="64" icon @click="stopRecording" variant="flat">
+                                            <v-icon size="64" color="red"
+                                                class="circle-border-icon">mdi-stop</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-space-between">
+                                <!-- <v-btn color="black" variant="outlined" class="text-body-2 mr-2 rounded-lg" @click="$emit('close-dialog')">Cancel</v-btn> -->
+                                <v-btn v-if="!started" @click="step--" color="black" variant="flat"
+                                    class="text-body-2 rounded-lg">
+                                    Previous
+                                </v-btn>
+                                <v-btn v-if="started" @click="resetRecording" color="black" variant="flat"
+                                    class="text-body-2 rounded-lg" :disabled="isTranscribing || !stopped">
+                                    Retake
+                                </v-btn>
+                                <v-btn @click="transcribeRecordedAudio" color="black" variant="flat"
+                                    class="text-body-2 rounded-lg" :loading="isTranscribing" :disabled="!stopped">
+                                    Transcribe
+                                </v-btn>
+                            </div>
+                        </div>
+                    </v-stepper-window-item>
+                </v-stepper-window>
+            </v-stepper>            
         </v-card>
     </v-dialog>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { AVMedia } from 'vue-audio-visual'
 import { useUserMedia } from '@vueuse/core'
 import axios from 'axios'
 
+import { useProjectStore } from '@/stores/projects'
 import { useTranscriptStore } from "@/stores/transcriptstore";
 const transcriptStore = useTranscriptStore();
 const router = useRouter()
+
+const step = ref(1)
+const configForm = ref(null); // instead of using $refs directly
+const location = ref("")
+const project = ref("")
+const mode = ref("")
+const projectStore = useProjectStore()
+onMounted(() => {
+    if (projectStore.projects.length === 0) {
+        projectStore.fetchProjects()
+    }
+})
+const projectOptions = computed(() => projectStore.projects)
+async function goToStep2() {
+    const { valid } = await configForm.value.validate();
+    if (valid) {
+        step.value = 2;
+        transcriptStore.loadConfig(location.value, project.value)
+    }
+}
 
 // For vue-audio-visual
 const { stream, enabled } = useUserMedia({ constraints: { audio: true, video: false } });
@@ -223,7 +287,7 @@ async function transcribeRecordedAudio() {
         console.log("Transcription successful:", response.data);
         transcriptStore.loadFromLLMJSON(response.data);
 
-		router.push('/TranscriptsHomepage');
+        router.push('/TranscriptsHomepage');
 
     } catch (error) {
         console.error("Error during transcription:", error);
@@ -244,5 +308,14 @@ async function transcribeRecordedAudio() {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+.no-shadow {
+    box-shadow: none !important;
+}
+
+.audio-record-text {
+    font-size: 1.25rem;
+    font-weight: normal;
 }
 </style>
