@@ -1,6 +1,6 @@
-import { ref } from 'vue';
 import { defineStore } from "pinia";
 import axios from 'axios';
+import { fetchBoards } from "@/stores/boards";
 
 interface Draft {
   id: number;
@@ -129,6 +129,7 @@ export const useDraftStore = defineStore("draft", {
           });
           console.log("draft passed to tasks table: " , taskResponse.data)
           await this.fetchFromAPI();
+          await fetchBoards();
       }
     } catch (error) {
         console.error(`Failed to approve draft ${draftId}:`, error);
@@ -161,6 +162,7 @@ export const useDraftStore = defineStore("draft", {
         }));
         console.log("All drafts approved:", response.data);
         await this.fetchFromAPI();
+        await fetchBoards();
       } catch (error) {
         console.error("Failed to approve drafts:", error);
       }

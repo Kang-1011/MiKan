@@ -14,7 +14,7 @@
                                     <v-icon left>mdi-plus</v-icon>
                                     Create
                                 </v-btn>
-                                <v-btn :disabled="draftStore.drafts.length === 0" variant="flat" color="grey"
+                                <v-btn :disabled="draftStore.drafts.length === 0" variant="flat" color="#2e2e2e"
                                     class="mr-2 text-body-2 rounded-xl" @click="openApproveAllDialog()">
                                     <v-icon left>mdi-check-all</v-icon>
                                     Approve All
