@@ -8,20 +8,22 @@ router = APIRouter()
 
 # --- Helpers ---
 
-def get_or_create_user_by_name(db: Session, name: str) -> User:
-    user = db.query(User).filter_by(name=name).first()
-    if not user:
-        user = User(
-            name=name,
-            username=name.lower(),  # dummy default
-            email=f"{name.lower()}@example.com",  # dummy default
-            password="defaultpassword",  # dummy default
-            position="Member",
-            role="user"
-        )
-        db.add(user)
-        db.commit()
-        db.refresh(user)
+def get_or_create_user_by_name(db: Session, username: str) -> User:
+    user = db.query(User).filter_by(username=username).first()
+
+    # if not user:
+    #     user = User(
+    #         name=name,
+    #         username=name.lower(),  # dummy default
+    #         email=f"{name.lower()}@test.com",  # dummy default
+    #         password="defaultpassword",  # dummy default
+    #         position="Member",
+    #         role="user"
+    #     )
+
+    #     db.add(user)
+    #     db.commit()
+    #     db.refresh(user)
     return user
 
 def get_or_create_project_by_title(db: Session, title: str) -> Project:
