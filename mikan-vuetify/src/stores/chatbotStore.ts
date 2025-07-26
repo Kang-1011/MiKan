@@ -52,12 +52,17 @@ export const useChatbotStore = defineStore('chatbot', {
 
       try {
         const historyToSend = this.messages.slice(0, -2).slice(-6); // Exclude user's latest and the placeholder
+ 
+        const systemMessage = `You are Mikan, a helpful and professional meeting assistant. Your goal is to answer the user's questions based ONLY on the provided "Page Context". Do not use any external knowledge. Keep your answers concise and directly related to the information on the page.`;
 
         const payload = {
           query: userMessage,
           context: JSON.stringify(this.currentPageContext.data),
-          context_name: this.currentPageContext.name,
-          messages: historyToSend.map(msg => ({ role: msg.role, content: msg.content })),
+          context_name: this.currentPageContext.name, 
+          messages: [
+            { role: 'system', content: systemMessage },
+            ...historyToSend.map(msg => ({ role: msg.role, content: msg.content }))
+          ],
         };
 
         // ✨ Use the Fetch API to handle the stream
