@@ -5,34 +5,34 @@
                 <v-card-title class="ml-3">Edit Draft</v-card-title>
 
                 <v-card-text>
-                    <v-form ref="taskForm" @submit.prevent="save" lazy-validation>
+                    <v-form ref="taskForm" @submit.prevent="save" lazy-validation >
                         <v-text-field clearable label="Task Title" variant="outlined" density="compact"
-                            v-model="taskTitle" rounded="lg" class="mb-1"
+                            v-model="taskTitle" rounded="xl" class="mb-1"
                             :rules="[(v) => !!v || 'Task title is required']"></v-text-field>
 
                         <v-text-field clearable label="Due Date" variant="outlined" density="compact" v-model="dueDate"
-                            rounded="lg" type="date" class="mb-1" :rules="[(v) => !!v || 'Due date is required']"
+                        rounded="xl" type="date" class="mb-1" :rules="[(v) => !!v || 'Due date is required']"
                             :min="tomorrowDate"></v-text-field>
 
                         <v-select v-model="assignee" :items="assigneeOptions" item-title="name" item-value="id" label="Assignee" 
-                            clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                            clearable variant="outlined" density="compact" rounded="xl" class="mb-1" 
                             :rules="[(v) => !!v || 'Assignee is required']" />
 
                         <v-select v-model="project" :items="projectOptions" item-title="title" item-value="id" label="Project" 
-                            clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                            clearable variant="outlined" density="compact" rounded="xl" class="mb-1" 
                             :rules="[(v) => !!v || 'Project is required']" />
 
                         <v-textarea clearable label="Task Description" variant="outlined" density="compact"
-                            v-model="taskDescription" rounded="lg" rows="3" class="mb-0"
+                            v-model="taskDescription" rounded="xl" rows="3" class="mb-0 "
                             :rules="[(v) => !!v || 'Task description is required']"></v-textarea>
                     </v-form>
                 </v-card-text>
 
                 <v-card-actions class="justify-end mb-2">
-                    <v-btn color="black" variant="outlined" class="text-body-2 mr-2" rounded="lg"
+                    <v-btn color="black" variant="outlined" class="text-body-2 mr-2" rounded="xl"
                         @click="cancel">Cancel</v-btn>
 
-                    <v-btn color="black" variant="flat" class="text-body-2  mr-4" rounded="lg"
+                    <v-btn color="black" variant="flat" class="text-body-2 mr-4 " rounded="xl"
                         @click="save">Save</v-btn>
                 </v-card-actions>
             </v-card>

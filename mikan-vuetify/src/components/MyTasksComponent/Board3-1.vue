@@ -6,7 +6,7 @@
 
   >
     <!-- Board Header -->
-    <v-toolbar class="page-background ">
+    <v-toolbar class="page-background-header ">
       <template v-if="!isEditing">
         <span style=" margin-left:16px" >{{ board.title }}</span>
         <v-btn icon v-if="!visitorMode" @click="startRename">
@@ -31,12 +31,12 @@
           single-line
           variant="outlined"
           density="compact"
-          class="border-sm rounded-xl border-2"
+          class="rounded-xl border-2 filter-button"
           dense hide-details clearable
           :menu-props="{
-          contentClass: 'rounded-xl text-body-2',
+          contentClass: 'rounded-xl border-2 text-body-2',
           }"
-          style="background: #dddddd ;max-width:180px"
+          style="max-width:180px"
         />
 
         <!-- Inline Priority Filter -->
@@ -48,12 +48,12 @@
           variant="outlined"
           density="compact"
     
-          class="border-sm rounded-xl border-2"
+          class=" rounded-xl border-2 filter-button"
           hide-details clearable
           :menu-props="{
           contentClass: 'rounded-xl text-body-2 ',
       }"
-          style="background: #dddddd; max-width:180px; margin-left:8px; margin-right:8px"
+          style="max-width:180px; margin-left:8px; margin-right:8px"
         />
 
         <!-- Inline Due Date Filter -->
@@ -69,20 +69,19 @@
               v-model="formattedDate"
               label="Due Before"
               variant="outlined"
-              class="border-sm rounded-xl border-2 mr-4"
+              class="rounded-xl border-2 mr-4 filter-button"
               density="compact"
               single-line
               hide-details clearable
               v-bind="menuProps"
-              style="background: #dddddd; max-width:200px; margin-right:8px"
+              style="max-width:200px; margin-right:8px"
             />
           </template>
           <v-date-picker 
           class="rounded-xl border-md text-body-2"
- 
           v-model="selectedDueDateFilter" 
           @input="dueDateMenu = false"
-
+          :min="tomorrowDate"
           /><!--           elevation="0" -->
         </v-menu>
     </v-toolbar>
@@ -249,7 +248,18 @@ function taskDropped(taskId, payload) {
   emit('task-updated', taskId, payload)
 }
 
+// Computed property for tomorrow's date
+const tomorrowDate = computed(() => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate()); // Set to tomorrow
 
+    // Format to YYYY-MM-DD
+    const year = tomorrow.getFullYear();
+    const month = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(tomorrow.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+});
 </script>
 
 <style scoped>

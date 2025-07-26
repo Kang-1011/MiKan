@@ -13,7 +13,7 @@
           <v-list density="compact" nav>
             <v-list-item
               value="toggle"
-              class="cursor-pointer rounded-xl sidebar-1"
+              class="cursor-pointer rounded-xl sidebar-button"
               @click.stop="rail = !rail"
               :active="false"
             >
@@ -32,7 +32,7 @@
 
           <v-list density="compact" nav>
             <v-list-item
-              class="rounded-xl sidebar-1"
+              class="rounded-xl sidebar-button"
               :to="{ path: '/AudioInput' }"
               exact
               :active="false"
@@ -46,7 +46,7 @@
             </v-list-item>
 
             <v-list-item
-              class="rounded-xl sidebar-1"
+              class="rounded-xl sidebar-button"
               :to="{ path: '/ManagerReview' }"
               exact
               :active="false"
@@ -60,7 +60,7 @@
             </v-list-item>
 
             <v-list-item
-              class="rounded-xl sidebar-1"
+              class="rounded-xl sidebar-button"
               :to="{ path: '/Kanban-2' }"
               exact
               :active="false"
@@ -79,7 +79,7 @@
           <v-list density="compact" nav>
             <!-- Projects Header -->
             <v-list-item
-              class="cursor-pointer rounded-xl sidebar-1"
+              class="cursor-pointer rounded-xl sidebar-button"
               style="align-items: center; min-height: 48px"
               @click="isOpen = !isOpen"
             >
@@ -111,7 +111,7 @@
               <v-list-item
                 v-for="proj in projectItems"
                 :key="proj"
-                class="rounded-xl sidebar-1"
+                class="rounded-xl sidebar-button"
                 @click="handleClick(proj)"
                 density="compact"
               >

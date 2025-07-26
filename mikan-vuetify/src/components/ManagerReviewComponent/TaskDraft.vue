@@ -21,7 +21,7 @@
                 <v-card-text>
                         <v-row>
                             <v-col>
-                                <div class="text-caption text-medium-emphasis">Due Date</div>
+                                <div class="text-caption text-medium-emphasis ">Due Date</div>
                                 <strong>{{ props.dueDate }}</strong>
                             </v-col>
                             <v-col>

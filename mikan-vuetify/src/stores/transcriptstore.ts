@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import axios from "axios";
-import { useProjectStore } from '@/stores/projects'
+import { useProjectStore } from "@/stores/projects";
 
 interface LLMTranscriptLine {
   timestamp: string;
@@ -10,10 +10,10 @@ interface LLMTranscriptLine {
 }
 
 interface LLMTranscriptDate {
-	title: string;
+  title: string;
   purpose: string;
-	attendees: string;
-	transcript_lines: LLMTranscriptLine[];
+  attendees: string;
+  transcript_lines: LLMTranscriptLine[];
 }
 
 interface ResponseFormatter {
@@ -80,13 +80,26 @@ export const useTranscriptStore = defineStore("transcript", () => {
 		const ms = parts[2].slice(0, 2); // get first two digits only
 		return `${parts[0]}:${parts[1]}:${ms}`;
 	}
+
+  function getTodayInTimezone(timeZone = 'Asia/Kuala_Lumpur') {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    
+    // Format to YYYY-MM-DD by default using 'en-CA' locale
+    return formatter.format(now);
+  }
   
   // Kang's code to bring in transcript data from llm's result (JSON)
   async function loadFromLLMJSON(llm_json: ResponseFormatter) {
     try {
       header.title = llm_json.transcript.title;
       header.createdBy = "You";
-      header.date = new Date().toISOString().slice(0, 10);
+      header.date = getTodayInTimezone();
       header.purpose = llm_json.transcript.purpose;
       header.attendees = llm_json.transcript.attendees;
 
@@ -94,9 +107,13 @@ export const useTranscriptStore = defineStore("transcript", () => {
         llm_json.transcript.transcript_lines &&
         Array.isArray(llm_json.transcript.transcript_lines)
       ) {
-        body.transcriptLines = llm_json.transcript.transcript_lines.map((line) => ({
-          transcript: `[${formatTimestamp(line.timestamp)}] ${line.speaker}: ${line.text}`,
-        }));
+        body.transcriptLines = llm_json.transcript.transcript_lines.map(
+          (line) => ({
+            transcript: `[${formatTimestamp(line.timestamp)}] ${
+              line.speaker
+            }: ${line.text}`,
+          })
+        );
       } else {
         console.warn("transcript_lines is missing or not an array");
         body.transcriptLines = [];
@@ -106,12 +123,12 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
-  const projectStore = useProjectStore()
+  const projectStore = useProjectStore();
   async function loadConfig(location: string, projectID: number) {
     header.location = location;
 
-    const retrievedProject = await projectStore.fetchProjectByID(projectID)
-    header.project = retrievedProject?.title as string
+    const retrievedProject = await projectStore.fetchProjectByID(projectID);
+    header.project = retrievedProject?.title as string;
   }
 
   // ✅ Save transcript to FastAPI backend
@@ -148,6 +165,34 @@ export const useTranscriptStore = defineStore("transcript", () => {
     }
   }
 
+  async function generateMinutesFromTranscript() {
+    try {
+      const payload = {
+        title: header.title,
+        location: header.location,
+        created_by: header.createdBy,
+        date: header.date,
+        project: header.project,
+        purpose: header.purpose,
+        attendees: header.attendees,
+        transcript_lines: body.transcriptLines.map((line) => ({
+          transcript: line.transcript,
+        })),
+      };
+
+      const response = await axios.post(
+        "http://localhost:8000/minutes/generate",
+        payload
+      );
+      console.log("Generated minutes:", response.data);
+
+      return response.data;
+    } catch (error) {
+      console.error("Failed to generate minutes:", error);
+      throw error;
+    }
+  }
+
   // ✨ ADDED: State for the highlighted transcript line
   const highlightedLine = ref<string | null>(null);
 
@@ -175,6 +220,7 @@ export const useTranscriptStore = defineStore("transcript", () => {
     setActiveEditor,
     updateHeaderField,
     updateTranscript,
+    generateMinutesFromTranscript, // ✅ ADD THIS LINE!
     loadFromLLMJSON,
     saveTranscriptToDB, // ✅ expose this to use in TranscriptDisplay.vue
     loadConfig,
