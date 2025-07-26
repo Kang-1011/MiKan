@@ -227,7 +227,7 @@
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import axios from 'axios'
 import Attachment from '@/components/MyTasksComponent/AttachmentManager.vue'
-import { boards } from '@/stores/boards'
+import { boards, fetchBoards } from '@/stores/boards'
 
 const props = defineProps<{ modelValue: boolean; task: any; visitorMode?: boolean }>()
 const emit = defineEmits(['update:modelValue','save-task','delete-task'])
@@ -413,6 +413,8 @@ async function save() {
 	deletedAttachments.value = []
 
   localTask.value.attachments = [...existingAttachments, ...uploadedAttachments];
+
+  fetchBoards()
 
   // 🧼 Optional: console.log everything at end
   console.log("✔️ All updates done.");
