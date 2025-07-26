@@ -11,6 +11,27 @@
     </v-main>
     <Chatbot />
 </template>
+
+<script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+const hasUnsavedChanges = ref(true) // Set this based on actual logic
+
+function handleBeforeUnload(event) {
+  if (hasUnsavedChanges.value) {
+    event.preventDefault()
+    event.returnValue = '' // Required for Chrome to trigger prompt
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+})
+</script>
  
 <style scoped> 
 .fill-height {
