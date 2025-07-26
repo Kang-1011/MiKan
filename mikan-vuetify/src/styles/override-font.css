@@ -1,43 +1,129 @@
-/* Load Inter from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-/* Shortlist This */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap'); 
-/* font-family: 'Poppins', sans-serif !important; */
-/* Shortlist This */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap');
-/* font-family: 'Nunito', sans-serif !important; */
-/* Shortlist This */
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap');
-/* font-family: 'Work Sans', sans-serif !important; */
-/* Don't want this */
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
-/* font-family: 'Lato', sans-serif !important; */
+/* -------------------------------------------------------------- */
+/* Original font imports - moved to top to ensure fonts load */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap");
 
-/* 1) Everything under the normal app wrapper… */
+/* 1) Design tokens (variables) */
+:root {
+  /* Fonts */
+  --font-sans-inter: "Inter", sans-serif;
+  --font-sans-poppins: "Poppins", sans-serif;
+  --font-sans-nunito: "Nunito", sans-serif;
+  --font-sans-work-sans: "Work Sans", sans-serif;
+  --font-primary: var(--font-sans-poppins);
+
+  /* Colors - plaingrey*/
+  /* --color-bg-base: hsl(110, 0%, 87%);
+  --color-bg-page: hsl(0, 0%, 100%);
+  --color-bg-stage: hsl(0, 0%, 94%);
+  --color-bg-taskcard: hsl(0, 0%, 80%); */
+  
+   /* Colors green*/
+   --color-bg-base: hsl(160, 15%, 87%);
+   --color-bg-page: hsl(150, 15%, 98%);
+   --color-bg-stage: hsl(150, 25%, 94%);
+   --color-bg-taskcard: hsl(150, 15%, 80%);
+
+  --color-border-light: hsl(0, 0%, 80%);
+  --color-border-dark: hsl(0, 0%, 83%);
+
+  /* task card specific colours for task card hovering animation */
+  --color-task-card-border: hsl(0, 0%, 80%);
+  --color-task-card-border-hover: hsl(0, 0%, 80%);
+  --color-task-card-border-select: hsl(0, 0%, 80%);
+
+  /* --color-border-dark: #d4d4d4; */
+  --color-divider-1: hsl(0, 0%, 0%);
+  --color-divider-2: hsl(245, 61%, 44%);
+
+  --color-accent-orange: #ff9046;
+  --color-sidebar-hover: #fcb9534c;
+  --color-accent-orange-hover: #ff7637;
+
+  --color-error-red: hsl(0, 90%, 61%);
+  --color-error-red-hover: hsl(0, 90%, 61%);
+  --color-error-red-background: hsl(0, 90%, 95%);
+
+  --color-success-green: hsl(101, 77%, 37%);
+  --color-success-text-dark-green: hsl(101, 100%, 12%);
+  --color-success-green-hover: hsl(101, 77%, 37%);
+  --color-success-green-background: hsl(101, 50%, 75%);
+  --color-disabled: grey;
+
+  --color-save-purple: hsl(300, 77%, 37%);
+  --color-save-purple-hover: hsl(300, 77%, 37%);
+  --color-save-purple-background: hsl(300, 77%, 37%);
+
+  --color-btn-primary-bg: #545454;
+  --color-btn-primary-text: #ffffff;
+  --color-btn-secondary-bg: #ffffff;
+  --color-btn-secondary-text: #515151;
+
+  --color-text-default: #000000;
+  --color-icon-grey-main: hsl(0, 0%, 14%);
+  --color-icon-grey-hover-background: hsl(0, 0%, 80%);
+  --color-icon-grey-hover: hsl(0, 0%, 0%);
+  --color-icon-grey-active: hsl(0, 0%, 0%);
+
+  --color-text-grey: #383838;
+  --color-icon-detail-grey: rgba(0, 0, 0, 0.6);
+
+  --color-taskcard-hover-bg: rgba(226, 255, 158, 0.01);
+  --color-mikan-orange: #ff9046;
+  --color-mikan-text-bg-light: hsl(0, 0%, 87%);
+  --color-mikan-text-bg-dark: hsl(0, 0%, 40%);
+
+  --color-user-avatar: #35be19;
+  --color-user-avatar-light: hsl(116, 45%, 87%);
+  --color-user-avatar-halo-light: hsla(110, 66%, 53%, 0.25);
+  --color-user-avatar-halo-lighter-1: hsla(110, 66%, 60%, 0.25);
+  --color-user-avatar-halo-lighter-2: hsla(110, 66%, 80%, 0.25);
+  --color-user-avatar-halo: rgba(53, 190, 25, 0.5);
+  --color-user-text: hsla(110, 77%, 15%, 1);
+  --color-mikan-orange-text: hsl(0, 0%, 15%);
+
+  --filter-button-bg: #f0f0f0;
+  --filter-button-bg-hover:  hsla(140, 66%, 70%, 0.25);
+  --filter-button-text: #141414;
+
+  --mikan-chat-bg: hsl(210, 17%, 95%);
+  --mikan-chat-header: hsl(210, 17%, 95%);
+  --mikan-chat-footer: hsl(210, 17%, 95%);
+
+
+  /* Border & Radius */
+  --border-width-sm: 0.75px;
+  --border-width-md: 1px;
+  --radius-v1: 16px;
+  --radius-v2: 12px;
+
+  /* Shadows */
+  --shadow-light: 6px 6px 12px rgba(0, 0, 0, 0.1);
+  --shadow-inset: inset 2px 2px 5px rgba(0, 0, 0, 0.05);
+
+  /* Transitions */
+  --transition-fast: transform 0.1s ease-in-out;
+  --transition-button: transform 150ms ease;
+
+  /* Ripple colors */
+  --ripple-orange: 255, 165, 255;
+  --ripple-orange-hover: 103, 255, 65;
+}
+
+/* -------------------------------------------------------------- */
+/* Apply primary font to Vuetify components */
 .v-application,
 .v-application *,
-
-/* 2) Any dialog content (teleported out)… */
 .v-dialog,
 .v-dialog *,
-
-/* 3) Any menu or select dropdown content (teleported out)… */
 .v-menu__content,
-.v-menu__content * {
-
-    /* font-family: "Times New Roman", serif !important; */
-    /* font-family: "Inter", sans-serif !important; */
-    font-family: 'Poppins', sans-serif !important;
-    /* font-family: 'Nunito', sans-serif !important; */
-    /* font-family: 'Work Sans', sans-serif !important; */
-}
-
+.v-menu__content *,
 .v-overlay,
 .v-overlay * {
-  font-family: 'Poppins', sans-serif !important;
+  font-family: var(--font-primary) !important;
 }
-
-/* And make sure native form controls inherit it */
 .v-application input,
 .v-application textarea,
 .v-application select,
@@ -45,337 +131,574 @@
   font-family: inherit !important;
 }
 
-/* Non-font elements for page */
-/* custom rounded-v1 utility */
-.rounded-v1 {
-  border-radius: 16px !important;
-}
-
-.rounded-v2 {
-  border-radius: 12px !important;
-}
-
-/* reusable utilities */
-
-.border-1 { /*from dark to bright*/
-  --v-border-opacity: 1 !important;
-  border: 1px solid #CCCCCC !important;
+/* -------------------------------------------------------------- */
+/* Utility classes */
+/* Borders */
+/* border-1 - dark to bright */
+.border-1 {
+  border: var(--border-width-md) solid var(--color-border-light) !important;
   box-shadow: none;
 }
-
 .divider-1 {
-  --v-border-opacity: 1 !important;
-  border: 0.75px solid #CCCCCC !important;
-  box-shadow: none;
+  border: var(--border-width-sm) solid var(--color-divider-1) !important;
 }
 
-.border-2 { /*from bright to dark*/
-  --v-border-opacity: 1 !important;
-  border: 1px solid #d4d4d4 !important;
+/* border-2 - bright to dark */
+.border-2 {
+  border: var(--border-width-md) solid var(--color-border-dark) !important;
   box-shadow: none;
 }
-
 .divider-2 {
-  border: 0.75px solid #372cb4 !important;
+  border: var(--border-width-sm) solid var(--color-divider-2) !important;
   box-shadow: none;
 }
 
-/* more element backgrounds */
+/* Rounded corners */
+.rounded-v1 {
+  border-radius: var(--radius-v1) !important;
+}
+.rounded-v2 {
+  border-radius: var(--radius-v2) !important;
+}
+
+/* Backgrounds */
 #app,
 .v-application,
-.unified-background{
-  background: #DEDEDE !important;
+.unified-background {
+  background: var(--color-bg-base) !important;
 }
-
-.page-background{
-  background: #ffffff !important;
+.page-background {
+  background: var(--color-bg-page) !important;
 }
 .page-background,
 .page-background * {
-  scrollbar-color: #545454 #CDCDCD !important;
+  scrollbar-color: var(--color-icon-grey-main) var(--color-bg-page) !important;
 }
 
-.stage-background{
-  background: #f0f0f0 !important;
-  transition: transform 0.1s ease-in-out;
+.page-background:hover {
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
 }
+
+.page-background-header {
+  background: transparent !important;
+  /* background: var(--color-bg-page) !important; */
+}
+
+/* Stage and task backgrounds */
+.stage-background-header{
+  background: transparent !important;
+  /* background: var(--color-bg-stage) !important; */
+}
+
 .stage-background,
-.stage-background * {
-  scrollbar-color: #6e6e6e #f0f0f0 !important;
-}
-.stage-background:hover {
-  transform: translateY(-1px); 
-  box-shadow:
-  6px 6px 12px rgba(0, 0, 0, 0.10),
- /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
-
-  /* inset shadows for that pressed-in look */
-  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
-  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
-  
+.task-draft-background,
+.task-draft-outer {
+  background: var(--color-bg-stage) !important;
+  transition: var(--transition-fast);
 }
 
-.task-draft-background{
-  background: #f0f0f0 !important;
-  transition: transform 0.1s ease-in-out;
-}
-
-.task-draft-background:hover {
-
-  transform: translateY(-1px); 
-  box-shadow:
-  6px 6px 12px rgba(0, 0, 0, 0.10),
- /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
-
-  /* inset shadows for that pressed-in look */
-  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
-  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
-  
-}
-
-.task-draft-outer{
-  background: #f0f0f0 !important;
-  transition: transform 0.1s ease-in-out;
-}
-
+.stage-background:hover,
+.task-draft-background:hover,
 .task-draft-outer:hover {
-
-  transform: translateY(-1px); 
-  box-shadow:
-  6px 6px 12px rgba(0, 0, 0, 0.10),
- /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
-
-  /* inset shadows for that pressed-in look */
-  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
-  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
-  
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
 }
 
-
+/* Task cards */
 .taskcard-background {
-  background: #CDCDCD !important;
+  background: var(--color-bg-taskcard) !important;
 }
-
-/* task-card animations */
-/* Stage.vue or TaskCard2-3.vue */
 .task-card {
-  /* the duration should match your :animation prop (150ms) */
-  transition: transform 150ms ease;
+  transition: var(--transition-button);
 }
-
 .task-card-1 {
   --v-border-opacity: 1 !important;
-  --v-hover-opacity: 0.0 !important;
-  /* orange RGB */
-  --v-ripple-color: 255, 165, 255 !important;
-  
-  /* how opaque the ripple is */
+  --v-hover-opacity: 0 !important;
+  --v-ripple-color: var(--ripple-orange) !important;
   --v-ripple-opacity: 1 !important;
-  
   box-shadow: none;
-  /* transition: background-color 0.2s ease-in-out !important; */
 }
-
 .task-card-1:hover {
-  background-color: rgba(226, 255, 158, 0.634) !important;
-  transform: translateY(-2px); 
-  box-shadow:
-  6px 6px 12px rgba(0, 0, 0, 0.10),
- /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
-
-  /* inset shadows for that pressed-in look */
-  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
-  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
-
+  background-color: var(--color-taskcard-hover-bg) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
 }
-
 .task-card-1 .v-ripple__animation {
-  color: rgb(103, 255, 65) !important;
+  color: var(--ripple-orange-hover) !important;
 }
 
-/* Sidebar animations */
-.sidebar-1 {
+/* Sidebar buttons */
+.sidebar-button {
   --v-border-opacity: 1 !important;
-  --v-hover-opacity: 0.0 !important;
-
-  border: 0px solid rgb(99, 99, 99) !important;
+  --v-hover-opacity: 0 !important;
+  border: 0 solid var(--color-icon-grey-main) !important;
   box-shadow: none;
   transition: background-color 0.2s ease-in-out !important;
 }
-
-.sidebar-1 .v-ripple__animation {
-  background-color: rgb(174, 255, 0) !important;
+.sidebar-button .v-ripple__animation {
+  background-color: var(--color-sidebar-hover) !important;
+}
+.sidebar-button:hover {
+  background-color: var(--color-sidebar-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
+}
+.sidebar:hover {
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
 }
 
-/* draw your orange scrim on hover instead */
-.sidebar-1:hover {
-  background-color: rgb(255, 230, 183) !important;
-  transform: translateY(-1px); /* keep your lift effect */
-  box-shadow:
-  3px 3px 6px rgba(0, 0, 0, 0.10),
- /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
-
-  /* inset shadows for that pressed-in look */
-  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8) */
-  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
-}
- 
-.button-primary{
-background-color:#545454 !important;
-color:#ffffff !important;
+/* Board hover */
+.board:hover {
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
 }
 
-.button-secondary{
-  background-color:#ffffff !important;
-  color:#515151 !important;
+/* Button styles */
+.button-primary {
+  background-color: var(--color-btn-primary-bg) !important;
+  color: var(--color-btn-primary-text) !important;
+}
+.button-secondary {
+  background-color: var(--color-btn-secondary-bg) !important;
+  color: var(--color-btn-secondary-text) !important;
 }
 
-.stage-button-delete{
-
+/* Stage action buttons */
+.stage-button-delete:hover {
+  transform: translateY(-1px);
+  color: var(--color-error-red) !important;
+  background-color: var(--color-error-red-background) !important;
 }
-.stage-button-delete .v-ripple__animation{
-
-}
-.stage-button-delete:hover{
-  transform: translateY(-1px); /* keep your lift effect */
-  color: rgb(245, 66, 66) !important;
-  background-color: #cfcfcf !important;
-
-}
-
-.stage-button-approve{
-
-}
-.stage-button-approve .v-ripple__animation{
-
-}
-.stage-button-approve:hover{
-  transform: translateY(-1px); /* keep your lift effect */
-  color: rgb(68, 166, 22) !important;
-  background-color: #cfcfcf !important;
-
+.stage-button-approve:hover {
+  transform: translateY(-1px);
+  color: var(--color-success-green) !important;
+  background-color: var(--color-bg-stage) !important;
 }
 
-.stage-button-edit{
-
+.stage-button-approve-all {
+  color: var(--color-success-text-dark-green) !important;
+  background-color: var(--color-success-green-background) !important;
 }
-.stage-button-edit .v-ripple__animation{
-transform: scale(1.1); 
-}
-
-.stage-button-edit:hover{
-  transform: translateY(-1px); /* keep your lift effect */
-
-  color: #000000 !important;
-  background-color: #cdcdcd !important;
+.stage-button-approve-all:disabled {
+  color: var(--color-text-grey) !important;
+  background-color: var(--color-disabled) !important;
 }
 
-.stage-button-add-task{
-
-}
-.stage-button-add-task .v-ripple__animation{
-
-}
-
-.stage-button-add-task:hover{
-  transform: translateY(-1px); /* keep your lift effect */
-  transform: scale(1.1); 
-  color: #000000 !important;
-  background-color: #cdcdcd !important;
-}
-
-.sidebar{
-
-}
-
-.sidebar:hover{
- 
-  box-shadow:
-  6px 6px 12px rgba(0, 0, 0, 0.10),
- /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
-
-  /* inset shadows for that pressed-in look */
-  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
-  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
+.stage-button-approve-all:hover {
+  transform: translateY(-1px);
+  color: white !important;
+  background-color: var(--color-success-green-hover) !important;
 }
 
 
-/* icons and fonts */
-.icon-grey{
-  color:#242424 !important;
-  fill: currentColor !important;
+.stage-button-edit .v-ripple__animation {
+  transform: scale(1.1);
+}
+.stage-button-edit:hover {
+  transform: translateY(-1px);
+  color: var(--color-icon-grey-hover) !important;
+  background-color: var(--color-icon-grey-hover-background) !important;
+}
+.stage-button-add-task:hover {
+  transform: translateY(-1px) scale(1.1);
+  color: var(--color-text-default) !important;
+  background-color: var(--color-bg-stage) !important;
 }
 
-.text-grey{
-  color:#383838 !important;
-}
-
-/* In-page buttons */
-.kanban-button-1{ 
-/* Primary button equivalent */
-
-}
-.kanban-button-1:hover {
-  background-color: rgb(251, 85, 7) !important;
-  transform: translateY(-1px); /* keep your lift effect */
-}
-
-.kanban-button-2{
-/* Secondary button equivalent */
-
-}
+/* Kanban button hovers */
+.kanban-button-1:hover,
 .kanban-button-2:hover {
-  background-color: rgb(251, 85, 7) !important;
-  transform: translateY(-1px); /* keep your lift effect */
+  background-color: var(--color-accent-orange-hover) !important;
+  transform: translateY(-1px);
 }
 
-.kanban-button-3{
-/* Tertiary button equivalent  */
-
-
+/* Mikan button animations */
+.mikan-button-1 {
+  background-color: var(--color-accent-orange) !important;
+  color: var(--color-btn-primary-text) !important;
+  transition: var(--transition-button);
 }
-
-.kanban-button-4{
-  
-
-}
-
-@keyframes wiggle {
-  0%, 100% { transform: translateX(0) translateY(-3px) rotate(0); }
-  15%      { transform: translateX(-1px) translateY(-3px) rotate(-5deg); }
-  30%      { transform: translateX(1px)  translateY(-3px) rotate(5deg); }
-  45%      { transform: translateX(-1px) translateY(-3px) rotate(-5deg); }
-  60%      { transform: translateX(1px)  translateY(-3px) rotate(5deg); }
-  75%      { transform: translateX(-0.5px) translateY(-3px) rotate(-2.5deg); }
-}
-.mikan-button-1{
-  background-color:#ff9046 !important;
-  color:#ffffff !important;
-}
-
 .mikan-button-1:hover {
-  background-color: rgb(251, 85, 7) !important;
+  background-color: var(--color-accent-orange-hover) !important;
   animation: wiggle 0.2s ease-in-out both;
 }
-
 .mikan-button-1 .v-ripple__animation {
   --v-ripple-opacity: 1 !important;
-  background-color: rgb(251, 85, 7) !important;
-  color: rgb(255, 81, 0) !important;
-
+  background-color: var(--color-accent-orange-hover) !important;
 }
 
-.taskdetail-icon-grey{
-  color: rgba(0,0,0,0.6)
+/* Keyframes */
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: translateX(0) translateY(-3px) rotate(0);
+  }
+  15% {
+    transform: translateX(-1px) translateY(-3px) rotate(-5deg);
+  }
+  30% {
+    transform: translateX(1px) translateY(-3px) rotate(5deg);
+  }
+  45% {
+    transform: translateX(-1px) translateY(-3px) rotate(-5deg);
+  }
+  60% {
+    transform: translateX(1px) translateY(-3px) rotate(5deg);
+  }
+  75% {
+    transform: translateX(-0.5px) translateY(-3px) rotate(-2.5deg);
+  }
+}
+@keyframes mikan-wiggle {
+  0%,
+  100% {
+    transform: translateX(0) translateY(0px) rotate(0);
+  }
+  15% {
+    transform: translateX(-1px) translateY(0px) scale(1.1) rotate(-5deg);
+  }
+  30% {
+    transform: translateX(1px) translateY(0px) scale(1.1) rotate(5deg);
+  }
+  45% {
+    transform: translateX(-1px) translateY(0px) scale(1.1) rotate(-5deg);
+  }
+  60% {
+    transform: translateX(1px) translateY(0px) scale(1.1) rotate(5deg);
+  }
+  75% {
+    transform: translateX(-0.5px) translateY(0px) scale(1.1) rotate(-2.5deg);
+  }
+}
+/* Icons and text greys */
+.icon-grey {
+  color: var(--color-icon-grey-main) !important;
+  fill: currentColor !important;
+}
+.text-grey {
+  color: var(--color-text-grey) !important;
+}
+.taskdetail-icon-grey {
+  color: var(--color-icon-detail-grey) !important;
 }
 
-/* *::-webkit-scrollbar,
-*::-webkit-scrollbar-track,
-*::-webkit-scrollbar-thumb {
-  background: magenta !important;
-} */
+/* -------------------------------------------------------------- */
+/* 3) New: Board split into header & body for hover control */
+.board-header {
+  background: var(--color-bg-stage) !important;
+  border-top-left-radius: var(--radius-v1) !important;
+  border-top-right-radius: var(--radius-v1) !important;
+}
+.board-body {
+  background: var(--color-bg-stage) !important;
+  border-bottom-left-radius: var(--radius-v1) !important;
+  border-bottom-right-radius: var(--radius-v1) !important;
+  transition: var(--transition-fast);
+}
+.board-body:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
+}
 
-/* .border-1   { --v-border-color: 255, 0, 0 !important;
+/* 4) Filter button utilities for Assignee, Priority, Due */
+.filter-button {
+  background-color: var(--filter-button-bg) !important;
+  color: var(--filter-button-text) !important;
+  border: var(--border-width-md) solid var(--color-border-dark) !important;
+
+  transition: var(--transition-button);
+}
+
+.filter-button:hover {
+  background-color: var(--filter-button-bg-hover) !important;
+  border: var(--border-width-md) solid var(--color-border-dark) !important;
+  /* color: #ffffff !important; */
+  transform: translateY(-1px);
+}
+
+
+/* -------------------------------------------------------------- */
+/* Manager Review task-drafts: outer + inner cards */
+.manager-stage-background,
+.manager-taskdraft-outer {
+  background: var(--color-bg-stage) !important;
+  transition: var(--transition-fast);
+}
+.manager-stage-background:hover,
+.manager-taskdraft-outer:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
+}
+
+.manager-taskdraft-inner {
+  /* same “inner card” styling as .task-card-1 */
   --v-border-opacity: 1 !important;
-  border: thin solid rgb(255, 0, 0) !important;
-  box-shadow: none; } */
+  --v-hover-opacity: 0 !important;
+  --v-ripple-color: var(--ripple-orange) !important;
+  --v-ripple-opacity: 1 !important;
+  box-shadow: none;
+  transition: var(--transition-button);
+}
+.manager-taskdraft-inner:hover {
+  background-color: var(--color-taskcard-hover-bg) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
+}
+.manager-taskdraft-inner .v-ripple__animation {
+  color: var(--ripple-orange-hover) !important;
+}
+
+/* --- Launcher Button Styling --- */
+.mikan-launcher-button {
+  background-color: #2e2e2e; /* Vuetify red-darken-4 */
+  border: none;
+  border-radius: 50%;
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  bottom: 25px;
+  right: 25px;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+.mikan-launcher-button:hover {
+  animation: mikan-wiggle 0.5s ease-in-out;
+  background-color: var(--color-mikan-orange); /* red-darken-3 */
+}
+
+/* --- Chat Window Styling --- */
+.mikan-chat-window {
+  position: fixed;
+  bottom: 100px;
+  right: 25px;
+  width: 400px;
+  height: 600px;
+  max-height: calc(100vh - 120px);
+
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.mikan-chat-window:hover {
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* --- MIKAN CHAT STYLES --- */
+
+.chat-fade-enter-active,
+.chat-fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.chat-fade-enter-from,
+.chat-fade-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.mikan-chat-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.mikan-chat-header h1 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #343a40;
+  font-weight: 700;
+}
+.mikan-chat-header .subtitle {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+.header-close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #6c757d;
+}
+.header-close-button .v-icon {
+  font-size: 20px;
+}
+
+.mikan-messages-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: var(--mikan-chat-bg);
+  scrollbar-color: grey var(--mikan-chat-bg) !important;
+}
+
+.message-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+.message-row-assistant {
+  justify-content: flex-start;
+}
+.message-row-user {
+  justify-content: flex-end;
+}
+.message-row-user .message-content {
+  align-items: flex-end;
+}
+.message-row-user .avatar {
+  order: 2;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  background-color: var(--color-mikan-orange); /* Default for bot */
+}
+.avatar-user {
+  background-color: var(--color-user-avatar);
+} /* Vuetify primary blue */
+.avatar .v-icon {
+  font-size: 24px;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 80%;
+}
+
+.message-bubble {
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  line-height: 1.5;
+  background-color: var(--color-mikan-text-bg-light); /* Default for bot */
+  color: var(--color-mikan-orange-text);
+}
+.bubble-assistant {
+  border-bottom-left-radius: 4px;
+}
+.bubble-user {
+  background-color: var(--color-user-avatar-light); /* Vuetify primary blue */
+  color: var(--color-user-text);
+  border-bottom-right-radius: 4px;
+}
+.message-bubble p {
+  margin: 0;
+}
+
+.mikan-chat-footer {
+  padding: 0.75rem 1rem;
+  /* border-top: 1px solid #dee2e6;
+  background: #ffffff; */
+  border-top: 1px solid hsl(210, 14%, 89%);
+  background: hsl(0, 0%, 100%);
+  flex-shrink: 0;
+}
+
+/* message-form */
+.message-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.message-form input {
+  flex-grow: 1;
+  padding: 0.75rem;
+  border: 1px solid hsl(210, 14%, 89%);
+  background: hsl(210, 17%, 95%);
+  border-radius: 20px;
+  font-size: 1rem;
+  transition: background 0.15s ease-in;
+}
+
+.message-form input:hover {
+  /* box-shadow: 0 0 0 2.5px var(--color-user-avatar-halo-light); */
+  background: var(--color-user-avatar-halo-lighter-2);
+}
+
+.message-form input:focus {
+  outline: none;
+  /* border-color: var(--color-user-avatar-halo); */
+  /* box-shadow: 0 0 0 5px var(--color-user-avatar-halo); */
+  background: var(--color-user-avatar-halo-lighter-1);
+}
+
+.message-form button {
+  border: none;
+  background: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--color-user-avatar);
+  /* animate transform, box-shadow & background-color */
+  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+/* only get the “pop + halo” on click if not disabled */
+.message-form button:not(:disabled):hover {
+  box-shadow: 0 0 0 6px rgba(191, 255, 206, 0.5);
+  background-color: var(--color-user-avatar-halo-lighter-2);
+}
+
+/* only get the “pop + halo” on click if not disabled */
+.message-form button:not(:disabled):active {
+  transform: scale(1.04);
+  box-shadow: 0 0 0 6px var(--color-user-avatar-halo);
+  background-color: var(--color-user-avatar);
+  color: white;
+}
+
+.message-form button .v-icon {
+  font-size: 24px;
+}
+.message-form button:disabled {
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+/* Typing Indicator */
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  background-color: var(--color-mikan-text-bg-dark);
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+.typing-indicator span:nth-of-type(1) {
+  animation-delay: -0.32s;
+}
+.typing-indicator span:nth-of-type(2) {
+  animation-delay: -0.16s;
+}
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}

@@ -122,6 +122,7 @@
 			item-title="name"
 			item-value="id"
 			label="Select assignee"
+      single-line
 			clearable
 			dense
 			hide-details

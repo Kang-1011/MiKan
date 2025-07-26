@@ -5,7 +5,7 @@
             <v-card class="fill-height rounded-v1 border-1" flat>
                 <v-card border="0" flat style="height: 100%; overflow-y: auto;" class="page-background">
                     <div style="position: sticky; top: 0; z-index: 10;">
-                        <v-card-title class="d-flex align-center justify-space-between">
+                        <v-card-title class="d-flex align-center justify-space-between page-background-header">
                             <div>Manager Review</div>
 
                             <div>
@@ -14,8 +14,8 @@
                                     <v-icon left>mdi-plus</v-icon>
                                     Create
                                 </v-btn>
-                                <v-btn :disabled="draftStore.drafts.length === 0" variant="flat" color="#2e2e2e"
-                                    class="mr-2 text-body-2 rounded-xl" @click="openApproveAllDialog()">
+                                <v-btn :disabled="draftStore.drafts.length === 0" variant="flat" 
+                                    class="mr-2 text-body-2 rounded-xl stage-button-approve-all " @click="openApproveAllDialog()">
                                     <v-icon left>mdi-check-all</v-icon>
                                     Approve All
                                 </v-btn>

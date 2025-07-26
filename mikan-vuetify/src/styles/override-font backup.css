@@ -1,0 +1,392 @@
+/* Load Inter from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* Shortlist This */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap'); 
+/* font-family: 'Poppins', sans-serif !important; */
+/* Shortlist This */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap');
+/* font-family: 'Nunito', sans-serif !important; */
+/* Shortlist This */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap');
+/* font-family: 'Work Sans', sans-serif !important; */
+/* Don't want this */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+/* font-family: 'Lato', sans-serif !important; */
+
+/* 1) Everything under the normal app wrapper… */
+.v-application,
+.v-application *,
+
+/* 2) Any dialog content (teleported out)… */
+.v-dialog,
+.v-dialog *,
+
+/* 3) Any menu or select dropdown content (teleported out)… */
+.v-menu__content,
+.v-menu__content * {
+    /* font-family: "Times New Roman", serif !important; */
+    /* font-family: "Inter", sans-serif !important; */
+    font-family: 'Poppins', sans-serif !important;
+    /* font-family: 'Nunito', sans-serif !important; */
+    /* font-family: 'Work Sans', sans-serif !important; */
+}
+
+.v-overlay,
+.v-overlay * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* And make sure native form controls inherit it */
+.v-application input,
+.v-application textarea,
+.v-application select,
+.v-application button {
+  font-family: inherit !important;
+}
+
+/* Non-font elements for page */
+/* custom rounded-v1 utility */
+.rounded-v1 {
+  border-radius: 16px !important;
+}
+
+.rounded-v2 {
+  border-radius: 12px !important;
+}
+
+/* reusable utilities */
+
+.border-1 { /*from dark to bright*/
+  --v-border-opacity: 1 !important;
+  border: 1px solid #CCCCCC !important;
+  box-shadow: none;
+}
+
+.divider-1 {
+  --v-border-opacity: 1 !important;
+  border: 0.75px solid #CCCCCC !important;
+  box-shadow: none;
+}
+
+.border-2 { /*from bright to dark*/
+  --v-border-opacity: 1 !important;
+  border: 1px solid #d4d4d4 !important;
+  box-shadow: none;
+}
+
+.divider-2 {
+  border: 0.75px solid #372cb4 !important;
+  box-shadow: none;
+}
+
+/* more element backgrounds */
+#app,
+.v-application,
+.unified-background{
+  background: #DEDEDE !important;
+}
+
+.page-background{
+  background: #ffffff !important;
+}
+.page-background,
+.page-background * {
+  scrollbar-color: #545454 #CDCDCD !important;
+}
+
+
+.stage-background{
+  background: #f0f0f0 !important;
+  transition: transform 0.1s ease-in-out;
+}
+.stage-background,
+.stage-background * {
+  scrollbar-color: #6e6e6e #f0f0f0 !important;
+}
+.stage-background:hover {
+  transform: translateY(-1px); 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
+  
+}
+
+.task-draft-background{
+  background: #f0f0f0 !important;
+  transition: transform 0.1s ease-in-out;
+}
+
+.task-draft-background:hover {
+
+  transform: translateY(-1px); 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
+  
+}
+
+.task-draft-outer{
+  background: #f0f0f0 !important;
+  transition: transform 0.1s ease-in-out;
+}
+
+.task-draft-outer:hover {
+
+  transform: translateY(-1px); 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
+  
+}
+
+
+.taskcard-background {
+  background: #CDCDCD !important;
+}
+
+/* task-card animations */
+/* Stage.vue or TaskCard2-3.vue */
+.task-card {
+  /* the duration should match your :animation prop (150ms) */
+  transition: transform 150ms ease;
+}
+
+.task-card-1 {
+  --v-border-opacity: 1 !important;
+  --v-hover-opacity: 0.0 !important;
+  /* orange RGB */
+  --v-ripple-color: 255, 165, 255 !important;
+  
+  /* how opaque the ripple is */
+  --v-ripple-opacity: 1 !important;
+  
+  box-shadow: none;
+  /* transition: background-color 0.2s ease-in-out !important; */
+}
+
+.task-card-1:hover {
+  background-color: rgba(226, 255, 158, 0.634) !important;
+  transform: translateY(-2px); 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
+
+}
+
+.task-card-1 .v-ripple__animation {
+  color: rgb(103, 255, 65) !important;
+}
+
+/* Sidebar animations */
+.sidebar-1 {
+  --v-border-opacity: 1 !important;
+  --v-hover-opacity: 0.0 !important;
+
+  border: 0px solid rgb(99, 99, 99) !important;
+  box-shadow: none;
+  transition: background-color 0.2s ease-in-out !important;
+}
+
+.sidebar-1 .v-ripple__animation {
+  background-color: rgb(174, 255, 0) !important;
+}
+
+/* draw your orange scrim on hover instead */
+.sidebar-1:hover {
+  background-color: rgb(255, 230, 183) !important;
+  transform: translateY(-1px); /* keep your lift effect */
+  box-shadow:
+  3px 3px 6px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8) */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+}
+
+.board:hover{
+ 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
+}
+
+.button-primary{
+background-color:#545454 !important;
+color:#ffffff !important;
+}
+
+.button-secondary{
+  background-color:#ffffff !important;
+  color:#515151 !important;
+}
+
+.stage-button-delete{
+
+}
+.stage-button-delete .v-ripple__animation{
+
+}
+.stage-button-delete:hover{
+  transform: translateY(-1px); /* keep your lift effect */
+  color: rgb(245, 66, 66) !important;
+  background-color: #cfcfcf !important;
+
+}
+
+.stage-button-approve{
+
+}
+.stage-button-approve .v-ripple__animation{
+
+}
+.stage-button-approve:hover{
+  transform: translateY(-1px); /* keep your lift effect */
+  color: rgb(68, 166, 22) !important;
+  background-color: #cfcfcf !important;
+
+}
+
+.stage-button-edit{
+
+}
+.stage-button-edit .v-ripple__animation{
+transform: scale(1.1); 
+}
+
+.stage-button-edit:hover{
+  transform: translateY(-1px); /* keep your lift effect */
+
+  color: #000000 !important;
+  background-color: #cdcdcd !important;
+}
+
+.stage-button-add-task{
+
+}
+.stage-button-add-task .v-ripple__animation{
+
+}
+
+.stage-button-add-task:hover{
+  transform: translateY(-1px); /* keep your lift effect */
+  transform: scale(1.1); 
+  color: #000000 !important;
+  background-color: #cdcdcd !important;
+}
+
+.sidebar{
+
+}
+
+.sidebar:hover{
+ 
+  box-shadow:
+  6px 6px 12px rgba(0, 0, 0, 0.10),
+ /* -6px -6px 12px rgba(255, 255, 255, 0.7), */
+
+  /* inset shadows for that pressed-in look */
+  inset 2px 2px 5px rgba(0, 0, 0, 0.05) !important;
+  /* inset -2px -2px 5px rgba(255, 255, 255, 0.8), */
+}
+
+
+/* icons and fonts */
+.icon-grey{
+  color:#242424 !important;
+  fill: currentColor !important;
+}
+
+.text-grey{
+  color:#383838 !important;
+}
+
+/* In-page buttons */
+.kanban-button-1{ 
+/* Primary button equivalent */
+
+}
+.kanban-button-1:hover {
+  background-color: rgb(251, 85, 7) !important;
+  transform: translateY(-1px); /* keep your lift effect */
+}
+
+.kanban-button-2{
+/* Secondary button equivalent */
+
+}
+.kanban-button-2:hover {
+  background-color: rgb(251, 85, 7) !important;
+  transform: translateY(-1px); /* keep your lift effect */
+}
+
+.kanban-button-3{
+/* Tertiary button equivalent  */
+
+
+}
+
+.kanban-button-4{
+  
+
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: translateX(0) translateY(-3px) rotate(0); }
+  15%      { transform: translateX(-1px) translateY(-3px) rotate(-5deg); }
+  30%      { transform: translateX(1px)  translateY(-3px) rotate(5deg); }
+  45%      { transform: translateX(-1px) translateY(-3px) rotate(-5deg); }
+  60%      { transform: translateX(1px)  translateY(-3px) rotate(5deg); }
+  75%      { transform: translateX(-0.5px) translateY(-3px) rotate(-2.5deg); }
+}
+.mikan-button-1{
+  background-color:#ff9046 !important;
+  color:#ffffff !important;
+}
+
+.mikan-button-1:hover {
+  background-color: rgb(251, 85, 7) !important;
+  animation: wiggle 0.2s ease-in-out both;
+}
+
+.mikan-button-1 .v-ripple__animation {
+  --v-ripple-opacity: 1 !important;
+  background-color: rgb(251, 85, 7) !important;
+  color: rgb(255, 81, 0) !important;
+
+}
+
+.taskdetail-icon-grey{
+  color: rgba(0,0,0,0.6)
+}
+
+/* *::-webkit-scrollbar,
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-thumb {
+  background: magenta !important;
+} */
+
+/* .border-1   { --v-border-color: 255, 0, 0 !important;
+  --v-border-opacity: 1 !important;
+  border: thin solid rgb(255, 0, 0) !important;
+  box-shadow: none; } */

@@ -11,7 +11,7 @@
   max-width: 340px; 
   display:flex; 
   flex-direction:column;">
-    <v-toolbar density="compact" class="rounded-v2 " >
+    <v-toolbar density="compact" class="rounded-v2 stage-background-header" >
       <template v-if="!isEditing">
         <v-toolbar-title  class="text-subtitle-1 my-0 py-0">{{ stage.title }}</v-toolbar-title>
         <v-spacer />
