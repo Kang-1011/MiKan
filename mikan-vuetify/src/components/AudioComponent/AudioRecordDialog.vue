@@ -1,7 +1,14 @@
 <template>
-    <v-dialog max-width="500px" min-height="450px" :persistent="started && !stopped">
+    <v-dialog max-width="500px" min-height="350px" :persistent="started && !stopped">
         <v-card class="rounded-xl pa-2">
-            <v-card-title class="ml-3">Transcribe</v-card-title>
+            <v-card-title class="ml-3 pb-0">
+				<div class="d-flex justify-space-between align-center">
+					<div>Transcribe</div>
+					<v-btn icon flat @click="$emit('close-dialog')">
+						<v-icon>mdi-close</v-icon>
+					</v-btn>
+				</div>
+			</v-card-title>
 
             <v-stepper v-model="step" class="no-shadow">
                 <v-stepper-header class="no-shadow">
@@ -13,7 +20,7 @@
                 <v-stepper-window>
                     <v-stepper-window-item :value="1">
                         <div>
-                            <div style="height: 300px;">
+                            <div style="height: 275px;">
                                 <v-form ref="configForm" lazy-validation>
                                     <v-text-field v-model="location" label="Location" clearable variant="outlined"
                                         density="compact" rounded="lg" class="mb-1 mt-2"
@@ -23,7 +30,7 @@
                                         item-value="id" label="Project" clearable variant="outlined" density="compact"
                                         rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']" />
 
-                                    <v-select v-model="mode" :items="['Summary', 'Kan']" label="Mode" clearable
+                                    <v-select v-model="mode" :items="['Summary', 'Kanban']" label="Mode" clearable
                                         variant="outlined" density="compact" rounded="lg" class="mb-1"
                                         :rules="[(v) => !!v || 'Transcription mode is required']" />
                                 </v-form>
@@ -42,8 +49,8 @@
 
                     <v-stepper-window-item :value="2" align="center">
                         <div>
-                            <div style="height: 300px;">
-                                <div style="height: 150px;" class="d-flex align-center justify-center text-center">
+                            <div style="height: 275px;">
+                                <div style="height: 125px;" class="d-flex align-center justify-center text-center">
                                     <div v-if="!started">
                                         <p class="audio-record-text">Press the button below to start recording</p>
                                     </div>
@@ -54,7 +61,7 @@
                                     </div>
                                 </div>
 
-                                <div v-if="stopped && audioUrl" class="mt-3">
+                                <div v-if="stopped && audioUrl" class="mt-4">
                                     <audio :src="audioUrl" controls></audio>
                                     <p class="text-subtitle-1">Recording complete. Press "Transcribe" to proceed.</p>
                                 </div>
@@ -115,7 +122,7 @@ const router = useRouter()
 
 const step = ref(1)
 const configForm = ref(null); // instead of using $refs directly
-const location = ref("")
+const location = ref("GLC Meeting Room 1")
 const project = ref("")
 const mode = ref("")
 const projectStore = useProjectStore()

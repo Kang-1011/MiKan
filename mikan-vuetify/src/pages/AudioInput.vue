@@ -18,7 +18,7 @@
                             Learn more about creating a story <v-icon size="small">mdi-arrow-right</v-icon>
                         </a>
                     </div> -->
-                    <AudioRecordDialog v-model="audioRecordDialog" />
+                    <AudioRecordDialog v-model="audioRecordDialog" @close-dialog="audioRecordDialog = false"/>
                     <AudioUploadDialog v-model="audioUploadDialog" @close-dialog="audioUploadDialog = false"/>
 
                     <v-row class="d-flex align-center justify-center ">
@@ -92,6 +92,25 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+const hasUnsavedChanges = ref(true) // Set this based on actual logic
+
+function handleBeforeUnload(event) {
+  if (hasUnsavedChanges.value) {
+    event.preventDefault()
+    event.returnValue = '' // Required for Chrome to trigger prompt
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+})
+
 const audioRecordDialog = ref(false);
 const audioUploadDialog = ref(false);
 </script>
