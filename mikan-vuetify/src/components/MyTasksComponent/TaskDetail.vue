@@ -175,6 +175,7 @@
 			@update:model-value="dateMenu = false"
 			class="rounded-xl border-md text-body-2"
 			no-title
+      :min="tomorrowDate"
 		/>
 		</v-menu>
 
@@ -227,7 +228,7 @@
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import axios from 'axios'
 import Attachment from '@/components/MyTasksComponent/AttachmentManager.vue'
-import { boards } from '@/stores/boards'
+import { boards, fetchBoards } from '@/stores/boards'
 
 const props = defineProps<{ modelValue: boolean; task: any; visitorMode?: boolean }>()
 const emit = defineEmits(['update:modelValue','save-task','delete-task'])
@@ -414,6 +415,8 @@ async function save() {
 
   localTask.value.attachments = [...existingAttachments, ...uploadedAttachments];
 
+  fetchBoards()
+
   // 🧼 Optional: console.log everything at end
   console.log("✔️ All updates done.");
 }
@@ -464,6 +467,19 @@ async function submitComment() {
 function formatDateShort(d: any) {
   return new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
+
+// Computed property for tomorrow's date
+const tomorrowDate = computed(() => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate()); // Set to tomorrow
+
+    // Format to YYYY-MM-DD
+    const year = tomorrow.getFullYear();
+    const month = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(tomorrow.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+});
 </script>
 
 <style scoped>

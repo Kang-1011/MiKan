@@ -27,7 +27,7 @@ class ResponseFormatter(BaseModel):
     # date: str = Field(description="Date of the meeting in YYYY-MM-DD format")
     # project: str = Field(description="Name of the related project(s)")
     purpose: str = Field(description="Purpose or objective of the meeting")
-    attendees: str = Field(description="List of attendees, newline-separated")
+    attendees: str = Field(description="List of attendees")
     transcript_lines: List[TranscriptLine] = Field(description="List of transcript entries with timestamp, speaker, and content")
 
 load_dotenv()

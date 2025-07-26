@@ -1,7 +1,14 @@
 <template>
 	<v-dialog max-width="500px" min-height="350px">
 		<v-card class="rounded-xl pa-2">
-			<v-card-title class="ml-3">Upload Recording</v-card-title>
+			<v-card-title class="ml-3 pb-0">
+				<div class="d-flex justify-space-between align-center">
+					<div>Transcribe</div>
+					<v-btn icon flat @click="$emit('close-dialog')">
+						<v-icon>mdi-close</v-icon>
+					</v-btn>
+				</div>
+			</v-card-title>
 
 			<v-stepper v-model="step" class="no-shadow">
 				<v-stepper-header class="no-shadow">
@@ -23,7 +30,7 @@
 										item-value="id" label="Project" clearable variant="outlined" density="compact"
 										rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']" />
 
-									<v-select v-model="mode" :items="['Summary', 'Kan']" label="Mode" clearable
+									<v-select v-model="mode" :items="['Summary', 'Kanban']" label="Mode" clearable
 										variant="outlined" density="compact" rounded="lg" class="mb-1"
 										:rules="[(v) => !!v || 'Transcription mode is required']" />
 								</v-form>
@@ -83,7 +90,7 @@
 									Previous
 								</v-btn>
 								<v-btn color="black" variant="flat" class="text-body-2 rounded-lg"
-									@click="transcribeUploadedAudio" :loading="isTranscribing">
+									@click="transcribeUploadedAudio" :loading="isTranscribing" :disabled="!hasUploaded">
 									Transcribe
 								</v-btn>
 							</div>
@@ -118,7 +125,7 @@ const router = useRouter();
 
 const step = ref(1)
 const configForm = ref(null); // instead of using $refs directly
-const location = ref("")
+const location = ref("GLC Meeting Room 1")
 const project = ref("")
 const mode = ref("")
 
