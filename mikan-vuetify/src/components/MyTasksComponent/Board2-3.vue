@@ -5,7 +5,7 @@
   
   <v-card class="border-sm border-1 page-background rounded-v1 ma-3" elevation="0" style="width:100%" color="white" >
 
-    <v-toolbar density="compact" class="page-background"  >
+    <v-toolbar density="compact" class="page-background-header"  >
       <template v-if="!isEditing">
         <v-toolbar-title class="">{{ board.title }}</v-toolbar-title>
         <v-spacer />

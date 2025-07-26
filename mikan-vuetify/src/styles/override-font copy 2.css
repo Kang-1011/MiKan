@@ -1,0 +1,507 @@
+/* -------------------------------------------------------------- */
+/* Original font imports - moved to top to ensure fonts load */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap');
+
+/* 1) Design tokens (variables) */
+:root {
+  /* Fonts */
+  --font-sans-inter: 'Inter', sans-serif;
+  --font-sans-poppins: 'Poppins', sans-serif;
+  --font-sans-nunito: 'Nunito', sans-serif;
+  --font-sans-work-sans: 'Work Sans', sans-serif;
+  --font-primary: var(--font-sans-poppins);
+
+  /* Colors */
+  --color-bg-base: #DEDEDE;
+  --color-bg-page: #FFFFFF;
+  --color-bg-stage: #F0F0F0;
+  --color-bg-taskcard: #CDCDCD;
+  --color-border-light: #CCCCCC;
+  --color-border-dark: #D4D4D4;
+  --color-divider-1: #000000;
+  --color-divider-2: #372cb4;
+  --color-accent-orange: #FF9046;
+  --color-sidebar-hover: #fcb9534c;
+  --color-accent-orange-hover: #ff7637;
+  --color-error-red: rgb(245, 66, 66);
+  --color-success-green: rgb(68, 166, 22);
+  --color-btn-primary-bg: #545454;
+  --color-btn-primary-text: #ffffff;
+  --color-btn-secondary-bg: #ffffff;
+  --color-btn-secondary-text: #515151;
+  --color-text-default: #000000;
+  --color-icon-grey-main: #242424;
+  --color-text-grey: #383838;
+  --color-icon-detail-grey: rgba(0, 0, 0, 0.6);
+  --color-taskcard-hover-bg: rgba(226, 255, 158, 0.01);
+  --color-mikan-orange: #FF9046;
+  --color-mikan-orange-light: #dfdfdf;
+  --color-user-avatar: #35be19;
+  --color-user-avatar-light: hsl(116, 45%, 87%);
+  --color-user-avatar-halo-light: rgba(83, 214, 57, 0.25);
+  --color-user-avatar-halo-lighter-1: hsla(110, 66%, 60%, 0.25);
+  --color-user-avatar-halo-lighter-2: hsla(110, 66%, 80%, 0.25);
+  --color-user-avatar-halo: rgba(53, 190, 25,0.5);
+  --color-user-text:  #272727;
+  --color-mikan-orange-text:  #272727;
+  /* Border & Radius */
+  --border-width-sm: 0.75px;
+  --border-width-md: 1px;
+  --radius-v1: 16px;
+  --radius-v2: 12px;
+
+  /* Shadows */
+  --shadow-light: 6px 6px 12px rgba(0, 0, 0, 0.10);
+  --shadow-inset: inset 2px 2px 5px rgba(0, 0, 0, 0.05);
+
+  /* Transitions */
+  --transition-fast: transform 0.1s ease-in-out;
+  --transition-button: transform 150ms ease;
+
+  /* Ripple colors */
+  --ripple-orange: 255, 165, 255;
+  --ripple-orange-hover: 103, 255, 65;
+}
+
+/* -------------------------------------------------------------- */
+/* Apply primary font to Vuetify components */
+.v-application,
+.v-application *,
+.v-dialog,
+.v-dialog *,
+.v-menu__content,
+.v-menu__content *,
+.v-overlay,
+.v-overlay * {
+  font-family: var(--font-primary) !important;
+}
+.v-application input,
+.v-application textarea,
+.v-application select,
+.v-application button {
+  font-family: inherit !important;
+}
+
+/* -------------------------------------------------------------- */
+/* Utility classes */
+/* Borders */
+.border-1 { border: var(--border-width-md) solid var(--color-border-light) !important; box-shadow: none; }
+.divider-1 { border: var(--border-width-sm) solid var( --color-divider-1) !important; }
+.border-2 { border: var(--border-width-md) solid var(--color-border-dark) !important; box-shadow: none; }
+.divider-2 { border: var(--border-width-sm) solid var(--color-divider-2) !important; box-shadow: none; }
+
+/* Rounded corners */
+.rounded-v1 { border-radius: var(--radius-v1) !important; }
+.rounded-v2 { border-radius: var(--radius-v2) !important; }
+
+/* Backgrounds */
+#app,
+.v-application,
+.unified-background { background: var(--color-bg-base) !important; }
+.page-background { background: var(--color-bg-page) !important; }
+.page-background,
+.page-background * { scrollbar-color: var(--color-icon-grey-main) var(--color-bg-page) !important; }
+
+.page-background-header { background: var(--color-bg-page) !important; }
+
+/* Stage and task backgrounds */
+.stage-background,
+.task-draft-background,
+.task-draft-outer { background: var(--color-bg-stage) !important; transition: var(--transition-fast); }
+.stage-background:hover,
+.task-draft-background:hover,
+.task-draft-outer:hover { transform: translateY(-1px); box-shadow: var(--shadow-light), var(--shadow-inset) !important; }
+
+/* Task cards */
+.taskcard-background { background: var(--color-bg-taskcard) !important; }
+.task-card { transition: var(--transition-button); }
+.task-card-1 {
+  --v-border-opacity: 1 !important;
+  --v-hover-opacity: 0 !important;
+  --v-ripple-color: var(--ripple-orange) !important;
+  --v-ripple-opacity: 1 !important;
+  box-shadow: none;
+}
+.task-card-1:hover {
+  background-color: var(--color-taskcard-hover-bg) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
+}
+.task-card-1 .v-ripple__animation { color: var(--ripple-orange-hover) !important; }
+
+/* Sidebar buttons */
+.sidebar-button {
+  --v-border-opacity: 1 !important;
+  --v-hover-opacity: 0 !important;
+  border: 0 solid var(--color-icon-grey-main) !important;
+  box-shadow: none;
+  transition: background-color 0.2s ease-in-out !important;
+}
+.sidebar-button .v-ripple__animation { background-color: var(--color-sidebar-hover) !important; }
+.sidebar-button:hover { background-color: var(--color-sidebar-hover) !important; transform: translateY(-1px); box-shadow: var(--shadow-light), var(--shadow-inset) !important; }
+.sidebar:hover { box-shadow: var(--shadow-light), var(--shadow-inset) !important; }
+
+/* Board hover */
+.board:hover { box-shadow: var(--shadow-light), var(--shadow-inset) !important; }
+
+/* Button styles */
+.button-primary { background-color: var(--color-btn-primary-bg) !important; color: var(--color-btn-primary-text) !important; }
+.button-secondary { background-color: var(--color-btn-secondary-bg) !important; color: var(--color-btn-secondary-text) !important; }
+
+/* Stage action buttons */
+.stage-button-delete:hover { transform: translateY(-1px); color: var(--color-error-red) !important; background-color: var(--color-bg-stage) !important; }
+.stage-button-approve:hover { transform: translateY(-1px); color: var(--color-success-green) !important; background-color: var(--color-bg-stage) !important; }
+.stage-button-edit .v-ripple__animation { transform: scale(1.1); }
+.stage-button-edit:hover { transform: translateY(-1px); color: var(--color-text-default) !important; background-color: var(--color-bg-stage) !important; }
+.stage-button-add-task:hover { transform: translateY(-1px) scale(1.1); color: var(--color-text-default) !important; background-color: var(--color-bg-stage) !important; }
+
+/* Kanban button hovers */
+.kanban-button-1:hover,
+.kanban-button-2:hover { background-color: var(--color-accent-orange-hover) !important; transform: translateY(-1px); }
+
+/* Mikan button animations */
+.mikan-button-1 {
+  background-color: var(--color-accent-orange) !important;
+  color: var(--color-btn-primary-text) !important;
+  transition: var(--transition-button);
+}
+.mikan-button-1:hover { background-color: var(--color-accent-orange-hover) !important; animation: wiggle 0.2s ease-in-out both; }
+.mikan-button-1 .v-ripple__animation { --v-ripple-opacity: 1 !important; background-color: var(--color-accent-orange-hover) !important; }
+
+/* Keyframes */
+@keyframes wiggle {
+  0%, 100% { transform: translateX(0) translateY(-3px) rotate(0); }
+  15%      { transform: translateX(-1px) translateY(-3px) rotate(-5deg); }
+  30%      { transform: translateX(1px)  translateY(-3px) rotate(5deg); }
+  45%      { transform: translateX(-1px) translateY(-3px) rotate(-5deg); }
+  60%      { transform: translateX(1px)  translateY(-3px) rotate(5deg); }
+  75%      { transform: translateX(-0.5px) translateY(-3px) rotate(-2.5deg); }
+}
+@keyframes mikan-wiggle {
+  0%, 100% { transform: translateX(0)      translateY(0px) rotate(0); }
+  15%      { transform: translateX(-1px)   translateY(0px) scale(1.1) rotate(-5deg); }
+  30%      { transform: translateX(1px)    translateY(0px) scale(1.1) rotate(5deg); }
+  45%      { transform: translateX(-1px)   translateY(0px) scale(1.1) rotate(-5deg); }
+  60%      { transform: translateX(1px)    translateY(0px) scale(1.1) rotate(5deg); }
+  75%      { transform: translateX(-0.5px) translateY(0px) scale(1.1) rotate(-2.5deg); }
+}
+/* Icons and text greys */
+.icon-grey { color: var(--color-icon-grey-main) !important; fill: currentColor !important; }
+.text-grey { color: var(--color-text-grey) !important; }
+.taskdetail-icon-grey { color: var(--color-icon-detail-grey) !important; }
+
+/* -------------------------------------------------------------- */
+/* 3) New: Board split into header & body for hover control */
+.board-header {
+  background: var(--color-bg-stage) !important;
+  border-top-left-radius: var(--radius-v1) !important;
+  border-top-right-radius: var(--radius-v1) !important;
+}
+.board-body {
+  background: var(--color-bg-stage) !important;
+  border-bottom-left-radius: var(--radius-v1) !important;
+  border-bottom-right-radius: var(--radius-v1) !important;
+  transition: var(--transition-fast);
+}
+.board-body:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
+}
+
+/* 4) Filter button utilities for Assignee, Priority, Due */
+.filter-button {
+  background-color: var(--color-bg-page) !important;
+  color: var(--color-text-default) !important;
+  border: var(--border-width-md) solid var(--color-border-light) !important;
+  border-radius: var(--radius-v2) !important;
+  padding: 0.4em 0.8em !important;
+  transition: var(--transition-button);
+}
+
+.filter-button:hover {
+  background-color: var(--color-accent-orange-hover) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+.filter-assignee {
+
+}
+
+.filter-priority {
+
+}
+.filter-due {
+
+}
+
+/* -------------------------------------------------------------- */
+/* Manager Review task-drafts: outer + inner cards */
+.manager-stage-background,
+.manager-taskdraft-outer {
+  background: var(--color-bg-stage) !important;
+  transition: var(--transition-fast);
+}
+.manager-stage-background:hover,
+.manager-taskdraft-outer:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
+}
+
+.manager-taskdraft-inner {
+  /* same “inner card” styling as .task-card-1 */
+  --v-border-opacity: 1 !important;
+  --v-hover-opacity: 0 !important;
+  --v-ripple-color: var(--ripple-orange) !important;
+  --v-ripple-opacity: 1 !important;
+  box-shadow: none;
+  transition: var(--transition-button);
+}
+.manager-taskdraft-inner:hover {
+  background-color: var(--color-taskcard-hover-bg) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-light), var(--shadow-inset) !important;
+}
+.manager-taskdraft-inner .v-ripple__animation {
+  color: var(--ripple-orange-hover) !important;
+}
+
+/* --- Launcher Button Styling --- */
+.mikan-launcher-button {
+  background-color: #2e2e2e; /* Vuetify red-darken-4 */
+  border: none;
+  border-radius: 50%;
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  bottom: 25px;
+  right: 25px;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+.mikan-launcher-button:hover {
+  animation: mikan-wiggle 0.5s ease-in-out;
+  background-color: var(--color-mikan-orange); /* red-darken-3 */
+}
+
+/* --- Chat Window Styling --- */
+.mikan-chat-window {
+  position: fixed;
+  bottom: 100px;
+  right: 25px;
+  width: 400px;
+  height: 600px;
+  max-height: calc(100vh - 120px);
+
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.mikan-chat-window:hover {
+  box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+}
+
+/* --- MIKAN CHAT STYLES --- */
+
+.chat-fade-enter-active,
+.chat-fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.chat-fade-enter-from,
+.chat-fade-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+
+.mikan-chat-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.mikan-chat-header h1 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #343a40;
+  font-weight: 700;
+}
+.mikan-chat-header .subtitle {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+.header-close-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: #6c757d;
+}
+.header-close-button .v-icon {
+    font-size: 20px;
+}
+
+.mikan-messages-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #f1f3f5;
+}
+
+.message-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+.message-row-assistant { justify-content: flex-start; }
+.message-row-user { justify-content: flex-end; }
+.message-row-user .message-content { align-items: flex-end; }
+.message-row-user .avatar { order: 2; }
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  background-color: var(--color-mikan-orange); /* Default for bot */
+}
+.avatar-user { background-color: var(--color-user-avatar); } /* Vuetify primary blue */
+.avatar .v-icon {
+  font-size: 24px;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 80%;
+}
+
+.message-bubble {
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  line-height: 1.5;
+  background-color: var(--color-mikan-orange-light); /* Default for bot */
+  color: var(--color-mikan-orange-text);
+}
+.bubble-assistant { border-bottom-left-radius: 4px; }
+.bubble-user {
+  background-color: var(--color-user-avatar-light); /* Vuetify primary blue */
+  color: var(--color-user-text);
+  border-bottom-right-radius: 4px;
+}
+.message-bubble p {
+    margin: 0;
+}
+
+.mikan-chat-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #dee2e6;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+/* message-form */
+.message-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.message-form input {
+  flex-grow: 1;
+  padding: 0.75rem;
+  border: 1px solid #dee2e6;
+  border-radius: 20px;
+  font-size: 1rem;
+  background: #f1f3f5;
+  transition: background 0.15s ease-in;
+}
+
+.message-form input:hover {
+  /* box-shadow: 0 0 0 2.5px var(--color-user-avatar-halo-light); */
+  background: var(--color-user-avatar-halo-lighter-2);
+}
+
+.message-form input:focus {
+    outline: none;
+    /* border-color: var(--color-user-avatar-halo); */
+    /* box-shadow: 0 0 0 5px var(--color-user-avatar-halo); */
+    background: var(--color-user-avatar-halo-lighter-1);
+}
+
+.message-form button {
+  border: none;
+  background: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--color-user-avatar);
+    /* animate transform, box-shadow & background-color */
+    transition: 
+    transform 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+.message-form button:hover {
+  /* pop out */
+  transform: scale(1.04);
+
+  /* green “halo” */
+  box-shadow: 0 0 0 6px rgba(40, 167, 69, 0.5);
+
+  /* darker green fill */
+  background-color: #218838; /* or your var(--color-green-dark) */
+  color: white; /* optional, to contrast on dark bg */
+}
+
+/* only get the “pop + halo” on click if not disabled */
+.message-form button:not(:disabled):active {
+  transform: scale(1.04);
+  box-shadow: 0 0 0 6px rgba(40, 167, 69, 0.5);
+  background-color: #218838;
+  color: white;
+}
+
+  
+.message-form button .v-icon { font-size: 24px; }
+.message-form button:disabled {
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+/* Typing Indicator */
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  background-color: #c62828;
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+.typing-indicator span:nth-of-type(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-of-type(2) { animation-delay: -0.16s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1.0); }
+}
