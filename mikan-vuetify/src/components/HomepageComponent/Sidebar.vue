@@ -4,7 +4,6 @@
     :rail="rail"
     permanent
     rail-width="90"
-    border="0"
     @click="rail = false"
   > <!-- vuetify elements have a tiny rounded to it, so rounded-0 removes all of it. (makes it sharp) --->
     <v-card class="pa-3 fill-height rounded-0 unified-background">
@@ -36,6 +35,7 @@
               :to="{ path: '/AudioInput' }"
               exact
               :active="false"
+            
             >
               <template #prepend>
                 <v-icon size="24" class="icon-left-padding icon-grey"
@@ -66,7 +66,7 @@
               :active="false"
             >
               <template #prepend>
-                <v-icon size="24" color="black" class="icon-left-padding"
+                <v-icon size="24" class="icon-left-padding icon-grey "
                   >mdi-format-list-checkbox</v-icon
                 >
               </template>
@@ -136,7 +136,7 @@
                 >
               </template>
 
-              <v-list-item-title>John Leider</v-list-item-title>
+              <v-list-item-title class="text-grey">John Leider</v-list-item-title>
             </v-list-item>
           </v-list>
         </div>
@@ -202,10 +202,6 @@ function handleNewProject(project: { id: number; title: string }) {
   height: 100%;
 }
 
-.card-1 {
-  border: thin solid lightgray;
-  box-shadow: none;
-}
 
 
 

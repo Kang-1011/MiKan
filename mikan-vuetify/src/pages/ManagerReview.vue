@@ -2,14 +2,14 @@
     <Sidebar></Sidebar>
     <v-app>
         <v-main style="height: 100vh" class="pa-3 unified-background">
-            <v-card class="fill-height rounded-v1 border-1" flat>
-                <v-card border="0" flat style="height: 100%; overflow-y: auto;" class="page-background">
+            <v-card class="fill-height rounded-v1 border-1 page-background" flat>
+                <v-card flat style="height: 100%; overflow-y: auto;" class="page-background">
                     <div style="position: sticky; top: 0; z-index: 10;">
-                        <v-card-title class="d-flex align-center justify-space-between page-background-header">
-                            <div>Manager Review</div>
+                        <v-card-title class="d-flex align-center justify-space-between manager-review-background-header">
+                            <div class="text-grey">Manager Review</div>
 
                             <div>
-                                <v-btn variant="outlined" class="mr-2 text-body-2 border-1 rounded-xl"
+                                <v-btn variant="outlined" class="mr-2 text-body-2 border-1 rounded-xl stage-button-create"
                                     @click="openCreateTaskDialog()">
                                     <v-icon left>mdi-plus</v-icon>
                                     Create
