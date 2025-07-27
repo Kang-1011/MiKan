@@ -82,7 +82,7 @@ def submit_minutes(data: dict, db: Session = Depends(get_db)):
 
         # Create Draft
         draft = Draft(
-            title=f"Task {task_no}",
+            title=f"{task_no}",
             description=description,
             due_date=due_date,
             approved=False,

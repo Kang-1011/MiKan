@@ -31,7 +31,7 @@ class MeetingHeader(BaseModel):
     attendees: str = Field(description="Comma-separated list of attendees")
 
 class Task(BaseModel):
-    task_no: str = Field(description="Task number (1, 1.1, 2, etc.)", alias="Task No.")
+    task_no: str = Field(description="The name of individual task", alias="Task No.")
     description: str = Field(description="Detailed task description", alias="Description")
     action_by: str = Field(description="Person assigned to the task", alias="Action by")
     due_date: str = Field(description="Due date in YYYY-MM-DD format", alias="Due date")
@@ -101,8 +101,8 @@ For meeting headers, extract:
 - attendees (format as comma-separated list: "Name1, Name2, Name3")
 
 For tasks, extract ALL actionable items with:
-- Task number (1, 2, 3, etc.)
 - Detailed description (use "Description" as the field name)
+- Task Title (From the analysis of detailed description must. Should follow this structure: {{detailed description's verb}} {{description's direct object}}.)
 - Person assigned ("Action by")
 - Due date in YYYY-MM-DD format (infer from context if not explicitly stated and use appropriate dates based on urgency )
 
