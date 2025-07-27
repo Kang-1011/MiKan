@@ -56,15 +56,15 @@
         <div
           class="position-absolute"
           style="
-            top: 50%;
+            top: 30%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -31%);
             z-index: 2;
             pointer-events: none;
           "
         >
           <div
-            class="d-flex flex-column align-center justify-center px-10 py-10"
+            class="d-flex flex-column align-center justify-center px-10 py-5"
             style="
               background: rgba(0, 0, 0, 0.3);
               backdrop-filter: blur(10px);
@@ -73,35 +73,47 @@
             "
           >
             <v-img
-              src="@/assets/gemini-logo.png"
-              alt="Google Gemini Logo"
-              contain
-              width="120"
-              height="120"
+              src="@/assets/mikan_loading.webp"
+              alt="Loading Animation"
+              width="200"
+              height="200"
               class="mb-2"
-              style="border-radius: 50%"
+              style="border-radius: 50%; object-fit: contain"
+              eager
             />
 
             <div class="d-flex align-center justify-center">
-              <div class="text-h2 font-weight-medium">Google Gemini</div>
+              <div class="text-h3 font-weight-medium">MIKAN</div>
             </div>
 
-            <div class="text-h2 font-weight-medium mt-4 text-center">
-              transforming words into
+            <div class="text-h5 font-weight-medium text-center">
+              transforming words into magic...
             </div>
-            <div class="text-h2 font-weight-medium mt-4 text-center">
+            <!-- <div class="text-h5 font-weight-medium mt-4 text-center">
               magic...
-            </div>
+            </div> -->
           </div>
         </div>
 
         <!-- Skeleton Loader underneath -->
-        <v-skeleton-loader
-          class="mx-auto"
-          elevation="2"
-          type="heading, subtitle, card, card, card, card"
-          max-width="2500"
-        />
+        <v-row dense>
+          <v-col cols="12">
+            <v-skeleton-loader
+              class="bg-white rounded-lg"
+              elevation="1"
+              type="card"
+              height="200"
+            />
+          </v-col>
+          <v-col cols="12">
+            <v-skeleton-loader
+              class="bg-white rounded-lg"
+              elevation="1"
+              type="card"
+              height="200"
+            />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
     <template v-else>
@@ -357,7 +369,11 @@
                 v-for="(line, index) in body.transcriptLines"
                 :key="index"
                 class="transcript-line"
-                :class="{ highlight: normalizeString(line.transcript) === activelyHighlightedLine }"
+                :class="{
+                  highlight:
+                    normalizeString(line.transcript) ===
+                    activelyHighlightedLine,
+                }"
                 :ref="(el) => setLineRef(el, line.transcript)"
               >
                 <span class="speaker-info"
