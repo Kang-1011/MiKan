@@ -7,7 +7,7 @@
 
     <v-toolbar density="compact" class="page-background-header"  >
       <template v-if="!isEditing">
-        <v-toolbar-title class="">{{ board.title }}</v-toolbar-title>
+        <v-toolbar-title class="text-grey">{{ board.title }}</v-toolbar-title>
         <v-spacer />
         <v-btn icon v-if="!visitorMode" @click="startRename">
           <v-icon>mdi-pencil</v-icon>

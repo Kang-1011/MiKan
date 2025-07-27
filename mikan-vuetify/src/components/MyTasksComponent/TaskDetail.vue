@@ -7,14 +7,14 @@
           Task: {{ localTask.title || 'New Task' }}
         </v-toolbar-title>
         <v-spacer />
-        <v-btn icon density="compact" elevation="0" class="header-action-btn" @click="closeDialog">
-          <v-icon color="rgba(0,0,0,0.6)">mdi-close</v-icon>
+        <v-btn icon density="compact" elevation="0" class="header-action-btn stage-button-cancel-icon" @click="closeDialog">
+          <v-icon >mdi-close</v-icon>
         </v-btn>
-        <v-btn icon density="compact" elevation="0" class="header-action-btn save-btn" @click="save">
-          <v-icon color="rgba(0,0,0,0.6)">mdi-content-save-outline</v-icon>
+        <v-btn icon density="compact" elevation="0" class="header-action-btn stage-button-save-icon" @click="save">
+          <v-icon >mdi-content-save-outline</v-icon>
         </v-btn>
         <v-btn icon density="compact" elevation="0" class="header-action-btn stage-button-delete" @click="$emit('delete-task')">
-          <v-icon color="rgba(0,0,0,0.6)">mdi-delete-outline</v-icon>
+          <v-icon >mdi-delete-outline</v-icon>
         </v-btn>
       </v-toolbar>
 
@@ -488,8 +488,7 @@ const tomorrowDate = computed(() => {
   display: flex;
   flex-direction: column;
 }
-.rounded-xl { border-radius: 1rem; }
-.border-md  { border: 1px solid #ddd; }
+
 
 .dialog-header {
   background: transparent;
@@ -536,7 +535,7 @@ const tomorrowDate = computed(() => {
   transition: border-color 0.2s;
 }
 .custom-input-wrapper:focus-within {
-  border-color: #1976d2;
+  border-color: hsl(210, 79%, 46%);
 }
 .custom-input {
   width: 100%;
