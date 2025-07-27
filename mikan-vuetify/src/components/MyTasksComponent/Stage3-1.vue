@@ -13,7 +13,7 @@
   flex-direction:column;">
     <v-toolbar density="compact" class="rounded-v2 stage-background-header" >
       <template v-if="!isEditing">
-        <v-toolbar-title  class="text-subtitle-1 my-0 py-0">{{ stage.title }}</v-toolbar-title>
+        <v-toolbar-title  class="text-subtitle-1 my-0 py-0 text-grey">{{ stage.title }}</v-toolbar-title>
         <v-spacer />
         <v-btn density="compact" class="stage-button-edit" icon  v-if="!visitorMode" @click="startRename">
           <v-icon size="20px">mdi-pencil</v-icon>

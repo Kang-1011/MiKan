@@ -29,10 +29,10 @@
                 </v-card-text>
 
                 <v-card-actions class="justify-end mb-2">
-                    <v-btn color="black" variant="outlined" class="text-body-2 mr-2" rounded="xl"
+                    <v-btn variant="outlined" class="text-body-2 mr-2 stage-button-cancel" rounded="xl"
                         @click="cancel">Cancel</v-btn>
 
-                    <v-btn color="black" variant="flat" class="text-body-2 mr-4 " rounded="xl"
+                    <v-btn variant="flat" class="text-body-2 mr-4 button-save" rounded="xl"
                         @click="save">Save</v-btn>
                 </v-card-actions>
             </v-card>
