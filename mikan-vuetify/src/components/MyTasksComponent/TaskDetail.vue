@@ -13,7 +13,7 @@
         <v-btn icon density="compact" elevation="0" class="header-action-btn save-btn" @click="save">
           <v-icon color="rgba(0,0,0,0.6)">mdi-content-save-outline</v-icon>
         </v-btn>
-        <v-btn icon density="compact" elevation="0" class="header-action-btn delete-btn" @click="$emit('delete-task')">
+        <v-btn icon density="compact" elevation="0" class="header-action-btn stage-button-delete" @click="$emit('delete-task')">
           <v-icon color="rgba(0,0,0,0.6)">mdi-delete-outline</v-icon>
         </v-btn>
       </v-toolbar>
@@ -90,6 +90,7 @@
             v-model="localTask.attachments"
             mode="attachments"
             :visitorMode="visitorMode"
+			@deleted-attachment="onDeletedAttachment"
           />
 
           <!-- AI Attachments -->
@@ -121,6 +122,7 @@
 			item-title="name"
 			item-value="id"
 			label="Select assignee"
+      single-line
 			clearable
 			dense
 			hide-details
@@ -173,6 +175,7 @@
 			@update:model-value="dateMenu = false"
 			class="rounded-xl border-md text-body-2"
 			no-title
+      :min="tomorrowDate"
 		/>
 		</v-menu>
 
@@ -225,7 +228,7 @@
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import axios from 'axios'
 import Attachment from '@/components/MyTasksComponent/AttachmentManager.vue'
-import { boards } from '@/stores/boards'
+import { boards, fetchBoards } from '@/stores/boards'
 
 const props = defineProps<{ modelValue: boolean; task: any; visitorMode?: boolean }>()
 const emit = defineEmits(['update:modelValue','save-task','delete-task'])
@@ -235,6 +238,7 @@ const internalDialogOpen = computed({
   set: v => emit('update:modelValue', v)
 })
 const localTask = ref<any>(null)
+const deletedAttachments = ref<any[]>([])
 const dateMenu = ref(false)
 const newComment = ref('')
 
@@ -332,6 +336,12 @@ function closeDialog() {
   emit('update:modelValue', false)
 }
 
+function onDeletedAttachment(file: any) {
+  if (file?.url) {
+    deletedAttachments.value.push(file)
+  }
+}
+
 async function save() {
   if (!localTask.value) return;
 
@@ -386,7 +396,26 @@ async function save() {
       console.error("❌ Failed to upload attachment:", err);
     }
   }
+
+  // ✅ Delete removed attachments
+	for (const deleted of deletedAttachments.value) {
+	const urlParts = deleted.url.split('/');
+	const attachmentId = urlParts[urlParts.length - 1];
+
+	if (attachmentId) {
+		try {
+		await axios.delete(`http://localhost:8000/attachments/delete_attachment/${attachmentId}`);
+		console.log(`🗑️ Deleted attachment ${attachmentId}`);
+		} catch (err) {
+		console.error(`❌ Failed to delete attachment ${attachmentId}:`, err);
+		}
+	}
+	}
+	deletedAttachments.value = []
+
   localTask.value.attachments = [...existingAttachments, ...uploadedAttachments];
+
+  fetchBoards()
 
   // 🧼 Optional: console.log everything at end
   console.log("✔️ All updates done.");
@@ -438,6 +467,19 @@ async function submitComment() {
 function formatDateShort(d: any) {
   return new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
+
+// Computed property for tomorrow's date
+const tomorrowDate = computed(() => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate()); // Set to tomorrow
+
+    // Format to YYYY-MM-DD
+    const year = tomorrow.getFullYear();
+    const month = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(tomorrow.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+});
 </script>
 
 <style scoped>

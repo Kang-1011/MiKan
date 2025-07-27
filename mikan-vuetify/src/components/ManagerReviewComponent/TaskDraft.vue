@@ -1,7 +1,7 @@
 <template>
     <!-- New Task Draft V4 -->
-    <v-card flat border class="mx-auto rounded-lg">
-        <v-card @click="openEditDialog" hover flat :ripple="false" class="bg-grey-lighten-5 pa-2">
+    <v-card flat class="mx-auto rounded-v1 border-2 stage-background ">
+        <v-card @click="openEditDialog" hover flat :ripple="false" class=" stage-background pa-2">
             <v-card-title class="text-truncate">
                 <v-row class="align-center text-truncate">
                     <v-col cols="10" class="text-truncate">
@@ -10,18 +10,18 @@
                     <v-col cols="2">
                         <div class="d-flex justify-center" style="gap: 10px;">
                             <TaskDraftApproveOneTaskButton @task-approved="handleTaskApproved"/>
-                            <TaskDraftDeleteOneTaskButton @task-deleted="handleTaskDeleted" />
+                            <TaskDraftDeleteOneTaskButton @task-deleted="handleTaskDeleted"  class="rounded-circle"/>
                             <TaskDraftEditOneTaskButton @task-edited="handleTaskEdited" ref="editDialogRef"/>
                         </div>
                     </v-col>
                 </v-row>
             </v-card-title>
 
-            <v-card flat border class="rounded-lg">
+            <v-card flat border class="rounded-v2">
                 <v-card-text>
                         <v-row>
                             <v-col>
-                                <div class="text-caption text-medium-emphasis">Due Date</div>
+                                <div class="text-caption text-medium-emphasis ">Due Date</div>
                                 <strong>{{ props.dueDate }}</strong>
                             </v-col>
                             <v-col>

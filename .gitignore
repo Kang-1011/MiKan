@@ -3,6 +3,7 @@ __pycache__
 .credentials
 token.json
 
+# Python Virtual Environment
 Include
 Lib
 Scripts

@@ -39,6 +39,5 @@ declare module 'vue' {
     Uploadfile: typeof import('./components/AudioComponent/Uploadfile.vue')['default']
     UploadFileCustom: typeof import('./components/AudioComponent/UploadFileCustom.vue')['default']
     VConfirmEdit: typeof import('./components/VConfirmEdit.vue')['default']
-    VuetifyTaskModal6: typeof import('./components/MyTasksComponent/VuetifyTaskModal6.vue')['default']
   }
 }

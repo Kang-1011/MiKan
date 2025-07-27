@@ -3,8 +3,8 @@
 // ======================== -->
 <template>
   
-  <v-sheet elevation="0" class="border-sm rounded-xl ma-2 hover:black" style="min-width: 340px; max-width: 340px; display:flex; flex-direction:column; background:#fcfcfc; ">
-    <v-toolbar density="compact" class="rounded-xl" color="#fcfcfc">
+  <v-sheet elevation="0" class="border-sm border-2 rounded-v2 ma-2 stage-background" style="min-width: 340px; max-width: 340px; display:flex; flex-direction:column; ">
+    <v-toolbar density="compact" class="rounded-v2 stage-background-header" >
       <template v-if="!isEditing">
         <v-toolbar-title  class="text-subtitle-1 my-0 py-0">{{ stage.title }}</v-toolbar-title>
         <v-spacer />
@@ -68,9 +68,9 @@
     </draggable>
     <!-- <v-divider></v-divider> -->
     <v-card-actions class="pa-0 pt-0 justify-center">
-      <v-btn density="compact" class="rounded-xl border-md ma-auto" @click="$emit('add-task')" :disabled="visitorMode">
+      <!-- <v-btn density="compact" class="rounded-xl border-md ma-auto" @click="$emit('add-task')" :disabled="visitorMode">
         <v-icon>mdi-plus</v-icon>
-      </v-btn>
+      </v-btn> -->
     </v-card-actions>
   </v-sheet>
 </template>

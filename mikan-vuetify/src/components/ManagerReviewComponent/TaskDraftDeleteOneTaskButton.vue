@@ -1,9 +1,10 @@
 <template>
+    
     <div>
         <v-tooltip text="Delete" location="top">
             <template #activator="{ props }">
-                <v-btn icon v-bind="props" @click.stop="dialog = true" variant="flat" density="compact" style="background: transparent;">
-                    <v-icon size="large" color="grey-darken-3">mdi-delete-outline</v-icon>
+                <v-btn icon v-bind="props" @click.stop="dialog = true"  class="stage-button-delete" variant="flat" density="compact" style="background: transparent;">
+                    <v-icon size="large" >mdi-delete-outline</v-icon>
                 </v-btn>
             </template>
         </v-tooltip>
@@ -32,7 +33,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import { useDraftStore } from '@/stores/drafts';
 const draftStore = useDraftStore()

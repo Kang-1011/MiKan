@@ -1,8 +1,9 @@
 <template>
     <Sidebar></Sidebar>
-    <v-main style="height: 100vh" class="pa-3 bg-grey-lighten-4">
-        <v-card class="fill-height rounded-lg card-1" flat>
-            <v-card border="0" flat style="height: 100%;">
+    <v-app>
+    <v-main style="height: 100vh" class="pa-3 unified-background">
+        <v-card class="fill-height rounded-v1 border-1 " flat>
+            <v-card border="0" flat style="height: 100%;" class="page-background">
                 <v-card-title class="d-flex align-center justify-space-between">
                     <div>New Meeting</div>
                 </v-card-title>
@@ -17,10 +18,10 @@
                             Learn more about creating a story <v-icon size="small">mdi-arrow-right</v-icon>
                         </a>
                     </div> -->
-                    <AudioRecordDialog v-model="audioRecordDialog" />
+                    <AudioRecordDialog v-model="audioRecordDialog" @close-dialog="audioRecordDialog = false"/>
                     <AudioUploadDialog v-model="audioUploadDialog" @close-dialog="audioUploadDialog = false"/>
 
-                    <v-row class="d-flex align-center justify-center">
+                    <v-row class="d-flex align-center justify-center ">
                         <!-- Live Transcription Card -->
                         <v-col cols="12" md="5" lg="4">
                             <v-card class="story-card rounded-xl pa-4 text-center d-flex flex-column" height="100%"
@@ -87,9 +88,29 @@
             </v-card>
         </v-card>
     </v-main>
+</v-app>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+const hasUnsavedChanges = ref(true) // Set this based on actual logic
+
+function handleBeforeUnload(event) {
+  if (hasUnsavedChanges.value) {
+    event.preventDefault()
+    event.returnValue = '' // Required for Chrome to trigger prompt
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+})
+
 const audioRecordDialog = ref(false);
 const audioUploadDialog = ref(false);
 </script>

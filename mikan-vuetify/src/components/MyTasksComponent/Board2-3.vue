@@ -3,9 +3,9 @@
 // ======================== -->
 <template>
   
-  <v-card class="border-sm rounded-xl ma-3" elevation="0" style="width:100%" color="white" >
+  <v-card class="border-sm border-1 page-background rounded-v1 ma-3" elevation="0" style="width:100%" color="white" >
 
-    <v-toolbar density="compact" color="white"  >
+    <v-toolbar density="compact" class="page-background-header"  >
       <template v-if="!isEditing">
         <v-toolbar-title class="">{{ board.title }}</v-toolbar-title>
         <v-spacer />
@@ -30,7 +30,7 @@
         />
       </template>
     </v-toolbar>
-    <v-divider/>
+    <v-divider class="divider-1"/>
 
 
     <div v-if="board.stages.length === 0" class="text-center grey--text pa-4">

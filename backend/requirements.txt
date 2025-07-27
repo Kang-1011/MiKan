@@ -1,6 +1,7 @@
 fastapi
 uvicorn
 sqlalchemy
+psycopg2
 databases[postgresql]
 asyncpg
 python-dotenv 
@@ -11,6 +12,7 @@ numpy
 google-api-python-client 
 google-auth-httplib2 
 google-auth-oauthlib
+langchain-community
 langchain-google-community
 unstructured
 unstructured[pdf]

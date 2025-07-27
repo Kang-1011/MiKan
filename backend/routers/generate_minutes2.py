@@ -138,9 +138,7 @@ def generate_minutes():
             f.write(result_str)
         raise ValueError("Failed to decode JSON. Raw result saved.")
 
-    # Save to file
-    with open(OUTPUT_JSON_PATH, "w", encoding="utf-8") as f:
-        json.dump(result_json, f, indent=4)
-    print(f"[✅] Minutes saved to {OUTPUT_JSON_PATH}")
-
+    # Save to pinia
+    print(f"[✅] Minutes generated successfully.")
     return result_json
+

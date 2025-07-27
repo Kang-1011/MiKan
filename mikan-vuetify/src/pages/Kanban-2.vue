@@ -46,14 +46,31 @@
         </v-btn>
       </v-app-bar>
       
-      <v-main  class="pa-0 bg-grey-lighten-4" >
+      <v-main  class="pa-0 unified-background">
       <!-- Top pill bar -->
   <div
-    class="pa-3 rounded-xl border-sm d-flex align-center ma-3"
+    class="pa-3 rounded-v1 border-1 page-background d-flex align-center ma-3"
     style="background: white;" 
   >
     <span class="text-h5 pl-1 me-4">My Tasks</span>
     <v-spacer></v-spacer>
+        <!-- Assignee filter (auto-selected on load) -->
+        <v-select
+      v-model="selectedAssignee"
+      :items="assigneeOptions"
+      label="Assignee"
+      clearable
+      variant="outlined"
+      class="me-4 border-2 rounded-xl filter-button"
+      density="compact"
+      single-line
+      hide-details
+      style=" max-width:180px"
+      :menu-props="{
+          contentClass: 'rounded-v1 text-body-2',
+          }"
+    />
+
     <!-- Priority filter -->
     <v-select
       v-model="selectedPriority"
@@ -64,10 +81,10 @@
       density="compact"
       single-line
       hide-details
-      class="me-4 border-sm rounded-xl"
-      style="background: #f5f5f5; max-width:180px"
+      class="me-4 border-2 rounded-xl filter-button"
+      style=" max-width:180px"
       :menu-props="{
-          contentClass: 'rounded-xl text-body-2',
+          contentClass: 'rounded-v1 text-body-2',
           }"
     />
 
@@ -83,37 +100,23 @@
           v-model="formattedDate"
           label="Due Before"
           variant="outlined"
-          class="me-4 border-sm rounded-xl"
+          class="me-4 border-2 rounded-xl filter-button"
           density="compact"
           single-line
           clearable hide-details
           v-bind="props"
-          style="background: #f5f5f5;max-width:200px"
+          style="max-width:200px"
         />
       </template>
       <v-date-picker
-        class="rounded-xl border-md text-body-2"
+        class="rounded-v1 text-body-2"
         v-model="selectedDueDate"
         @input="dueDateMenu = false"
+        :min="tomorrowDate"
       />
     </v-menu>
 
-    <!-- Assignee filter (auto-selected on load) -->
-    <v-select
-      v-model="selectedAssignee"
-      :items="assigneeOptions"
-      label="Assignee"
-      clearable
-      variant="outlined"
-      class="me-4 border-sm rounded-xl"
-      density="compact"
-      single-line
-      hide-details
-      style="background: #f5f5f5; max-width:180px"
-      :menu-props="{
-          contentClass: 'rounded-xl text-body-2',
-          }"
-    />
+
   </div>
 
 
@@ -449,6 +452,18 @@ onUnmounted(() => {
   console.log("Chatbot context CLEARED from Kanban page.");
 });
 
+// Computed property for tomorrow's date
+const tomorrowDate = computed(() => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate()); // Set to tomorrow
+
+    // Format to YYYY-MM-DD
+    const year = tomorrow.getFullYear();
+    const month = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(tomorrow.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+});
 </script>
 
 <style scoped>
