@@ -102,7 +102,7 @@ For meeting headers, extract:
 
 For tasks, extract ALL actionable items with:
 - Detailed description (use "Description" as the field name)
-- Task Title (From the analysis of detailed description must. Should follow this structure: {{detailed description's verb}} {{description's direct object}}.)
+- Task Title (From the analysis of detailed description must. Should follow this structure: {{detailed description's verb}} {{description's direct object}}. Also, treat each task as individual task so that the context can be conveyed effectively)
 - Person assigned ("Action by")
 - Due date in YYYY-MM-DD format (infer from context if not explicitly stated and use appropriate dates based on urgency )
 
