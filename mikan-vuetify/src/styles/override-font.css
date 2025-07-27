@@ -440,6 +440,10 @@
   color: var(--color-text-grey) !important;
 }
 
+.stage-button-create-icon {
+  color: var(--color-text-grey) !important;
+}
+
 .stage-button-create-dialog {
   border: 1px solid var(--color-mikan-orange) !important;
   color: var(--color-mikan-orange) !important;
@@ -452,7 +456,7 @@
   background-color: var( --color-text-grey-disabled-bg) !important;
 }
 
-
+.stage-button-create-icon:hover,
 .stage-button-create-dialog:hover,
 .stage-button-create:hover {
   background-color: var(--color-mikan-orange) !important;

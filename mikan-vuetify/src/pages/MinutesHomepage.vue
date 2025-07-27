@@ -3,7 +3,7 @@
 
     <v-main style="height: 100vh" class="pa-3 ">
         <v-card class="fill-height rounded-v1 border-1" flat>
-            <v-card border="0" flat style="height:100%; overflow-y: auto;">
+            <v-card border="0" class=" page-background" flat style="height:100%; overflow-y: auto;">
                 <MinuteDisplay   /> 
             </v-card>
         </v-card>
