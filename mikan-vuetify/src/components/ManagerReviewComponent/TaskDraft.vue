@@ -1,6 +1,6 @@
 <template>
     <!-- New Task Draft V4 -->
-    <v-card flat class="mx-auto rounded-v1 border-2 stage-background " style="max-width: 600px; min-width: 250px;">
+    <v-card flat class="mx-auto rounded-v1 border-2 stage-background task-draft-1 " style="max-width: 600px; min-width: 250px;">
         <v-card @click="openEditDialog" hover flat  class="stage-background pa-2">
             <v-card-title class="text-truncate">
                 <v-row class="align-center text-truncate">

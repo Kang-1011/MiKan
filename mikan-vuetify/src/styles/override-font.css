@@ -23,7 +23,8 @@
    /* Colors green*/
    --color-bg-base: hsl(160, 15%, 87%);
    --color-bg-page: hsl(150, 15%, 98%);
-   --color-bg-stage: hsl(150, 25%, 94%);
+   --color-bg-stage: hsl(150, 27%, 94%);
+   --color-bg-stage-dark:hsl(160, 25%, 80%);
    --color-bg-taskcard: hsl(150, 15%, 80%);
 
   --color-border-light: hsl(150, 35%, 80%);
@@ -65,18 +66,22 @@
 
   --color-text-default: #000000;
   --color-icon-grey-main: hsl(150, 8%, 40%);
+  --color-icon-grey-main-dark: hsl(150, 8%, 15%);
   --color-icon-grey-hover-background: hsl(0, 0%, 80%);
   --color-icon-grey-hover: hsl(0, 0%, 0%);
   --color-icon-grey-active: hsl(0, 0%, 0%);
 
   --color-text-grey-disabled: hsl(0, 0%, 22%);
+  --color-text-grey-disabled-bg: hsl(0, 0%, 100%);
 
+  --color-dialog-icons-grey: hsl(150, 0%, 22%);
   --color-menu-icons-grey: hsl(150, 20%, 22%);
+  
   --color-text-grey: hsl(150, 20%, 22%); 
   --color-text-grey-dark: hsl(150, 20%, 11%);  
   --color-icon-detail-grey: hsla(0, 0%, 0%, 0.6);
-
   
+  --color-story-card-hover: hsla(150, 70%, 86%, 0.298);
 
   --color-taskcard-hover-bg: rgba(226, 255, 158, 0.01);
   --color-mikan-orange: hsl(24, 100%, 64%);
@@ -90,6 +95,7 @@
   --color-user-avatar-halo-lighter-1: hsla(110, 66%, 60%, 0.25);
   --color-user-avatar-halo-lighter-2: hsla(110, 66%, 80%, 0.25);
   /* --color-user-avatar-input-text: hsla(110, 66%, 80%, 0.25); */
+  --color-user-avatar-shadow: hsla(150, 50%, 10%, 0.3);
 
   --color-user-avatar-halo: rgba(53, 190, 25, 0.5);
   --color-user-text: hsla(110, 77%, 15%, 1);
@@ -107,6 +113,7 @@
   /* Border & Radius */
   --border-width-sm: 0.75px;
   --border-width-md: 1px;
+  --border-width-lg: 3px;
   --radius-v1: 16px;
   --radius-v2: 12px;
 
@@ -120,7 +127,7 @@
 
   /* Ripple colors */
   --ripple-orange: 255, 165, 255;
-  --ripple-orange-hover: 103, 255, 65;
+  --ripple-orange-hover: hsl(150, 25%, 30%);;
 }
 
 /* -------------------------------------------------------------- */
@@ -163,6 +170,11 @@
 .divider-2 {
   border: var(--border-width-sm) solid var(--color-divider-2) !important;
   opacity: 1 !important;
+  box-shadow: none;
+}
+
+.border-3 {
+  border: var(--border-width-lg) solid var(--color-border-dark) !important;
   box-shadow: none;
 }
 
@@ -230,6 +242,8 @@
 .task-card {
   transition: var(--transition-button);
 }
+
+.task-draft-1,
 .task-card-1 {
   --v-border-opacity: 1 !important;
   --v-hover-opacity: 0 !important;
@@ -237,14 +251,21 @@
   --v-ripple-opacity: 1 !important;
   box-shadow: none;
 }
+
+
+.task-draft-1:hover,
 .task-card-1:hover {
   background-color: var(--color-taskcard-hover-bg) !important;
   transform: translateY(-2px);
   box-shadow: var(--shadow-light), var(--shadow-inset) !important;
 }
+
+.new-meeting-button .v-ripple__animation,
+.task-draft-1 .v-ripple__animation,
 .task-card-1 .v-ripple__animation {
   color: var(--ripple-orange-hover) !important;
 }
+
 
 /* Force v-icon color inside v-list-item, v-btn, etc. */
 .v-icon,
@@ -392,6 +413,16 @@
   color: var(--color-menu-icons-grey) !important;
 }
 
+.stage-button-cancel-dialog {
+  color: var(--color-dialog-icons-grey) !important;
+  border: 1px solid var(--color-dialog-icons-grey) !important;
+}
+
+.stage-button-cancel-dialog:hover {
+  transform: translateY(-2px);
+  color: var(--color-dialog-icons-grey) !important;
+}
+
 .stage-button-delete-dialog {
   color: var(--color-error-red) !important;
   background-color: var(--color-error-red-background) !important;
@@ -414,6 +445,13 @@
   color: var(--color-mikan-orange) !important;
   background-color: var( --color-mikan-orange-bg) !important;
 }
+
+.stage-button-create-dialog:disabled {
+  border: 1px solid var(--color-text-grey-disabled) !important;
+  color: var(--color-text-grey-disabled) !important;
+  background-color: var( --color-text-grey-disabled-bg) !important;
+}
+
 
 .stage-button-create-dialog:hover,
 .stage-button-create:hover {
@@ -491,6 +529,11 @@
 /* Icons and text greys */
 .icon-grey {
   color: var(--color-icon-grey-main) !important;
+  fill: currentColor !important;
+}
+
+.icon-grey-dark {
+  color: var(--color-icon-grey-main-dark) !important;
   fill: currentColor !important;
 }
 
@@ -709,7 +752,8 @@
 .avatar-user {
   background-color: var(--color-user-avatar);
   box-shadow:  
-  2px 2px 4px  hsla(150, 50%, 10%, 0.3);
+  2px 2px 4px  var(--color-user-avatar-shadow);
+
 } /* Vuetify primary blue */
 .avatar .v-icon {
   font-size: 24px;
@@ -739,7 +783,7 @@
   color: var(--color-user-text);
   border-bottom-right-radius: 4px;
   box-shadow:  
-  2px 2px 4px  hsla(150, 50%, 10%, 0.3);
+  2px 2px 4px  var(--color-user-avatar-shadow);
 }
 .message-bubble p {
   margin: 0;
@@ -853,3 +897,111 @@
     transform: scale(1);
   }
 }
+
+/* Mikan New Meeting Things */
+.story-card {
+  /* border: 1px solid #3e3d4e !important; */
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.story-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  background-color:  var(--color-story-card-hover);
+  border: 0px !important;
+  /* animation: starWarsShadow 1s ease-in-out infinite; */
+}
+
+.story-card:active {
+animation: applePop 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+border: 0px !important;
+}
+
+/* The inner circle holding the icon */
+.inner-circle {
+  width: 80px;
+  height: 80px;
+  /* background-color: rgba(0, 0, 0, 0.2); */
+  background-color: var(--color-bg-stage-dark);
+}
+
+/* The middle, darker circle */
+.middle-circle {
+  width: 110px;
+  height: 110px;
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  background-color: var(--color-bg-stage);
+  border: 1px solid var(--color-border-dark);
+  transition: box-shadow 0.3s ease-out
+}
+
+.story-card:hover .middle-circle {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Icon Glow Effect --- */
+
+/* 2) Trigger the animation on the child when the parent is hovered */
+.story-card:hover .icon-container {
+  transform: translateY(-4px) scale(1.1);
+  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); */
+  /* animation: glow 1.5s ease-in-out infinite; */
+}
+
+.icon-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 24px;
+  transition: transform 0.3s ease-out
+}
+
+.glow-circle {
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+/* from no-shadow → big blurred glow → back to no-shadow (and repeat) */
+@keyframes starWarsShadow {
+  0% {
+    box-shadow: 0 0 0 rgba(255,255,255,0);
+  }
+  100% {
+    /* tweak these values & color to taste */
+    box-shadow: 0 0 60px rgba(212, 40, 40, 0.8);
+  }
+}
+
+/* 1) Make it non-interactive */
+.no-grey-disable {
+  pointer-events: none;
+}
+
+/* 2) Undo Vuetify’s disabled opacity */
+.no-grey-disable.v-btn--disabled {
+  opacity: 1 !important;
+}
+
+@keyframes applePop {
+  0%,100%  { transform: scale(1)  translateY(-8px);     }
+  40%  { transform: scale(0.98)  translateY(-8px);  }
+  /* 50% { transform: scale(1.02)  translateY(-8px);   } */
+}
+
+@keyframes glow {
+  0%   { box-shadow: 0 0 0 rgba(255,255,255,0); }
+  50%  { box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+  100% { box-shadow: 0 0 0 rgba(255,255,255,0); }
+}
+
+
+

@@ -23,24 +23,25 @@
                             <div style="height: 275px;">
                                 <v-form ref="configForm" lazy-validation>
                                     <v-text-field v-model="location" label="Location" clearable variant="outlined"
-                                        density="compact" rounded="lg" class="mb-1 mt-2"
+                                        density="compact" rounded="xl" class="mb-1 mt-2"
                                         :rules="[(v) => !!v || 'Location is required']" />
 
                                     <v-select v-model="project" :items="projectOptions" item-title="title"
                                         item-value="id" label="Project" clearable variant="outlined" density="compact"
-                                        rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Project is required']" />
+                                        rounded="xl" class="mb-1" :rules="[(v) => !!v || 'Project is required']" />
 
                                     <v-select v-model="mode" :items="['Summary', 'Kanban']" label="Mode" clearable
-                                        variant="outlined" density="compact" rounded="lg" class="mb-1"
+                                        variant="outlined" density="compact" rounded="xl" class="mb-1"
                                         :rules="[(v) => !!v || 'Transcription mode is required']" />
                                 </v-form>
                             </div>
                             <div class="d-flex justify-space-between">
-                                <v-btn color="black" variant="flat" class="text-body-2 rounded-lg"
+                                <!-- <v-btn color="black" variant="flat" class="text-body-2 rounded-xl"
                                     :disabled="step == 1">
                                     Previous
-                                </v-btn>
-                                <v-btn color="black" variant="flat" class="text-body-2 rounded-lg" @click="goToStep2">
+                                </v-btn> -->
+                                <v-spacer></v-spacer>
+                                <v-btn variant="flat" class="stage-button-create-dialog text-body-2 rounded-xl" @click="goToStep2">
                                     Next
                                 </v-btn>
                             </div>
@@ -87,17 +88,17 @@
                             </div>
 
                             <div class="d-flex justify-space-between">
-                                <!-- <v-btn color="black" variant="outlined" class="text-body-2 mr-2 rounded-lg" @click="$emit('close-dialog')">Cancel</v-btn> -->
-                                <v-btn v-if="!started" @click="step--" color="black" variant="flat"
-                                    class="text-body-2 rounded-lg">
+                                <!-- <v-btn color="black" variant="outlined" class="text-body-2 mr-2 rounded-xl" @click="$emit('close-dialog')">Cancel</v-btn> -->
+                                <v-btn v-if="!started" @click="step--" variant="flat"
+                                    class="text-body-2 rounded-xl stage-button-cancel-dialog">
                                     Previous
                                 </v-btn>
                                 <v-btn v-if="started" @click="resetRecording" color="black" variant="flat"
-                                    class="text-body-2 rounded-lg" :disabled="isTranscribing || !stopped">
+                                    class="text-body-2 rounded-xl" :disabled="isTranscribing || !stopped">
                                     Retake
                                 </v-btn>
-                                <v-btn @click="transcribeRecordedAudio" color="black" variant="flat"
-                                    class="text-body-2 rounded-lg" :loading="isTranscribing" :disabled="!stopped">
+                                <v-btn @click="transcribeRecordedAudio" variant="flat"
+                                    class="text-body-2 rounded-xl stage-button-create-dialog" :loading="isTranscribing" :disabled="!stopped">
                                     Transcribe
                                 </v-btn>
                             </div>
