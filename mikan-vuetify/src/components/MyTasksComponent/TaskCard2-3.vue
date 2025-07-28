@@ -6,7 +6,7 @@
   <v-card class="pa-3 rounded-v2 task-card-1 border-1 mb-3" elevation="0">
     <!-- Title + Priority -->
     <div class="d-flex justify-space-between align-center mb-2">
-      <div class="font-weight-medium text-truncate">{{ task.title }}</div>
+      <div class="font-weight-medium text-truncate me-2" style="flex: 1 1 0; min-width-0;">{{ task.title }}</div>
       <v-chip
         v-if="task.priority"
         :color="priorityColor"
