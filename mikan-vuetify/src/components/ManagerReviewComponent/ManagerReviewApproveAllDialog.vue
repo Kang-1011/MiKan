@@ -11,10 +11,10 @@
             </v-card-subtitle>
 
             <v-card-actions class="my-2">
-                <v-btn color="black" variant="outlined" class="text-body-2 mr-2" rounded="lg" @click="closeDialog">
+                <v-btn  variant="outlined" class="text-body-2 mr-2 stage-button-cancel" rounded="xl" @click="closeDialog">
                     Cancel
                 </v-btn>
-                <v-btn color="black" variant="flat" class="text-body-2 mr-2" rounded="lg" @click="approveAllDrafts">
+                <v-btn  variant="flat" class="text-body-2 mr-2 stage-button-create-dialog" rounded="xl" @click="approveAllDrafts">
                     Approve
                 </v-btn>
             </v-card-actions>

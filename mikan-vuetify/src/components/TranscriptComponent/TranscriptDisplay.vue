@@ -1,12 +1,10 @@
-// transcript.vue
-
 <template>
   <v-row
-    class="justify-space-between attachment-manager align-center ma-2"
+    class="justify-space-between align-center ma-2"
     style="border-bottom: 2px solid #e0e0e0; padding: 8px 16px"
   >
     <div>
-      <h2>Transcript</h2>
+      <h2 class="text-grey">Transcript</h2>
     </div>
     <div>
       <v-tooltip
@@ -28,6 +26,7 @@
           <v-btn
             icon="mdi-download-outline"
             variant="text"
+            class="stage-button-save-icon"
             v-bind="props"
             @click="exportToPDF"
           ></v-btn>
@@ -38,6 +37,7 @@
           <v-btn
             icon="mdi-send-outline"
             variant="text"
+            class="stage-button-create-icon"
             v-bind="props"
             @click="toMinute"
           ></v-btn>
@@ -56,15 +56,15 @@
         <div
           class="position-absolute"
           style="
-            top: 50%;
+            top: 30%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -31%);
             z-index: 2;
             pointer-events: none;
           "
         >
           <div
-            class="d-flex flex-column align-center justify-center px-10 py-10"
+            class="d-flex flex-column align-center justify-center px-10 py-5"
             style="
               background: rgba(0, 0, 0, 0.3);
               backdrop-filter: blur(10px);
@@ -73,35 +73,47 @@
             "
           >
             <v-img
-              src="@/assets/gemini-logo.png"
-              alt="Google Gemini Logo"
-              contain
-              width="120"
-              height="120"
+              src="@/assets/mikan_loading.webp"
+              alt="Loading Animation"
+              width="200"
+              height="200"
               class="mb-2"
-              style="border-radius: 50%"
+              style="border-radius: 50%; object-fit: contain"
+              eager
             />
 
             <div class="d-flex align-center justify-center">
-              <div class="text-h2 font-weight-medium">Google Gemini</div>
+              <div class="text-h3 font-weight-medium">MIKAN</div>
             </div>
 
-            <div class="text-h2 font-weight-medium mt-4 text-center">
-              transforming words into
+            <div class="text-h5 font-weight-medium text-center">
+              transforming words into magic...
             </div>
-            <div class="text-h2 font-weight-medium mt-4 text-center">
+            <!-- <div class="text-h5 font-weight-medium mt-4 text-center">
               magic...
-            </div>
+            </div> -->
           </div>
         </div>
 
         <!-- Skeleton Loader underneath -->
-        <v-skeleton-loader
-          class="mx-auto"
-          elevation="2"
-          type="heading, subtitle, card, card, card, card"
-          max-width="2500"
-        />
+        <v-row dense>
+          <v-col cols="12">
+            <v-skeleton-loader
+              class="bg-white rounded-lg"
+              elevation="1"
+              type="card"
+              height="200"
+            />
+          </v-col>
+          <v-col cols="12">
+            <v-skeleton-loader
+              class="bg-white rounded-lg"
+              elevation="1"
+              type="card"
+              height="200"
+            />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
     <template v-else>
@@ -357,7 +369,11 @@
                 v-for="(line, index) in body.transcriptLines"
                 :key="index"
                 class="transcript-line"
-                :class="{ highlight: normalizeString(line.transcript) === activelyHighlightedLine }"
+                :class="{
+                  highlight:
+                    normalizeString(line.transcript) ===
+                    activelyHighlightedLine,
+                }"
                 :ref="(el) => setLineRef(el, line.transcript)"
               >
                 <span class="speaker-info"
@@ -740,7 +756,7 @@ onUnmounted(() => {
 
 .attachment-manager,
 .attachment-manager * {
-  font-family: "Inter", serif !important;
+  /* font-family: "Inter", serif !important; */
 }
 
 .transcript-container {
@@ -749,7 +765,7 @@ onUnmounted(() => {
   line-height: 1.6;
   max-height: 50vh; /* Adjusted for better viewport fit */
   overflow-y: auto;
-  font-family: "Inter", serif !important;
+  /* font-family: "Inter", serif !important; */
 }
 
 .transcript-line {
@@ -757,7 +773,7 @@ onUnmounted(() => {
   align-items: flex-start;
   margin-bottom: 8px;
   padding: 4px 8px; /* Added padding for the highlight effect */
-  font-family: "Inter", serif !important;
+  /* font-family: "Inter", serif !important; */
   border-radius: 4px; /* Added for the highlight effect */
   transition: background-color 0.3s ease-in-out;
 }
@@ -772,7 +788,7 @@ onUnmounted(() => {
   padding-right: 1em; /* Added spacing */
   color: #333;
   font-weight: 500; /* Made speaker slightly bolder */
-  font-family: "Inter", serif !important;
+  /* font-family: "Inter", serif !important; */
 }
 
 .content {
@@ -784,7 +800,7 @@ onUnmounted(() => {
   border-radius: 4px;
   transition: background-color 0.2s ease-in-out;
   border: 2px dashed transparent;
-  font-family: "Inter", serif !important;
+  /* font-family: "Inter", serif !important; */
 }
 .editable-field:hover {
   background-color: #f0f0f0;
@@ -796,7 +812,7 @@ onUnmounted(() => {
   border: 2px solid #e0e0e0;
   border-radius: 24px;
   overflow: hidden;
-  font-family: "Inter", serif !important;
+  /* font-family: "Inter", serif !important; */
 }
 .rounded-header-cell {
   border-right: 2px solid #e0e0e0;
@@ -814,7 +830,7 @@ onUnmounted(() => {
 .title-cell {
   padding: 16px;
   border-bottom: 2px solid #e0e0e0;
-  font-family: "Inter", serif !important;
+  /* font-family: "Inter", serif !important; */
 }
 .content-cell {
   padding: 16px 8px;

@@ -32,6 +32,7 @@
             "Description": "Push Jumbo Rentals for at least a 10% cut on the sound system quote",
             "Action by": "Asfar",
             "Due date": "2025-07-13"
+            "Due date": "2025-07-13"
         },
         {
             "Task No.": "5",
@@ -44,11 +45,13 @@
             "Description": "Lock in Ken Lim's Twitch slot for Shaver Gaming",
             "Action by": "Kang",
             "Due date": "2025-07-14"
+            "Due date": "2025-07-14"
         },
         {
             "Task No.": "7",
             "Description": "Handle the Dime Savvy media invites",
             "Action by": "Alia",
+            "Due date": "2025-07-15"
             "Due date": "2025-07-15"
         },
         {
@@ -56,17 +59,20 @@
             "Description": "Confirm the costume rack specs with Tech Zone and email the sketch to make sure to release purchase order",
             "Action by": "Jet",
             "Due date": "2025-07-12"
+            "Due date": "2025-07-12"
         },
         {
             "Task No.": "9",
             "Description": "Submit the police traffic permit applications for both events",
             "Action by": "Rohimi",
             "Due date": "2025-07-12"
+            "Due date": "2025-07-12"
         },
         {
             "Task No.": "10",
             "Description": "Follow up with the fire department regarding the COVID-19 SOP and fire safety clearance for both events",
             "Action by": "Sebastian",
+            "Due date": "2025-07-13"
             "Due date": "2025-07-13"
         },
         {
@@ -103,6 +109,7 @@
             "Task No.": "16",
             "Description": "Chase Asfar to resubmit the New G Store renovation fire safety audit and ensure clearance is sorted",
             "Action by": "Jet",
+            "Due date": "2025-07-14"
             "Due date": "2025-07-14"
         }
     ]

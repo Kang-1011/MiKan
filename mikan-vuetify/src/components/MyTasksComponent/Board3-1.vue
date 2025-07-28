@@ -6,7 +6,7 @@
 
   >
     <!-- Board Header -->
-    <v-toolbar class="page-background-header ">
+    <v-toolbar class="page-background-header text-grey ">
       <template v-if="!isEditing">
         <span style=" margin-left:16px" >{{ board.title }}</span>
         <v-btn icon v-if="!visitorMode" @click="startRename">
@@ -34,7 +34,7 @@
           class="rounded-xl border-2 filter-button"
           dense hide-details clearable
           :menu-props="{
-          contentClass: 'rounded-xl border-2 text-body-2',
+          contentClass: 'rounded-xl text-body-2',
           }"
           style="max-width:180px"
         />
@@ -78,7 +78,7 @@
             />
           </template>
           <v-date-picker 
-          class="rounded-xl border-md text-body-2"
+          class="rounded-xl  text-body-2"
           v-model="selectedDueDateFilter" 
           @input="dueDateMenu = false"
           :min="tomorrowDate"

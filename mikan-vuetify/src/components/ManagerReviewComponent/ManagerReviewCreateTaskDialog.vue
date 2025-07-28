@@ -6,31 +6,31 @@
             <v-card-text>
                 <v-form ref="taskForm" @submit.prevent="createDraft" lazy-validation>
                     <v-text-field clearable label="Task Title" variant="outlined" density="compact" v-model="title"
-                        rounded="lg" class="mb-1" :rules="[(v) => !!v || 'Task title is required']"></v-text-field>
+                        rounded="xl" class="mb-1" :rules="[(v) => !!v || 'Task title is required']"></v-text-field>
 
                     <v-text-field clearable label="Due Date" variant="outlined" density="compact" v-model="dueDate"
-                        rounded="lg" type="date" class="mb-1" :rules="[(v) => !!v || 'Due date is required']"
+                        rounded="xl" type="date" class="mb-1" :rules="[(v) => !!v || 'Due date is required']"
                         :min="tomorrowDate"></v-text-field>
 
                     <v-select v-model="assignee" :items="assigneeOptions" item-title="name" item-value="id" label="Assignee" 
-                        clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                        clearable variant="outlined" density="compact" rounded="xl" class="mb-1" 
                         :rules="[(v) => !!v || 'Assignee is required']" />
 
                     <v-select v-model="project" :items="projectOptions" item-title="title" item-value="id" label="Project" 
-                        clearable variant="outlined" density="compact" rounded="lg" class="mb-1" 
+                        clearable variant="outlined" density="compact" rounded="xl" class="mb-1" 
                         :rules="[(v) => !!v || 'Project is required']" />
 
                     <v-textarea clearable label="Task Description" variant="outlined" density="compact"
-                        v-model="description" rounded="lg" rows="3" class="mb-0"
+                        v-model="description" rounded="xl" rows="3" class="mb-0"
                         :rules="[(v) => !!v || 'Task description is required']"></v-textarea>
                 </v-form>
             </v-card-text>
 
             <v-card-actions class="justify-end mb-2">
-                <v-btn color="black" variant="outlined" class="text-body-2 mr-2" rounded="lg"
+                <v-btn color="black" variant="outlined" class="text-body-2 mr-2 stage-button-cancel" rounded="xl"
                     @click="closeDialog">Cancel</v-btn>
 
-                <v-btn color="black" variant="flat" class="text-body-2  mr-4" rounded="lg"
+                <v-btn variant="flat" class="text-body-2 mr-4 stage-button-create-dialog" rounded="xl"
                     @click="createDraft">Create</v-btn>
             </v-card-actions>
         </v-card>
