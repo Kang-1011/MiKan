@@ -18,6 +18,7 @@ from routers.transcript import router as transcript_router
 from routers.minutes import router as minutes_router
 from routers.chatbot import router as chatbot_router 
 from routers.llm_speech_json import router as llm_speech_json
+from routers.names import router as names_router
 
 app = FastAPI()
 create_tables()
@@ -48,3 +49,4 @@ app.include_router(transcript_router, prefix="", tags=["Transcript"])
 app.include_router(minutes_router, prefix="/minutes", tags=["Minutes"])
 app.include_router(chatbot_router, prefix="/chatbot", tags=["Chatbot"]) 
 app.include_router(llm_speech_json, prefix="/llm_speech_json", tags=["LLM Speech JSON"])
+app.include_router(names_router, prefix="/names", tags=["Names"])
