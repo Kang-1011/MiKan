@@ -1,6 +1,7 @@
 __pycache__
 .env
 .credentials
+credentials.json
 token.json
 
 # Python Virtual Environment
