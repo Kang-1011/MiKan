@@ -23,11 +23,12 @@
    /* Colors green*/
    --color-bg-base: hsl(160, 15%, 87%);
    --color-bg-page: hsl(150, 15%, 98%);
-   --color-bg-stage: hsl(150, 25%, 94%);
+   --color-bg-stage: hsl(150, 27%, 94%);
+   --color-bg-stage-dark:hsl(160, 25%, 80%);
    --color-bg-taskcard: hsl(150, 15%, 80%);
 
-  --color-border-light: hsl(0, 0%, 80%);
-  --color-border-dark: hsl(0, 0%, 83%);
+  --color-border-light: hsl(150, 35%, 80%);
+  --color-border-dark: hsl(150, 25%, 83%);
 
   /* task card specific colours for task card hovering animation */
   --color-task-card-border: hsl(0, 0%, 80%);
@@ -35,11 +36,11 @@
   --color-task-card-border-select: hsl(0, 0%, 80%);
 
   /* --color-border-dark: #d4d4d4; */
-  --color-divider-1: hsl(0, 0%, 0%);
-  --color-divider-2: hsl(245, 61%, 44%);
+  --color-divider-1: hsl(150, 25%, 83%);
+  --color-divider-2: hsl(150, 25%, 83%);
 
   --color-accent-orange: #ff9046;
-  --color-sidebar-hover: #fcb9534c;
+  --color-sidebar-hover: hsla(150, 70%, 86%, 0.298);
   --color-accent-orange-hover: #ff7637;
 
   --color-error-red: hsl(0, 90%, 61%);
@@ -50,11 +51,13 @@
   --color-success-text-dark-green: hsl(101, 100%, 12%);
   --color-success-green-hover: hsl(101, 77%, 37%);
   --color-success-green-background: hsl(101, 50%, 75%);
+  --color-success-green-background-light: hsl(101, 50%, 90%);
   --color-disabled: grey;
 
   --color-save-purple: hsl(300, 77%, 37%);
-  --color-save-purple-hover: hsl(300, 77%, 37%);
-  --color-save-purple-background: hsl(300, 77%, 37%);
+  --color-save-purple-text: hsl(300, 77%, 15%);
+  --color-save-purple-hover: hsla(300, 77%, 57%, 0.1);
+  --color-save-purple-background: hsla(300, 77%, 57%, 0.1);
 
   --color-btn-primary-bg: #545454;
   --color-btn-primary-text: #ffffff;
@@ -62,16 +65,27 @@
   --color-btn-secondary-text: #515151;
 
   --color-text-default: #000000;
-  --color-icon-grey-main: hsl(0, 0%, 14%);
+  --color-icon-grey-main: hsl(150, 8%, 40%);
+  --color-icon-grey-main-dark: hsl(150, 8%, 15%);
   --color-icon-grey-hover-background: hsl(0, 0%, 80%);
   --color-icon-grey-hover: hsl(0, 0%, 0%);
   --color-icon-grey-active: hsl(0, 0%, 0%);
 
-  --color-text-grey: #383838;
-  --color-icon-detail-grey: rgba(0, 0, 0, 0.6);
+  --color-text-grey-disabled: hsl(0, 0%, 22%);
+  --color-text-grey-disabled-bg: hsl(0, 0%, 100%);
+
+  --color-dialog-icons-grey: hsl(150, 0%, 22%);
+  --color-menu-icons-grey: hsl(150, 20%, 22%);
+  
+  --color-text-grey: hsl(150, 20%, 22%); 
+  --color-text-grey-dark: hsl(150, 20%, 11%);  
+  --color-icon-detail-grey: hsla(0, 0%, 0%, 0.6);
+  
+  --color-story-card-hover: hsla(150, 70%, 86%, 0.298);
 
   --color-taskcard-hover-bg: rgba(226, 255, 158, 0.01);
-  --color-mikan-orange: #ff9046;
+  --color-mikan-orange: hsl(24, 100%, 64%);
+  --color-mikan-orange-bg: hsl(24, 77%, 97%);
   --color-mikan-text-bg-light: hsl(0, 0%, 87%);
   --color-mikan-text-bg-dark: hsl(0, 0%, 40%);
 
@@ -80,13 +94,16 @@
   --color-user-avatar-halo-light: hsla(110, 66%, 53%, 0.25);
   --color-user-avatar-halo-lighter-1: hsla(110, 66%, 60%, 0.25);
   --color-user-avatar-halo-lighter-2: hsla(110, 66%, 80%, 0.25);
+  /* --color-user-avatar-input-text: hsla(110, 66%, 80%, 0.25); */
+  --color-user-avatar-shadow: hsla(150, 50%, 10%, 0.3);
+
   --color-user-avatar-halo: rgba(53, 190, 25, 0.5);
   --color-user-text: hsla(110, 77%, 15%, 1);
   --color-mikan-orange-text: hsl(0, 0%, 15%);
 
-  --filter-button-bg: #f0f0f0;
+  --filter-button-bg: hsl(150, 20%, 94%);
   --filter-button-bg-hover:  hsla(140, 66%, 70%, 0.25);
-  --filter-button-text: #141414;
+  --filter-button-text: hsl(150, 20%, 22%);
 
   --mikan-chat-bg: hsl(210, 17%, 95%);
   --mikan-chat-header: hsl(210, 17%, 95%);
@@ -96,6 +113,7 @@
   /* Border & Radius */
   --border-width-sm: 0.75px;
   --border-width-md: 1px;
+  --border-width-lg: 3px;
   --radius-v1: 16px;
   --radius-v2: 12px;
 
@@ -109,7 +127,7 @@
 
   /* Ripple colors */
   --ripple-orange: 255, 165, 255;
-  --ripple-orange-hover: 103, 255, 65;
+  --ripple-orange-hover: hsl(150, 25%, 30%);;
 }
 
 /* -------------------------------------------------------------- */
@@ -141,6 +159,7 @@
 }
 .divider-1 {
   border: var(--border-width-sm) solid var(--color-divider-1) !important;
+  opacity: 1 !important;
 }
 
 /* border-2 - bright to dark */
@@ -150,6 +169,12 @@
 }
 .divider-2 {
   border: var(--border-width-sm) solid var(--color-divider-2) !important;
+  opacity: 1 !important;
+  box-shadow: none;
+}
+
+.border-3 {
+  border: var(--border-width-lg) solid var(--color-border-dark) !important;
   box-shadow: none;
 }
 
@@ -160,6 +185,7 @@
 .rounded-v2 {
   border-radius: var(--radius-v2) !important;
 }
+
 
 /* Backgrounds */
 #app,
@@ -181,6 +207,11 @@
 
 .page-background-header {
   background: transparent !important;
+  /* background: var(--color-bg-page) !important; */
+}
+
+.manager-review-background-header{
+  background: var(--color-bg-page) !important;
   /* background: var(--color-bg-page) !important; */
 }
 
@@ -211,6 +242,8 @@
 .task-card {
   transition: var(--transition-button);
 }
+
+.task-draft-1,
 .task-card-1 {
   --v-border-opacity: 1 !important;
   --v-hover-opacity: 0 !important;
@@ -218,20 +251,34 @@
   --v-ripple-opacity: 1 !important;
   box-shadow: none;
 }
+
+
+.task-draft-1:hover,
 .task-card-1:hover {
   background-color: var(--color-taskcard-hover-bg) !important;
   transform: translateY(-2px);
   box-shadow: var(--shadow-light), var(--shadow-inset) !important;
 }
+
+.new-meeting-button .v-ripple__animation,
+.task-draft-1 .v-ripple__animation,
 .task-card-1 .v-ripple__animation {
   color: var(--ripple-orange-hover) !important;
+}
+
+
+/* Force v-icon color inside v-list-item, v-btn, etc. */
+.v-icon,
+.v-list-item .v-icon,
+.v-btn .v-icon {
+  opacity: 1 !important;
 }
 
 /* Sidebar buttons */
 .sidebar-button {
   --v-border-opacity: 1 !important;
   --v-hover-opacity: 0 !important;
-  border: 0 solid var(--color-icon-grey-main) !important;
+  border: 0 solid !important;
   box-shadow: none;
   transition: background-color 0.2s ease-in-out !important;
 }
@@ -263,15 +310,30 @@
 }
 
 /* Stage action buttons */
+.stage-button-delete {
+  color: var(--color-menu-icons-grey) !important;
+}
+
 .stage-button-delete:hover {
   transform: translateY(-1px);
   color: var(--color-error-red) !important;
   background-color: var(--color-error-red-background) !important;
 }
+
+.stage-button-approve {
+  color: var(--color-menu-icons-grey) !important;
+}
+
 .stage-button-approve:hover {
   transform: translateY(-1px);
   color: var(--color-success-green) !important;
   background-color: var(--color-bg-stage) !important;
+}
+
+.stage-button-approve-dialog {
+  background-color: var(--color-success-green-background-light) !important;
+  color: var(--color-success-green-hover) !important;
+  border: 1px solid var(--color-success-green-hover)!important;
 }
 
 .stage-button-approve-all {
@@ -279,16 +341,20 @@
   background-color: var(--color-success-green-background) !important;
 }
 .stage-button-approve-all:disabled {
-  color: var(--color-text-grey) !important;
+  color: var(--color-text-grey-disabled) !important;
   background-color: var(--color-disabled) !important;
 }
 
+.stage-button-approve-dialog:hover,
 .stage-button-approve-all:hover {
   transform: translateY(-1px);
   color: white !important;
   background-color: var(--color-success-green-hover) !important;
 }
 
+.stage-button-edit {
+  color: var(--color-menu-icons-grey) !important;
+}
 
 .stage-button-edit .v-ripple__animation {
   transform: scale(1.1);
@@ -302,6 +368,101 @@
   transform: translateY(-1px) scale(1.1);
   color: var(--color-text-default) !important;
   background-color: var(--color-bg-stage) !important;
+}
+
+.stage-button-save-icon {
+  color: var(--color-menu-icons-grey) !important;
+
+}
+
+.stage-button-save-icon:hover {
+  transform: translateY(-1px);
+  color: var(--color-save-purple) !important;
+  background-color: var(--color-save-purple-background) !important;
+}
+
+.button-save {
+  background-color: var(--color-save-purple-background) !important;
+  color: var(--color-save-purple-text) !important;
+  border: 1px solid var(--color-save-purple-text) !important;
+}
+
+.button-save:hover {
+  transform: translateY(-1px);
+  color: white !important;
+  background-color: var(--color-save-purple) !important;
+}
+
+.stage-button-cancel-icon {
+  color: var(--color-menu-icons-grey) !important;
+}
+
+.stage-button-cancel-icon:hover {
+  transform: translateY(-1px);
+  color: var(--color-menu-icons-grey) !important;
+}
+
+
+.stage-button-cancel {
+  color: var(--color-menu-icons-grey) !important;
+  border: 1px solid var(--color-menu-icons-grey) !important;
+}
+
+.stage-button-cancel:hover {
+  transform: translateY(-2px);
+  color: var(--color-menu-icons-grey) !important;
+}
+
+.stage-button-cancel-dialog {
+  color: var(--color-dialog-icons-grey) !important;
+  border: 1px solid var(--color-dialog-icons-grey) !important;
+}
+
+.stage-button-cancel-dialog:hover {
+  transform: translateY(-2px);
+  color: var(--color-dialog-icons-grey) !important;
+}
+
+.stage-button-delete-dialog {
+  color: var(--color-error-red) !important;
+  background-color: var(--color-error-red-background) !important;
+  border: 1px solid var(--color-error-red) !important;
+}
+
+.stage-button-delete-dialog:hover {
+  transform: translateY(-1px);
+  color: white !important;
+  background-color: var(--color-error-red) !important;
+}
+
+.stage-button-create {
+  border: 1px solid var(--color-text-grey) !important;
+  color: var(--color-text-grey) !important;
+}
+
+.stage-button-create-icon {
+  color: var(--color-text-grey) !important;
+}
+
+.stage-button-create-dialog {
+  border: 1px solid var(--color-mikan-orange) !important;
+  color: var(--color-mikan-orange) !important;
+  background-color: var( --color-mikan-orange-bg) !important;
+}
+
+.stage-button-create-dialog:disabled {
+  border: 1px solid var(--color-text-grey-disabled) !important;
+  color: var(--color-text-grey-disabled) !important;
+  background-color: var( --color-text-grey-disabled-bg) !important;
+}
+
+.stage-button-create-icon:hover,
+.stage-button-create-dialog:hover,
+.stage-button-create:hover {
+  background-color: var(--color-mikan-orange) !important;
+  transform: translateY(-1px);
+  color: white !important;
+  border: 1px solid transparent !important;
 }
 
 /* Kanban button hovers */
@@ -374,9 +535,24 @@
   color: var(--color-icon-grey-main) !important;
   fill: currentColor !important;
 }
+
+.icon-grey-dark {
+  color: var(--color-icon-grey-main-dark) !important;
+  fill: currentColor !important;
+}
+
+.icon-black {
+  color:black !important;
+  fill: currentColor !important;
+}
+
 .text-grey {
   color: var(--color-text-grey) !important;
 }
+.text-grey-dark {
+  color: var(--color-text-grey-dark) !important;
+}
+
 .taskdetail-icon-grey {
   color: var(--color-icon-detail-grey) !important;
 }
@@ -449,7 +625,7 @@
 
 /* --- Launcher Button Styling --- */
 .mikan-launcher-button {
-  background-color: #2e2e2e; /* Vuetify red-darken-4 */
+  background-color: var(--color-menu-icons-grey); /* Vuetify red-darken-4 */
   border: none;
   border-radius: 50%;
   height: 60px;
@@ -491,6 +667,7 @@
 
 .mikan-chat-window:hover {
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+
 }
 
 /* --- MIKAN CHAT STYLES --- */
@@ -573,9 +750,14 @@
   align-items: center;
   flex-shrink: 0;
   background-color: var(--color-mikan-orange); /* Default for bot */
+  box-shadow:  
+  2px 2px 4px  hsla(150, 0%, 10%, 0.3);
 }
 .avatar-user {
   background-color: var(--color-user-avatar);
+  box-shadow:  
+  2px 2px 4px  var(--color-user-avatar-shadow);
+
 } /* Vuetify primary blue */
 .avatar .v-icon {
   font-size: 24px;
@@ -597,11 +779,15 @@
 }
 .bubble-assistant {
   border-bottom-left-radius: 4px;
+  box-shadow:  
+  2px 2px 4px  hsla(150, 0%, 10%, 0.3);
 }
 .bubble-user {
   background-color: var(--color-user-avatar-light); /* Vuetify primary blue */
   color: var(--color-user-text);
   border-bottom-right-radius: 4px;
+  box-shadow:  
+  2px 2px 4px  var(--color-user-avatar-shadow);
 }
 .message-bubble p {
   margin: 0;
@@ -621,6 +807,8 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  
+  
 }
 .message-form input {
   flex-grow: 1;
@@ -629,19 +817,30 @@
   background: hsl(210, 17%, 95%);
   border-radius: 20px;
   font-size: 1rem;
-  transition: background 0.15s ease-in;
+  transition: background 0.15s ease-in, box-shadow 0.15s ease-in;
 }
 
 .message-form input:hover {
   /* box-shadow: 0 0 0 2.5px var(--color-user-avatar-halo-light); */
   background: var(--color-user-avatar-halo-lighter-2);
+  border: 1px solid transparent;
+  box-shadow:  
+  1px 1px 2px  hsla(150, 50%, 10%, 0.1);
+  color: var(--color-user-text) !important;
 }
 
 .message-form input:focus {
   outline: none;
+ 
   /* border-color: var(--color-user-avatar-halo); */
   /* box-shadow: 0 0 0 5px var(--color-user-avatar-halo); */
   background: var(--color-user-avatar-halo-lighter-1);
+  border: 1px solid transparent;
+  box-shadow:  
+  /* inset 2px 2px 4px  hsla(150, 50%, 10%, 0.3), */
+  2px 2px 4px  hsla(150, 50%, 10%, 0.3);
+  color: var(--color-user-text) !important;
+
 }
 
 .message-form button {
@@ -702,3 +901,111 @@
     transform: scale(1);
   }
 }
+
+/* Mikan New Meeting Things */
+.story-card {
+  /* border: 1px solid #3e3d4e !important; */
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.story-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  background-color:  var(--color-story-card-hover);
+  border: 0px !important;
+  /* animation: starWarsShadow 1s ease-in-out infinite; */
+}
+
+.story-card:active {
+animation: applePop 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+border: 0px !important;
+}
+
+/* The inner circle holding the icon */
+.inner-circle {
+  width: 80px;
+  height: 80px;
+  /* background-color: rgba(0, 0, 0, 0.2); */
+  background-color: var(--color-bg-stage-dark);
+}
+
+/* The middle, darker circle */
+.middle-circle {
+  width: 110px;
+  height: 110px;
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  background-color: var(--color-bg-stage);
+  border: 1px solid var(--color-border-dark);
+  transition: box-shadow 0.3s ease-out
+}
+
+.story-card:hover .middle-circle {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Icon Glow Effect --- */
+
+/* 2) Trigger the animation on the child when the parent is hovered */
+.story-card:hover .icon-container {
+  transform: translateY(-4px) scale(1.1);
+  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); */
+  /* animation: glow 1.5s ease-in-out infinite; */
+}
+
+.icon-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 24px;
+  transition: transform 0.3s ease-out
+}
+
+.glow-circle {
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+/* from no-shadow → big blurred glow → back to no-shadow (and repeat) */
+@keyframes starWarsShadow {
+  0% {
+    box-shadow: 0 0 0 rgba(255,255,255,0);
+  }
+  100% {
+    /* tweak these values & color to taste */
+    box-shadow: 0 0 60px rgba(212, 40, 40, 0.8);
+  }
+}
+
+/* 1) Make it non-interactive */
+.no-grey-disable {
+  pointer-events: none;
+}
+
+/* 2) Undo Vuetify’s disabled opacity */
+.no-grey-disable.v-btn--disabled {
+  opacity: 1 !important;
+}
+
+@keyframes applePop {
+  0%,100%  { transform: scale(1)  translateY(-8px);     }
+  40%  { transform: scale(0.98)  translateY(-8px);  }
+  /* 50% { transform: scale(1.02)  translateY(-8px);   } */
+}
+
+@keyframes glow {
+  0%   { box-shadow: 0 0 0 rgba(255,255,255,0); }
+  50%  { box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+  100% { box-shadow: 0 0 0 rgba(255,255,255,0); }
+}
+
+
+

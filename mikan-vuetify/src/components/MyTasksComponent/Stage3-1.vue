@@ -13,7 +13,7 @@
   flex-direction:column;">
     <v-toolbar density="compact" class="rounded-v2 stage-background-header" >
       <template v-if="!isEditing">
-        <v-toolbar-title  class="text-subtitle-1 my-0 py-0">{{ stage.title }}</v-toolbar-title>
+        <v-toolbar-title  class="text-subtitle-1 my-0 py-0 text-grey">{{ stage.title }}</v-toolbar-title>
         <v-spacer />
         <v-btn density="compact" class="stage-button-edit" icon  v-if="!visitorMode" @click="startRename">
           <v-icon size="20px">mdi-pencil</v-icon>
@@ -100,7 +100,8 @@ const props = defineProps({
   boardIndex: Number,
   stageIndex: Number,
   visitorMode: Boolean,
-  selectedAssignee: String
+  selectedAssignee: String,
+  projectId: Number
 })
 const emit = defineEmits(['add-task','delete-stage','open-task-dialog','rename-stage', 'task-dropped'])
 
@@ -129,8 +130,8 @@ function onTaskDrop(evt) {
     // Only send update if status actually changed
     if (task.status !== newStatus) {
       const payload = {
-        assignee_id: task.assignee_id || 0,
-        project_id: props.boardIndex + 1,
+        assignee_id: task.assignee_id,
+        project_id: props.projectId,
         title: task.title || "",
         description: task.description || "",
         due_date: task.dueDate || "",

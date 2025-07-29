@@ -49,6 +49,7 @@ class Project(Base):
 
     task = relationship("Task", back_populates="project")
     meeting = relationship("Meeting", back_populates="project")
+    # stage = relationship("Stage", back_populates="project")
 
 class ProjectBase(BaseModel):
     title: str
@@ -378,3 +379,17 @@ class TranscriptCreate(BaseModel):
     purpose: str
     attendees: str
     transcript_lines: List[TranscriptLineCreate]
+
+
+
+# ------------------------- Proper Nouns -------------------------
+class Name(Base):
+    __tablename__ = "names"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    special_name = Column(String, unique=True, nullable=False)
+
+class NameOut(BaseModel):
+    id: Optional[int]
+    special_name: Optional[str]
+    class Config:
+        orm_mode = True

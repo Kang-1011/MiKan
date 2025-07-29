@@ -11,6 +11,7 @@ from .agent_fetch_users import get_attendees
 from sqlalchemy.orm import Session
 from database import get_db
 from .users import get_users
+from .names import get_names
 
 router = APIRouter()
 
@@ -52,8 +53,13 @@ async def transcribe(file: UploadFile = File(...), db: Session = Depends(get_db)
 
         users = get_users(db)
         users = [user.username for user in users]
-        users_str = ",".join(users) if users else "No users found"
+        users_str = ", ".join(users) if users else "No users found"
         print("Users:", users_str)
+
+        names = get_names(db)
+        names = [name.special_name for name in names]
+        names_str = ", ".join(names) if names else "No names found"
+        print("Proper Nouns:", names_str)
 
         prompt = ChatPromptTemplate.from_messages([
             (
@@ -76,6 +82,8 @@ async def transcribe(file: UploadFile = File(...), db: Session = Depends(get_db)
                                 For purpose, please analyze the tasks assigned, then categorized them into common category. Template: 'To discuss plans for the XXX, focusing {{common categories}}.'
                                 Available attendees: {attendee_list}                                
                                 For the attendees field, match the speakers you identify in the transcript with the available attendees list above. Only include attendees who actually spoke or were mentioned in the meeting.
+                                Proper nouns: {proper_nouns}
+                                For the actual spelling of proper_nouns, match with the names you identify in the transcript with the available proper nouns list above.
                                 """
                     },
                     {
@@ -89,9 +97,7 @@ async def transcribe(file: UploadFile = File(...), db: Session = Depends(get_db)
         ])
         chain = prompt | structured_llm
         
-        # attendee_str = ", ".join(attendee) if attendee else "No attendees found"
-        # print(attendee_str)
-        response = chain.invoke({"attendee_list": users_str})
+        response = chain.invoke({"attendee_list": users_str, "proper_nouns": names_str})
         # response = chain.invoke({})
 
         return {"transcript": response}
