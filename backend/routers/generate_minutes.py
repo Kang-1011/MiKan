@@ -111,10 +111,9 @@ For tasks, extract ALL actionable items with:
     3. How it should be done (if there are constraints or requirements)
     4. Why it matters (if context or dependencies are important)
     do not the word 'both events', be specific and list down the event names)
-    make the structure to follow the following :
 - Task Title (From the analysis of detailed description must. Should follow tprovide clearhis structure: {{detailed description's verb}} {{description's direct object}}.)
-- Person assigned ("Action by" , and should be lowercase)
-- Due date in YYYY-MM-DD format (infer from context if not explicitly stated and use appropriate dates based on urgency, ignore the date mentioned in the analysis of the meeting transcript, use date )
+- Person assigned ("Action by")
+- Due date in YYYY-MM-DD format (randomly from from 10 August 2025 to 17 August 2025 )
 
 Make sure to extract ALL tasks mentioned in the transcript - don't miss any actionable items.
 
