@@ -130,7 +130,7 @@
 <script setup lang="ts">
 import { ref,computed, watch } from 'vue'
 import axios from 'axios'
-import { boards } from '@/stores/boards'
+import { boards, fetchBoards } from '@/stores/boards'
 import { useRoute } from "vue-router";
 import draggable from 'vuedraggable'
 import Board from '@/components/MyTasksComponent/Board3-1.vue'
@@ -243,6 +243,7 @@ function handleTaskSave(taskId, updatedTask) {
     axios.put(`http://localhost:8000/tasks/update_task/${taskId}`, payload)
       .then(() => {
         console.log(`✅ Task updated from dialog with Task ID : ${taskId}`, payload);
+		fetchBoards();
         isTaskDialogOpen.value = false;
       })
       .catch(err => {
@@ -281,16 +282,64 @@ boards.value[boardIndex].stages[stageIndex].title = newTitle
 }
 
 function addStage(boardIndex: number) {
-boards.value[boardIndex].stages.push({ id: genId(), title: `Stage ${boards.value[boardIndex].stages.length+1}`, tasks: [] })
+	boards.value[boardIndex].stages.push({ id: genId(), title: `Stage ${boards.value[boardIndex].stages.length+1}`, tasks: [] })
 }
 function deleteStage(boardIndex: number, stageIndex: number) {
 boards.value[boardIndex].stages.splice(stageIndex, 1)
 }
-function addTask(boardIndex: number, stageIndex: number) {
-boards.value[boardIndex].stages[stageIndex].tasks.push({ id: genId(), title: `Task ${boards.value[boardIndex].stages[stageIndex].tasks.length+1}` })
+
+const projects = ref([])
+onMounted(async () => {
+  try {
+    const res = await axios.get('http://localhost:8000/projects')
+    projects.value = res.data
+  } catch (err) {
+    console.error("❌ Failed to fetch projects:", err)
+  }
+})
+
+async function addTask(boardIndex: number, stageIndex: number){
+	boards.value[boardIndex].stages[stageIndex].tasks.push({ id: genId(), title: `Task ${boards.value[boardIndex].stages[stageIndex].tasks.length+1}` })
+	
+	const matchedProject = projects.value.find(
+		(p) => p.title.toLowerCase() === boards.value[boardIndex].title.toLowerCase()
+	)
+	
+	const newTask = {
+		assignee_id: 1,
+		project_id: matchedProject.id,
+		title: `Task ${boards.value[boardIndex].stages[stageIndex].tasks.length + 1}`,
+		description: "",
+		due_date: new Date().toISOString().slice(0, 10),
+		priority: "Low",
+		status: boards.value[boardIndex].stages[stageIndex].title
+	}
+	console.log("Add new task : ", newTask)
+
+	try {
+    const res = await axios.post('http://localhost:8000/tasks/add_task', newTask)
+    const createdTask = res.data
+
+    console.log('Task added and synced:', createdTask)
+	fetchBoards();
+	} catch (err) {
+    console.error('Failed to add task:', err)
+  	}
 }
-function deleteTask(boardIndex: number, stageIndex: number, taskIndex: number) {
-boards.value[boardIndex].stages[stageIndex].tasks.splice(taskIndex, 1)
+async function deleteTask(boardIndex: number, stageIndex: number, taskIndex: number) {
+  const task = boards.value[boardIndex].stages[stageIndex].tasks[taskIndex];
+  console.log("Deleted task:", task);
+
+  try {
+    await axios.delete(`http://localhost:8000/tasks/delete_task/${task.id}`);
+    console.log(`Task with ID ${task.id} deleted from backend`);
+
+    // Remove task from local state
+    // boards.value[boardIndex].stages[stageIndex].tasks.splice(taskIndex, 1);
+	fetchBoards();
+  } catch (error) {
+    console.error("Failed to delete task:", error);
+  }
 }
 function openTaskDialog(boardIndex: number, stageIndex: number, taskId: number) {
   const tasks    = boards.value[boardIndex].stages[stageIndex].tasks
