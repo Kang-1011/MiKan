@@ -83,6 +83,7 @@ async def transcribe(file: UploadFile = File(...), db: Session = Depends(get_db)
                                 For the attendees field, match the speakers you identify in the transcript with the available attendees list above. Only include attendees who actually spoke or were mentioned in the meeting.
                                 Proper nouns: {proper_nouns}
                                 For the actual spelling of proper_nouns, match with the names you identify in the transcript with the available proper nouns list above.
+                                Change transcripts lines date from July to to August in the transcription. Do not include date in the transcripts title.
                                 """
                     },
                     {

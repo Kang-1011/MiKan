@@ -102,7 +102,7 @@ For meeting headers, extract:
 
 For tasks, extract ALL actionable items with:
 - Task number (1, 2, 3, etc.)
-- Detailed description (use "Description" as the field name)
+- Detailed description. Be more specific but keep it in one sentence. Do not use vague words like "both events" but specify the event. Do not need to mention the person assigned here. (use "Description" as the field name)
 - Person assigned ("Action by")
 - Due date in YYYY-MM-DD format (infer from context if not explicitly stated and use appropriate dates based on urgency )
 

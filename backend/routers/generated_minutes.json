@@ -1,116 +1,109 @@
 {
     "header": {
-        "title": "Event Planning Meeting for Dime Savvy Car Showcase and Shaver Gaming Event",
+        "title": "Dime Sarby Car Showcase and Shaver Gaming Event Planning Meeting",
         "location": "GLC Meeting Room 1",
         "created_by": "You",
-        "date": "2025-07-27",
-        "project": "Website Redesign",
-        "purpose": "To discuss plans for the upcoming events, focusing on logistics, budget, and marketing.",
-        "attendees": "Alia, Sebastian, Asfar, Jet, Kang, Rohimi"
+        "date": "2025-07-30",
+        "project": "Dime Sarby Event",
+        "purpose": "To discuss plans for the Dime Sarby Car Showcase and Shaver Gaming Event, focusing on logistics, budget, security, and cross-promotional opportunities.",
+        "attendees": "Alia, Sebastian, Jet, Azfar, Kang, Rohimi"
     },
     "tasks": [
         {
             "Task No.": "1",
-            "Description": "Finalize power strip specifications for Central Court layout with Jet",
-            "Action by": "Sebastian",
-            "Due date": "2025-07-11"
+            "Description": "Finalize the exact power strip specifications for the Centre Court layout.",
+            "Action by": "Jet",
+            "Due date": "2025-08-11"
         },
         {
             "Task No.": "2",
-            "Description": "Follow up on Klang Sound's quote and availability",
+            "Description": "Follow up on Klang Sound's quote and availability to get clear figures for the sound system.",
             "Action by": "Jet, Kang",
-            "Due date": "2025-07-11"
+            "Due date": "2025-08-11"
         },
         {
             "Task No.": "3",
-            "Description": "Inform downstairs personnel to stick with Central Court for the car showcase",
+            "Description": "Inform the person with the trolling cart to stick with the Centre Court for the car showcase.",
             "Action by": "Rohimi",
-            "Due date": "2025-07-27"
+            "Due date": "2025-07-30"
         },
         {
             "Task No.": "4",
-            "Description": "Push Jumbo Rentals for at least a 10% cut on the sound system quote",
-            "Action by": "Asfar",
-            "Due date": "2025-07-13"
-            "Due date": "2025-07-13"
+            "Description": "Push Jumbo Rentals for at least a 10% cut on their quote.",
+            "Action by": "Azfar",
+            "Due date": "2025-08-13"
         },
         {
             "Task No.": "5",
-            "Description": "Draft the Shaver Gaming media invites",
+            "Description": "Draft the Shaver Gaming media invites.",
             "Action by": "Kang",
-            "Due date": "2025-07-11"
+            "Due date": "2025-07-31"
         },
         {
             "Task No.": "6",
-            "Description": "Lock in Ken Lim's Twitch slot for Shaver Gaming",
+            "Description": "Lock in Ken Lim's Twitch slot for the Shaver Gaming event.",
             "Action by": "Kang",
-            "Due date": "2025-07-14"
-            "Due date": "2025-07-14"
+            "Due date": "2025-08-14"
         },
         {
             "Task No.": "7",
-            "Description": "Handle the Dime Savvy media invites",
+            "Description": "Handle the Dime Sarby media invites and send them out.",
             "Action by": "Alia",
-            "Due date": "2025-07-15"
-            "Due date": "2025-07-15"
+            "Due date": "2025-08-15"
         },
         {
             "Task No.": "8",
-            "Description": "Confirm the costume rack specs with Tech Zone and email the sketch to make sure to release purchase order",
+            "Description": "Confirm the costume rack specs with TechZone Co. and email the sketch to eSports Channel and HyperX.",
             "Action by": "Jet",
-            "Due date": "2025-07-12"
-            "Due date": "2025-07-12"
+            "Due date": "2025-08-12"
         },
         {
             "Task No.": "9",
-            "Description": "Submit the police traffic permit applications for both events",
+            "Description": "Submit the police traffic permit applications for the Dime Sarby Car Showcase and Shaver Gaming Event.",
             "Action by": "Rohimi",
-            "Due date": "2025-07-12"
-            "Due date": "2025-07-12"
+            "Due date": "2025-08-12"
         },
         {
             "Task No.": "10",
-            "Description": "Follow up with the fire department regarding the COVID-19 SOP and fire safety clearance for both events",
+            "Description": "Follow up with the Fire Department regarding the COVID-19 SOP and fire safety clearance for the Dime Sarby Car Showcase and Shaver Gaming Event.",
             "Action by": "Sebastian",
-            "Due date": "2025-07-13"
-            "Due date": "2025-07-13"
+            "Due date": "2025-08-13"
         },
         {
             "Task No.": "11",
-            "Description": "Confirm the concrete delivery date for the VR demo gear with the vendor and update the shared document",
+            "Description": "Ping the vendor directly and get a concrete delivery date for the VR demo gear for the Shaver Gaming event and update the shared document.",
             "Action by": "Sebastian",
-            "Due date": "2025-07-11"
+            "Due date": "2025-07-31"
         },
         {
             "Task No.": "12",
-            "Description": "Map out specific routes and timings for loading and unloading cars and gaming equipment with Sebastian",
-            "Action by": "Asfar",
-            "Due date": "2025-07-11"
+            "Description": "Map out specific routes and timings for loading and unloading cars for the Dime Sarby Car Showcase, as well as getting gaming equipment in for the Shaver Gaming event, with security considerations.",
+            "Action by": "Azfar, Sebastian",
+            "Due date": "2025-07-30"
         },
         {
             "Task No.": "13",
-            "Description": "Coordinate closely with mall operators to ensure minimal disruption to mall goers during setup and teardown for both events",
+            "Description": "Coordinate closely with mall operators to ensure minimal disruption to mall-goers during setup and teardown for the Dime Sarby Car Showcase and Shaver Gaming Event.",
             "Action by": "Sebastian",
-            "Due date": "2025-07-12"
+            "Due date": "2025-08-12"
         },
         {
             "Task No.": "14",
-            "Description": "Talk to Esports channel about featuring a segment on the CYD Nova EV",
+            "Description": "Talk to eSports Channel about featuring a segment on the CYD Nova EV and discuss a casual gaming peripheral review for the Shaver Gaming event with AutoBuzz.",
             "Action by": "Kang",
-            "Due date": "2025-07-12"
+            "Due date": "2025-08-06"
         },
         {
             "Task No.": "15",
-            "Description": "Reach out to HyperX and Logitech, the Shaver Gaming sponsors, to explore cross-promotional budget",
+            "Description": "Reach out to HyperX and Logitech, the Shaver Gaming sponsors, to explore a cross-promotional giveaway that ties into both the Dime Sarby Car Showcase and Shaver Gaming event.",
             "Action by": "Jet",
-            "Due date": "2025-07-29"
+            "Due date": "2025-08-06"
         },
         {
             "Task No.": "16",
-            "Description": "Chase Asfar to resubmit the New G Store renovation fire safety audit and ensure clearance is sorted",
+            "Description": "Chase Azfar on the NUJI store renovation fire safety audit to get the clearance sorted.",
             "Action by": "Jet",
-            "Due date": "2025-07-14"
-            "Due date": "2025-07-14"
+            "Due date": "2025-08-14"
         }
     ]
 }
