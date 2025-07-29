@@ -132,7 +132,10 @@
            :projectId="board.id"
            :selectedAssignee="selectedAssignee"
           @rename-stage="(sIdx, title) => $emit('rename-stage', boardIndex, sIdx, title)"
-          @add-task="() => $emit('add-task', boardIndex, sIndex)"
+          @add-task="() => {
+			console.log('Add task triggered at board:', boardIndex, 'stage:', sIndex)
+			$emit('add-task', boardIndex, sIndex)
+			}"
           @open-task-dialog="tIdx => $emit('open-task-dialog', boardIndex, sIndex, tIdx)"
           @delete-stage="sIdx => $emit('delete-stage', boardIndex, sIdx)"
 		  @task-dropped="taskDropped"
