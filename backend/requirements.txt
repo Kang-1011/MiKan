@@ -21,3 +21,4 @@ unstructured[xlsx]
 unstructured[pptx]
 pymongo
 langchain-mongodb
+langgraph
