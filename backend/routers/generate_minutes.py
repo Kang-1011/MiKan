@@ -9,6 +9,10 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from pydantic import BaseModel, Field
 from typing import List
+from datetime import datetime
+
+# === Load today's date ===
+today = datetime.now().strftime("%Y-%m-%d")
 
 # === LOAD GEMINI API KEY ===
 load_dotenv()
@@ -31,7 +35,7 @@ class MeetingHeader(BaseModel):
     attendees: str = Field(description="Comma-separated list of attendees")
 
 class Task(BaseModel):
-    task_no: str = Field(description="Task number (1, 1.1, 2, etc.)", alias="Task No.")
+    task_no: str = Field(description="The name of individual task", alias="Task No.")
     description: str = Field(description="Detailed task description", alias="Description")
     action_by: str = Field(description="Person assigned to the task", alias="Action by")
     due_date: str = Field(description="Due date in YYYY-MM-DD format", alias="Due date")
@@ -95,16 +99,22 @@ For meeting headers, extract:
 - title
 - location  
 - created_by
-- date (YYYY-MM-DD)
+- date (YYYY-MM-DD),
 - project
 - purpose
 - attendees (format as comma-separated list: "Name1, Name2, Name3")
 
 For tasks, extract ALL actionable items with:
-- Task number (1, 2, 3, etc.)
-- Detailed description (use "Description" as the field name)
-- Person assigned ("Action by")
-- Due date in YYYY-MM-DD format (infer from context if not explicitly stated and use appropriate dates based on urgency )
+- Detailed description (use "Description" as the field name. Analyse the meeting trasncript and infer the events that is being discuss in the meeting. For each event, analyzed the transcript again for the details such as the What needs to be done
+    1. Who is responsible as the assignee
+    2. When it should be done
+    3. How it should be done (if there are constraints or requirements)
+    4. Why it matters (if context or dependencies are important)
+    do not the word 'both events', be specific and list down the event names)
+    make the structure to follow the following :
+- Task Title (From the analysis of detailed description must. Should follow this structure: {{detailed description's verb}} {{description's direct object}}.)
+- Person assigned ("Action by" , and should be lowercase)
+- Due date in YYYY-MM-DD format (infer from context if not explicitly stated and use appropriate dates based on urgency, ignore the date mentioned in the analysis of the meeting transcript, use date )
 
 Make sure to extract ALL tasks mentioned in the transcript - don't miss any actionable items.
 
