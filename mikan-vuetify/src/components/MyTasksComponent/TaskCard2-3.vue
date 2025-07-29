@@ -41,7 +41,7 @@
         size="x-small"
         variant="tonal"
         class="mt-2 mikan-button-1"
-        @click.stop="mikangen"
+        @click.stop="runAutostart"
         :loading="isAutostartRunning"
       >
       </v-btn>
@@ -114,24 +114,6 @@ async function runAutostart() {
     }
   } catch (error) {
     console.error(`An error occurred during autostart for task ${props.task.id}:`, error)
-  } finally {
-    isAutostartRunning.value = false
-  }
-}
-import { fetchBoards } from '@/stores/boards'
-async function mikangen() {
-  isAutostartRunning.value = true
-  console.log(`Running mikangen for task ${props.task.id}`)
-  console.log(`Task description: ${props.task.description}`)
-  try {
-    await axios.post('http://127.0.0.1:8000/mikangen/mikangen/', {
-      task: props.task.description,
-      task_id: props.task.id
-    })
-    console.log(`MiKanGen finished for task ${props.task.id}:`)
-    fetchBoards()
-  } catch (error) {
-    console.error(`An error occurred during MiKanGen for task ${props.task.id}:`, error)
   } finally {
     isAutostartRunning.value = false
   }
