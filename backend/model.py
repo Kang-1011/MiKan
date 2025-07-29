@@ -49,6 +49,7 @@ class Project(Base):
 
     task = relationship("Task", back_populates="project")
     meeting = relationship("Meeting", back_populates="project")
+    # stage = relationship("Stage", back_populates="project")
 
 class ProjectBase(BaseModel):
     title: str
