@@ -9,3 +9,4 @@ Lib
 Scripts
 share
 pyvenv.cfg
+backend/credentials.json
