@@ -129,6 +129,7 @@
            :boardIndex="boardIndex"
            :stageIndex="sIndex"
            :visitorMode="visitorMode"
+           :projectId="board.id"
            :selectedAssignee="selectedAssignee"
           @rename-stage="(sIdx, title) => $emit('rename-stage', boardIndex, sIdx, title)"
           @add-task="() => {

@@ -28,17 +28,17 @@ async def autostart_task_endpoint(request: AutostartStringRequest, db: db_depend
             raise HTTPException(status_code=500, detail=result.get("error"))
 
         # # Save to database
-        # autostart_db = Autostart(
-        #     task_id=request.task_id,
-        #     title=result.get("name"),
-        #     url=result.get("url")
-        # )
-        # db.add(autostart_db)
-        # db.commit()
-        # db.refresh(autostart_db)
+        autostart_db = Autostart(
+            task_id=request.task_id,
+            title=result.get("name"),
+            url=result.get("url")
+        )
+        db.add(autostart_db)
+        db.commit()
+        db.refresh(autostart_db)
 
-        # print(f"Autostart-task processing complete. Returning result for task {request.task_id}.")
-        # return autostart_db
+        print(f"Autostart-task processing complete. Returning result for task {request.task_id}.")
+        return autostart_db
 
         # Create a temporary object to return to the frontend without saving to DB
         import time
