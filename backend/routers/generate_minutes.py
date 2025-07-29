@@ -9,6 +9,10 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from pydantic import BaseModel, Field
 from typing import List
+from datetime import datetime
+
+# === Load today's date ===
+today = datetime.now().strftime("%Y-%m-%d")
 
 # === LOAD GEMINI API KEY ===
 load_dotenv()
@@ -110,7 +114,7 @@ For tasks, extract ALL actionable items with:
     make the structure to follow the following :
 - Task Title (From the analysis of detailed description must. Should follow tprovide clearhis structure: {{detailed description's verb}} {{description's direct object}}.)
 - Person assigned ("Action by" , and should be lowercase)
-- Due date in YYYY-MM-DD format (infer from context if not explicitly stated and use appropriate dates based on urgency )
+- Due date in YYYY-MM-DD format (infer from context if not explicitly stated and use appropriate dates based on urgency, ignore the date mentioned in the analysis of the meeting transcript, use date )
 
 Make sure to extract ALL tasks mentioned in the transcript - don't miss any actionable items.
 
