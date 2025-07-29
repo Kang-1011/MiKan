@@ -349,11 +349,25 @@ function onDeletedAttachment(file: any) {
 async function save() {
   if (!localTask.value) return;
 
+  // const payload = {
+  //   assignee_id: localTask.value.assignee_id,
+  //   title: localTask.value.title,
+  //   description: localTask.value.description,
+  //   due_date: localTask.value.dueDate ? new Date(localTask.value.dueDate).toISOString().slice(0, 10) : null,
+  //   priority: localTask.value.priority,
+  //   status: localTask.value.status
+  // };
   const payload = {
     assignee_id: localTask.value.assignee_id,
     title: localTask.value.title,
     description: localTask.value.description,
-    due_date: localTask.value.dueDate ? new Date(localTask.value.dueDate).toISOString().slice(0, 10) : null,
+    due_date: localTask.value.dueDate
+    ? `${new Date(localTask.value.dueDate).getFullYear()}-${String(
+        new Date(localTask.value.dueDate).getMonth() + 1
+      ).padStart(2, '0')}-${String(
+        new Date(localTask.value.dueDate).getDate()
+      ).padStart(2, '0')}`
+    : null,
     priority: localTask.value.priority,
     status: localTask.value.status
   };
