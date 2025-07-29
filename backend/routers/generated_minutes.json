@@ -1,115 +1,115 @@
 {
     "header": {
-        "title": "Dime Sarby and Shaver Gaming Events Planning Meeting",
+        "title": "Event Planning Meeting for Dime Savvy Car Showcase and Shaver Gaming Event",
         "location": "GLC Meeting Room 1",
         "created_by": "You",
-        "date": "2025-07-28",
+        "date": "2025-07-27",
         "project": "Website Redesign",
-        "purpose": "To discuss plans for the Dime Sarby and Shaver Gaming events, focusing on logistics, budget, and promotion.",
-        "attendees": "Alia,Sebastian,Asfar,Kang,Jet,Rohimi"
+        "purpose": "To discuss plans for the upcoming events, focusing on logistics, budget, and marketing.",
+        "attendees": "Alia, Sebastian, Asfar, Jet, Kang, Rohimi"
     },
     "tasks": [
         {
             "Task No.": "1",
-            "Description": "Finalize power strip specifications for Dime Sarby car showcase layout.",
-            "Action by": "Jet",
+            "Description": "Finalize power strip specifications for Central Court layout with Jet",
+            "Action by": "Sebastian",
             "Due date": "2025-07-11"
         },
         {
             "Task No.": "2",
-            "Description": "Follow up on Klang Sound's quote and availability immediately.",
+            "Description": "Follow up on Klang Sound's quote and availability",
             "Action by": "Jet, Kang",
-            "Due date": "2025-07-28"
+            "Due date": "2025-07-11"
         },
         {
             "Task No.": "3",
-            "Description": "Inform the person who wants to set up a display in the LG Oval zone to stick with the Centre Court for the car showcase.",
+            "Description": "Inform downstairs personnel to stick with Central Court for the car showcase",
             "Action by": "Rohimi",
-            "Due date": "2025-07-28"
+            "Due date": "2025-07-27"
         },
         {
             "Task No.": "4",
-            "Description": "Push Jumbo Rentals for at least a 10% cut on the sound budget.",
+            "Description": "Push Jumbo Rentals for at least a 10% cut on the sound system quote",
             "Action by": "Asfar",
+            "Due date": "2025-07-13"
             "Due date": "2025-07-13"
         },
         {
             "Task No.": "5",
-            "Description": "Draft the Shaver Gaming media invites.",
+            "Description": "Draft the Shaver Gaming media invites",
             "Action by": "Kang",
-            "Due date": "2025-07-28"
+            "Due date": "2025-07-11"
         },
         {
             "Task No.": "6",
-            "Description": "Lock in Ken Lim's Twitch slot for Shaver Gaming.",
+            "Description": "Lock in Ken Lim's Twitch slot for Shaver Gaming",
             "Action by": "Kang",
+            "Due date": "2025-07-14"
             "Due date": "2025-07-14"
         },
         {
             "Task No.": "7",
-            "Description": "Handle Dime Sarby media invites.",
+            "Description": "Handle the Dime Savvy media invites",
             "Action by": "Alia",
+            "Due date": "2025-07-15"
             "Due date": "2025-07-15"
         },
         {
             "Task No.": "8",
-            "Description": "Confirm the costume rack specs with TechZone Co. and email the sketch for Shaver Gaming.",
+            "Description": "Confirm the costume rack specs with Tech Zone and email the sketch to make sure to release purchase order",
             "Action by": "Jet",
+            "Due date": "2025-07-12"
             "Due date": "2025-07-12"
         },
         {
             "Task No.": "9",
-            "Description": "Submit the police traffic permit applications for both events.",
+            "Description": "Submit the police traffic permit applications for both events",
             "Action by": "Rohimi",
+            "Due date": "2025-07-12"
             "Due date": "2025-07-12"
         },
         {
             "Task No.": "10",
-            "Description": "Follow up with the Fire Department regarding the COVID-19 SOP and fire safety clearance for both events.",
+            "Description": "Follow up with the fire department regarding the COVID-19 SOP and fire safety clearance for both events",
             "Action by": "Sebastian",
+            "Due date": "2025-07-13"
             "Due date": "2025-07-13"
         },
         {
             "Task No.": "11",
-            "Description": "Confirm the delivery date for the VR demo gear.",
+            "Description": "Confirm the concrete delivery date for the VR demo gear with the vendor and update the shared document",
             "Action by": "Sebastian",
-            "Due date": "2025-07-29"
+            "Due date": "2025-07-11"
         },
         {
             "Task No.": "12",
-            "Description": "Map out specific routes and timings with Sebastian for loading and unloading cars and gaming equipment.",
+            "Description": "Map out specific routes and timings for loading and unloading cars and gaming equipment with Sebastian",
             "Action by": "Asfar",
-            "Due date": "2025-07-28"
+            "Due date": "2025-07-11"
         },
         {
             "Task No.": "13",
-            "Description": "Coordinate closely with mall operators to ensure minimal disruption to mall-goers during setup and teardown for both events.",
+            "Description": "Coordinate closely with mall operators to ensure minimal disruption to mall goers during setup and teardown for both events",
             "Action by": "Sebastian",
-            "Due date": "2025-07-28"
+            "Due date": "2025-07-12"
         },
         {
             "Task No.": "14",
-            "Description": "Talk to eSports Channel about featuring a segment on the CYD Nova EV.",
+            "Description": "Talk to Esports channel about featuring a segment on the CYD Nova EV",
             "Action by": "Kang",
-            "Due date": "2025-07-29"
+            "Due date": "2025-07-12"
         },
         {
             "Task No.": "15",
-            "Description": "Reach out to HyperX and Logitech, the Shaver Gaming sponsors, to explore cross-promotional opportunities.",
+            "Description": "Reach out to HyperX and Logitech, the Shaver Gaming sponsors, to explore cross-promotional budget",
             "Action by": "Jet",
-
             "Due date": "2025-07-29"
         },
         {
             "Task No.": "16",
-            "Description": "Chase Asfar on the NUJI store renovation fire safety audit.",
+            "Description": "Chase Asfar to resubmit the New G Store renovation fire safety audit and ensure clearance is sorted",
             "Action by": "Jet",
-            "Due date": "2025-07-28"
-        },
-        {
-            "Task No.": "17",
-            "Description": "Get the NUJI store renovation fire safety clearance sorted.",
-            "Action by": "Jet",
+            "Due date": "2025-07-14"
             "Due date": "2025-07-14"
         }
     ]

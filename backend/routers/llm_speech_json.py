@@ -6,7 +6,6 @@ from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from typing import List
-from .agent_fetch_users import get_attendees
 
 from sqlalchemy.orm import Session
 from database import get_db
