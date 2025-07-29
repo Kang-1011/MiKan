@@ -19,7 +19,7 @@ from routers.minutes import router as minutes_router
 from routers.chatbot import router as chatbot_router 
 from routers.llm_speech_json import router as llm_speech_json
 from routers.names import router as names_router
-from backend.routers.mikangen import router as mikangen
+from routers.mikangen import router as mikangen
 
 app = FastAPI()
 create_tables()

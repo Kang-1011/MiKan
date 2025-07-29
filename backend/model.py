@@ -393,3 +393,7 @@ class NameOut(BaseModel):
     special_name: Optional[str]
     class Config:
         orm_mode = True
+
+class MiKanGenRequest(BaseModel):
+    task: str
+    task_id: int

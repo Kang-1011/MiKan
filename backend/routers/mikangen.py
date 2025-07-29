@@ -1,6 +1,8 @@
 from dotenv import load_dotenv
 import os   
+
 from typing import List, TypedDict
+
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from google.cloud import storage
@@ -11,8 +13,17 @@ from langchain_google_genai.embeddings import GoogleGenerativeAIEmbeddings
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langgraph.graph import END, StateGraph, START
-from fastapi import APIRouter, HTTPException
+
+from fastapi import APIRouter, HTTPException, Depends
 import json
+
+from .mikangen_helpers import generate_title, format_text_to_google_doc
+
+from sqlalchemy.orm import Session
+from database import get_db
+from .autostart import upload_autostart_url
+from .ai_attachments import upload_ai_attachment_url
+from model import AutostartIn, AIAttachmentIn, MiKanGenRequest
 
 load_dotenv()
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
@@ -307,6 +318,10 @@ def solve(state: ReWOO):
     return {"result": solver_result.content, "retrieved_docs": _files}
 
 
+##########################################################################################################################
+# Define Graph
+##########################################################################################################################
+
 def _route(state):
     _step = _get_current_task(state)
     # return _step is None
@@ -335,20 +350,77 @@ graph.add_edge(START, "plan")
 
 app = graph.compile()
 
+
+##########################################################################################################################
+# Langgraph ends here
+##########################################################################################################################
+
+
 router = APIRouter()
 @router.post("/mikangen")
-def main_agent(task: str):
+def main_agent(request: MiKanGenRequest, db: Session = Depends(get_db)):
+    task = request.task
+    task_id = request.task_id
     try:
         for s in app.stream({"task": task}):
             print(json.dumps(s, indent=2))
             print("---")
 
+
+        # Extract the autostart content and format into Google Doc
         autostart_content = s['solve']['result']
         print("Autostart Content:")
         print(autostart_content)
 
-        files = s['solve']['retrieved_docs']
+        autostart_title = generate_title(autostart_content)
+        formatted_doc_url = format_text_to_google_doc(
+            autostart_content,
+            autostart_title,
+            folder_id="1wjMWSKk8Z0VToz8hS05VrZXkyVWcP3dc",
+        )
+        # Save autostart to database
+        upload_autostart_url(autostart_data=AutostartIn(
+            task_id=task_id,
+            title=autostart_title,
+            url=formatted_doc_url
+        ), 
+        db=db)
+
+
+
+
+        # Clean duplicate files
+        unique_files_set = set(s['solve']['retrieved_docs'])
+        unique_files_list = list(unique_files_set)
         print("Files:")
-        print(files)
+        print(unique_files_list)
+
+        http_urls = [url.replace("gs://", "https://storage.googleapis.com/") for url in unique_files_list]
+
+        for each_url in http_urls:
+            upload_ai_attachment_url(ai_attachment_data=AIAttachmentIn(
+                task_id=task_id,
+                title=each_url.split("/")[-1],
+                url=each_url
+            ),
+            db=db)
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred during MiKanGen: {str(e)}")
+    
+
+# from model import AutostartIn
+
+# @router.post("/testing")
+# def main_test(task: str, task_id: int, db: Session = Depends(get_db)):
+#     try:
+#         vari = upload_autostart_url(autostart_data=AutostartIn(
+#             task_id=41,
+#             title="Media Invitation: Shaver Gaming Expo 2025",
+#             url="https://docs.google.com/document/d/1ouAlSrG-1J4QXAeiALmi-cmxqgNegRuLWW-7DhhzAgE/edit"
+#         ), 
+#         db=db)
+#         print(vari.task_id)
+
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=f"An error occurred during testing: {str(e)}")
