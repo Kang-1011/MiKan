@@ -64,8 +64,11 @@ def get_project_boards(db: db_dependency):
 
 			stage_map = {
 				"to-do": "To Do",
+				"To Do": "To Do",
 				"in-progress": "In Progress",
-				"done": "Done"
+				"In Progress": "In Progress",
+				"done": "Done",
+				"Done": "Done"
 			}
 			stage_title = stage_map.get(status, "To Do")
 

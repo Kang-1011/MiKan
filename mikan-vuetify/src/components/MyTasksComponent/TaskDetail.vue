@@ -228,7 +228,7 @@
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import axios from 'axios'
 import Attachment from '@/components/MyTasksComponent/AttachmentManager.vue'
-import { boards, fetchBoards } from '@/stores/boards'
+import { boards } from '@/stores/boards'
 
 const props = defineProps<{ modelValue: boolean; task: any; visitorMode?: boolean }>()
 const emit = defineEmits(['update:modelValue','save-task','delete-task'])
@@ -288,7 +288,11 @@ watch(internalDialogOpen, open => {
       comments: (t.comments || []).map(x =>
         typeof x === 'string' ? { text: x, date: new Date() } : { ...x }
       ),
-      assignee_id: t.assignee_id
+      assignee_id: t.assignee_id,
+      description: t.description || '',
+      priority: t.priority || '',
+      dueDate: t.dueDate || '',
+      status: t.status || 'to-do'
     }
     localTask.value = copy
   } else {
@@ -345,15 +349,59 @@ function onDeletedAttachment(file: any) {
 async function save() {
   if (!localTask.value) return;
 
+  // const payload = {
+  //   assignee_id: localTask.value.assignee_id,
+  //   title: localTask.value.title,
+  //   description: localTask.value.description,
+  //   due_date: localTask.value.dueDate ? new Date(localTask.value.dueDate).toISOString().slice(0, 10) : null,
+  //   priority: localTask.value.priority,
+  //   status: localTask.value.status
+  // };
   const payload = {
     assignee_id: localTask.value.assignee_id,
     title: localTask.value.title,
     description: localTask.value.description,
-    due_date: localTask.value.dueDate ? new Date(localTask.value.dueDate).toISOString().slice(0, 10) : null,
+    due_date: localTask.value.dueDate
+    ? `${new Date(localTask.value.dueDate).getFullYear()}-${String(
+        new Date(localTask.value.dueDate).getMonth() + 1
+      ).padStart(2, '0')}-${String(
+        new Date(localTask.value.dueDate).getDate()
+      ).padStart(2, '0')}`
+    : null,
     priority: localTask.value.priority,
     status: localTask.value.status
   };
   console.log("Payload sent from TaskDetail to Kanban: ", payload)
+
+    // When a task is newly created on the client it does not exist in the
+  // backend yet. Such tasks use a temporary id (starting at 2000). Before we
+  // can emit the save event and upload attachments we need to persist the task
+  // so that we get a real database id.
+  if (localTask.value.id >= 2000) {
+    const findProjectId = (tid: number) => {
+      for (const b of boards.value) {
+        for (const sg of b.stages) {
+          if (sg.tasks.find((t: any) => t.id === tid)) {
+            return b.id
+          }
+        }
+      }
+      return null
+    }
+    const projectId = findProjectId(localTask.value.id)
+    try {
+      const res = await axios.post('http://localhost:8000/tasks/add_task', {
+        ...payload,
+        project_id: projectId
+      })
+      // Replace the temporary id with the real one returned by the backend
+      localTask.value.id = res.data.id
+    } catch (err) {
+      console.error('❌ Failed to create task:', err)
+      return
+    }
+  }
+
   emit('save-task', localTask.value.id, payload)
 
    // ✅ Handle NEW Subtasks
@@ -415,7 +463,7 @@ async function save() {
 
   localTask.value.attachments = [...existingAttachments, ...uploadedAttachments];
 
-  fetchBoards()
+  // fetchBoards()
 
   // 🧼 Optional: console.log everything at end
   console.log("✔️ All updates done.");
