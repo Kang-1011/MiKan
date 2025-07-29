@@ -301,7 +301,7 @@
                   class="text-center font-weight-bold text-black"
                   style="width: 8%"
                 >
-                  Task Title
+                  No.
                 </th>
                 <th
                   class="text-center font-weight-bold text-black"
