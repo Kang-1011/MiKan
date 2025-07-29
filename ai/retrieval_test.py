@@ -41,3 +41,11 @@ prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
     ("human", "{input}")
 ])
+
+document_chain = create_stuff_documents_chain(llm, prompt)
+chain = create_retrieval_chain(retriever, document_chain)
+
+ai_response = chain.invoke({"input": "Details of the vendor contract for Jumbo Rentals for the Dime Sarby car showcase, focusing on the sound system quote and cost breakdown"})
+print(ai_response["answer"])
+
+client.close()

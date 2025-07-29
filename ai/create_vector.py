@@ -24,7 +24,8 @@ vector_store = MongoDBAtlasVectorSearch(
     relevance_score_fn="cosine",
 )
 
-vector_store.create_vector_search_index(dimensions=768)
+# vector_store.create_vector_search_index(dimensions=768)
+vector_store.create_vector_search_index(dimensions=3072)
 
 print("Vector Store Created!")
 client.close()
