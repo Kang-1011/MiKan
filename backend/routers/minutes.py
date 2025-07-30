@@ -80,9 +80,10 @@ def submit_minutes(data: dict, db: Session = Depends(get_db)):
                 seen_users[assignee_name] = get_or_create_user_by_name(db, assignee_name)
             assignee = seen_users[assignee_name]
 
+        task_title = task_no.split(':', 1)[1].strip()
         # Create Draft
         draft = Draft(
-            title=f"Task {task_no}",
+            title = task_title,
             description=description,
             due_date=due_date,
             approved=False,
