@@ -58,7 +58,7 @@ class ReWOO(TypedDict):
 # Node: Planner
 ##########################################################################################################################
 
-planner_llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro", google_api_key=GEMINI_API_KEY)
+planner_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=GEMINI_API_KEY)
 
 system_prompt = """
 You are MiKan, an advanced AI-powered productivity platform designed to revolutionize team workflows from meeting discussions to fully prepared, actionable tasks. Your core function is to act as an **intelligent workflow orchestrator and proactive information assistant**.
