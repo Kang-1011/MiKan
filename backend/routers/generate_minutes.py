@@ -31,7 +31,7 @@ class MeetingHeader(BaseModel):
     attendees: str = Field(description="Comma-separated list of attendees")
 
 class Task(BaseModel):
-    task_no: str = Field(description="Task number (1, 1.1, 2, etc.)", alias="Task No.")
+    task_no: str = Field(description="Task number and task title. For example, 1 : Write email to John", alias="Task No.")
     description: str = Field(description="Detailed task description", alias="Description")
     action_by: str = Field(description="Person assigned to the task", alias="Action by")
     due_date: str = Field(description="Due date in YYYY-MM-DD format", alias="Due date")
@@ -101,10 +101,13 @@ For meeting headers, extract:
 - attendees (format as comma-separated list: "Name1, Name2, Name3")
 
 For tasks, extract ALL actionable items with:
-- Task number (1, 2, 3, etc.)
-- Detailed description (use "Description" as the field name)
+- Task title (1 : Write email to John, 2 : Send email invites, 3 : Follow-up with Jane on the implementation of the new campaign, etc.)
+- Detailed description (use "Description" as the field name). 
 - Person assigned ("Action by")
 - Due date in YYYY-MM-DD format (infer from context if not explicitly stated and use appropriate dates based on urgency )
+
+For task title, make sure it's number followed by task title. For example, 1 : Prepare template for email
+For description, be very detailed and precise. Ensure it's contextually very clear even people without context can understand what's the objectives is.
 
 Make sure to extract ALL tasks mentioned in the transcript - don't miss any actionable items.
 

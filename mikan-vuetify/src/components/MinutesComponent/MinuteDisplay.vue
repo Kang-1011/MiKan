@@ -337,7 +337,7 @@
                 :class="index % 2 === 0 ? 'even-row' : 'odd-row'"
               >
                 <td>
-                  {{ task["Task No."] }}
+                  {{ task["Task No."].match(/^\s*(\d+)\s*:/)?.[1] || 'N/A' }}
                 </td>
                 <td>
                   <div
